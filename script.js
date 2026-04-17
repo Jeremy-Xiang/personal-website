@@ -51,27 +51,44 @@
   requestAnimationFrame(() => requestAnimationFrame(tick));
 })();
 
-// ----- manual motion toggle -----
+// ----- manual motion toggle (ARIA switch) -----
 (function() {
   const toggle = document.getElementById('motionToggle');
   if (!toggle) return;
 
-  function syncLabel() {
-    const on = document.documentElement.classList.contains('low-perf');
-    toggle.textContent = on ? 'enable motion' : 'reduce motion';
+  function sync() {
+    // ARIA switch: aria-checked="true" means motion is ON
+    const motionOn = !document.documentElement.classList.contains('low-perf');
+    toggle.setAttribute('aria-checked', motionOn ? 'true' : 'false');
   }
-  syncLabel();
+  sync();
 
-  toggle.addEventListener('click', (e) => {
-    e.preventDefault();
+  toggle.addEventListener('click', () => {
     const root = document.documentElement;
     const nowReduced = !root.classList.contains('low-perf');
     root.classList.toggle('low-perf', nowReduced);
     try {
       localStorage.setItem('motion', nowReduced ? 'reduced' : 'normal');
     } catch(e) {}
-    syncLabel();
+    sync();
   });
+})();
+
+// ----- mark intro animation as played (once per session) -----
+// so re-enabling motion doesn't replay the Domain Expansion
+(function() {
+  try {
+    const played = sessionStorage.getItem('introPlayed') === '1';
+    if (played) {
+      document.documentElement.classList.add('intro-done');
+    } else {
+      // mark it after a short delay so intro has time to play
+      setTimeout(() => {
+        sessionStorage.setItem('introPlayed', '1');
+        document.documentElement.classList.add('intro-done');
+      }, 2800); // intro is ~2.5s long
+    }
+  } catch(e) {}
 })();
 
 // build ambient background: constellations + scattered stars
@@ -375,16 +392,52 @@ document.querySelector('.logo').addEventListener('click', () => {
   const inf = document.querySelector('.infinity');
   if (!inf) return;
   inf.style.cursor = 'pointer';
+
+  let cooldown = false;
   inf.addEventListener('click', (e) => {
     e.stopPropagation();  // don't trigger logo scroll
-    document.querySelectorAll('.constellation').forEach(c => {
-      const prev = c.style.animationDuration;
-      c.style.animationDuration = '2s, 8s';
-      setTimeout(() => {
-        c.style.animationDuration = '';
-      }, 4000);
+    if (cooldown) return;
+    cooldown = true;
+
+    const constellations = document.querySelectorAll('.constellation');
+
+    // Speed up phase: 0 -> 4s. Ease back: 4s -> 6s.
+    // We interpolate the animation-duration in steps so there's no snap.
+    const fastDur = [2, 8];   // [const-drift, twinkle]
+    const normDur = [null, null]; // empty means restore default from CSS
+
+    constellations.forEach(c => {
+      c.style.animationDuration = `${fastDur[0]}s, ${fastDur[1]}s`;
     });
-    // also spin infinity a full 360 as feedback
+
+    // after 4s, ease back in 6 steps over 2 seconds
+    setTimeout(() => {
+      const steps = 12;
+      const stepMs = 180;
+      let i = 0;
+      const timer = setInterval(() => {
+        i++;
+        const t = i / steps; // 0 -> 1
+        const eased = t * t * (3 - 2 * t); // smoothstep
+        // interpolate toward original CSS durations (approx 60s const, 180s twinkle on defaults)
+        // we approximate by scaling the fast values toward a "slow" target
+        const targetConst = 60;
+        const targetTwink = 180;
+        const curConst = fastDur[0] + (targetConst - fastDur[0]) * eased;
+        const curTwink = fastDur[1] + (targetTwink - fastDur[1]) * eased;
+        constellations.forEach(c => {
+          c.style.animationDuration = `${curConst.toFixed(1)}s, ${curTwink.toFixed(1)}s`;
+        });
+        if (i >= steps) {
+          clearInterval(timer);
+          // clear inline override so CSS defaults (per-constellation) take over again
+          constellations.forEach(c => { c.style.animationDuration = ''; });
+          cooldown = false;
+        }
+      }, stepMs);
+    }, 4000);
+
+    // spin infinity as feedback
     inf.style.transition = 'transform 1s cubic-bezier(0.77, 0, 0.175, 1)';
     inf.style.transform = 'rotate(720deg)';
     setTimeout(() => {

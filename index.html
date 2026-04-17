@@ -33,18 +33,27 @@
   } catch(e) {}
 </script>
 
-<!-- fonts -->
+<!-- fonts — loaded async so they don't block first paint (improves LCP) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 
 <!-- styles -->
-<link rel="stylesheet" href="styles.css?v=8">
+<link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
 
 <!-- custom cursor -->
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+<!-- motion toggle: floating slider, sticky, starts OFF -->
+<div class="motion-slider" id="motionSlider">
+  <span class="motion-slider-label">motion</span>
+  <button class="motion-slider-switch" id="motionToggle" role="switch" aria-checked="true" aria-label="toggle animations">
+    <span class="motion-slider-knob"></span>
+  </button>
+</div>
 
 <!-- soft ambient drift -->
 <div class="ambient" aria-hidden="true">
@@ -120,8 +129,8 @@
     <div class="section-label">experience</div>
 
     <div class="entry reveal">
-      <div class="entry-title">designed and built personal website</div>
-      <div class="entry-meta">2026 · html, css, javascript, cloudflare</div>
+      <div class="entry-title">designed and built this personal website</div>
+      <div class="entry-meta">2026 · html, css, javascript, vercel</div>
     </div>
 
     <div class="entry reveal">
@@ -299,19 +308,13 @@
 
   <footer>
     <div>© 2026 jeremy xiang · built with care</div>
-    <div class="social">
-      <a href="mailto:jeremy@jeremyxiang.com">email</a>
-      <a href="https://www.linkedin.com/in/jeremy-xiang/" target="_blank" rel="noopener">linkedin</a>
-      <a href="Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener">resume</a>
-      <a href="#" id="motionToggle" class="motion-toggle" title="toggle animations">reduce motion</a>
-    </div>
   </footer>
 
 </main>
 </div>
 
 <!-- scripts -->
-<script src="script.js?v=8"></script>
+<script src="script.js?v=9" defer></script>
 
 </body>
 </html>
