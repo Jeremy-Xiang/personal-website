@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>jeremy xiang</title>
+
+<!-- meta -->
+<meta name="description" content="Jeremy Xiang — CS student at UW–Madison, class of 2028. Interested in machine learning, product strategy, and building software that solves real problems." />
+<meta name="author" content="Jeremy Xiang" />
+<meta name="theme-color" content="#0e0f13" />
+
+<!-- open graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="jeremy xiang" />
+<meta property="og:description" content="CS student at UW–Madison, class of 2028. Machine learning, product strategy, and building software that solves real problems." />
+<meta property="og:site_name" content="jeremy xiang" />
+
+<!-- twitter card -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="jeremy xiang" />
+<meta name="twitter:description" content="CS student at UW–Madison, class of 2028. Machine learning, product strategy, and building software that solves real problems." />
+
+<!-- favicon -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cstyle%3Etext%7Bfont-family:serif;font-style:italic;font-weight:300;fill:%236b8aff%7D%3C/style%3E%3Ctext x='50' y='78' font-size='100' text-anchor='middle'%3E%E2%88%9E%3C/text%3E%3C/svg%3E" />
+
+<!-- theme preload (inline to avoid flash) -->
+<script>
+  try {
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.classList.add('light');
+    }
+  } catch(e) {}
+</script>
+
+<!-- fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- styles -->
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- custom cursor -->
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+<!-- soft ambient drift -->
+<div class="ambient" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="shooting-star s1"></div>
+  <div class="shooting-star s2"></div>
+</div>
+
+<!-- domain expansion opener -->
+<div class="domain" aria-hidden="true">
+  <div class="domain-ring r1"></div>
+  <div class="domain-ring r2"></div>
+  <div class="domain-ring r3"></div>
+  <div class="domain-text">infinity</div>
+</div>
+
+<div class="container">
+<main>
+
+  <nav>
+    <div class="logo"><span class="infinity">∞</span>jeremy xiang<span class="dot">.</span></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#now">now</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#traits">traits</a></li>
+      <li><a href="#tools">tools</a></li>
+      <li><a href="#contact">contact</a></li>
+      <li><a href="Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener">resume</a></li>
+      <li>
+        <button class="theme-toggle" id="themeToggle" aria-label="toggle theme">
+          <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <h1>cs student,<br><em>quietly curious</em>.<span class="cursor"></span></h1>
+    <p>studying computer science at the <a href="https://www.wisc.edu/" target="_blank" rel="noopener">university of wisconsin–madison</a>, class of 2028.</p>
+  </section>
+
+  <section id="now">
+    <div class="section-label">now</div>
+    <div class="now-list">
+      <div class="now-item">
+        <div class="now-label">learning</div>
+        <div class="now-text">machine learning fundamentals — the math underneath the models</div>
+      </div>
+      <div class="now-item">
+        <div class="now-label">building</div>
+        <div class="now-text">this site, plus a few smaller weekend projects</div>
+      </div>
+      <div class="now-item">
+        <div class="now-label">reading</div>
+        <div class="now-text"><em>the most human human</em> by brian christian</div>
+      </div>
+      <div class="now-item">
+        <div class="now-label">exploring</div>
+        <div class="now-text">what content creation might look like over the summer</div>
+      </div>
+      <div class="now-item">
+        <div class="now-label">on the side</div>
+        <div class="now-text">keeping spanish sharp, chipping away at chess puzzles</div>
+      </div>
+    </div>
+    <div class="now-meta">last updated · april 2026</div>
+  </section>
+
+  <section id="experience">
+    <div class="section-label">experience</div>
+
+    <div class="entry reveal">
+      <div class="entry-title">designed and built this personal website</div>
+      <div class="entry-meta">2026 · html, css, javascript, vercel</div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-title">presented a product strategy for <a href="https://codafive.vercel.app/" target="_blank" rel="noopener">codaworx</a> at the PMC case competition</div>
+      <div class="entry-meta">2026 · RICE scoring, vercel</div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-title">co-authored an NLP paper on word-reading time prediction at <a href="https://www.inspiritai.com/" target="_blank" rel="noopener">inspirit ai</a></div>
+      <div class="entry-meta">aug 2023 – jan 2024 · student ambassador & researcher</div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-title">built ml models for stroke risk prediction with an interactive web tool</div>
+      <div class="entry-meta">2023 · python, pandas, classification</div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-title">shadowed chip design engineers on PPA research at <a href="https://www.intel.com/" target="_blank" rel="noopener">intel</a></div>
+      <div class="entry-meta">may 2022 – aug 2022 · engineering shadow</div>
+    </div>
+  </section>
+
+  <section id="leadership">
+    <div class="section-label">leadership</div>
+
+    <div class="entry reveal">
+      <div class="entry-title">senior patrol leader · eagle scout</div>
+      <div class="entry-meta">boy scouts of america · 2018 – 2023</div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-title">recipient of the BSA heroism award</div>
+      <div class="entry-meta">boy scouts of america</div>
+    </div>
+  </section>
+
+  <section id="traits">
+    <div class="section-label">traits</div>
+    <div class="traits">
+      <div class="trait">
+        <div class="trait-glyph">✦</div>
+        <div class="trait-name">curious</div>
+        <div class="trait-desc">ask why, then ask again</div>
+      </div>
+      <div class="trait">
+        <div class="trait-glyph">◈</div>
+        <div class="trait-name">adaptable</div>
+        <div class="trait-desc">good at finding footing</div>
+      </div>
+      <div class="trait">
+        <div class="trait-glyph">✣</div>
+        <div class="trait-name">collaborative</div>
+        <div class="trait-desc">comfortable across teams</div>
+      </div>
+      <div class="trait">
+        <div class="trait-glyph">❖</div>
+        <div class="trait-name">resilient</div>
+        <div class="trait-desc">eagle scout, heroism award</div>
+      </div>
+      <div class="trait">
+        <div class="trait-glyph">✧</div>
+        <div class="trait-name">composed</div>
+        <div class="trait-desc">steady under pressure</div>
+      </div>
+      <div class="trait">
+        <div class="trait-glyph">✶</div>
+        <div class="trait-name">patient</div>
+        <div class="trait-desc">good things take time</div>
+      </div>
+      <div class="trait">
+        <div class="trait-glyph">❋</div>
+        <div class="trait-name">passionate</div>
+        <div class="trait-desc">obsessive about what i love</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="section-label">tools</div>
+
+    <div class="tools-grid">
+      <div class="tool-card reveal">
+        <div class="tool-icon">⟨/⟩</div>
+        <h3>languages</h3>
+        <p>the core toolkit — from systems-level C/C++ to typescript and python.</p>
+        <div class="tool-tags">
+          <span class="tool-tag">typescript</span>
+          <span class="tool-tag">python</span>
+          <span class="tool-tag">java</span>
+          <span class="tool-tag">c / c++</span>
+        </div>
+      </div>
+
+      <div class="tool-card reveal">
+        <div class="tool-icon">λ</div>
+        <h3>machine learning</h3>
+        <p>classification, nlp, and data exploration with the usual python stack.</p>
+        <div class="tool-tags">
+          <span class="tool-tag">pandas</span>
+          <span class="tool-tag">matplotlib</span>
+          <span class="tool-tag">jupyter</span>
+          <span class="tool-tag">nlp</span>
+        </div>
+      </div>
+
+      <div class="tool-card reveal">
+        <div class="tool-icon">◉</div>
+        <h3>web & backend</h3>
+        <p>full-stack apps shipped on vercel and firebase, node under the hood.</p>
+        <div class="tool-tags">
+          <span class="tool-tag">node.js</span>
+          <span class="tool-tag">express</span>
+          <span class="tool-tag">vercel</span>
+          <span class="tool-tag">firebase</span>
+        </div>
+      </div>
+
+      <div class="tool-card reveal">
+        <div class="tool-icon">∑</div>
+        <h3>economics</h3>
+        <p>intermediate micro, macro, and econometric measurement.</p>
+        <div class="tool-tags">
+          <span class="tool-tag">microeconomics</span>
+          <span class="tool-tag">macroeconomics</span>
+          <span class="tool-tag">statistics</span>
+          <span class="tool-tag">latex</span>
+        </div>
+      </div>
+
+      <div class="tool-card reveal">
+        <div class="tool-icon">⌘</div>
+        <h3>workflow</h3>
+        <p>the everyday stack for shipping and reviewing.</p>
+        <div class="tool-tags">
+          <span class="tool-tag">git</span>
+          <span class="tool-tag">vs code</span>
+          <span class="tool-tag">figma</span>
+          <span class="tool-tag">android studio</span>
+        </div>
+      </div>
+
+      <div class="tool-card reveal">
+        <div class="tool-icon">✎</div>
+        <h3>spoken</h3>
+        <p>happy to hold a conversation in any of three.</p>
+        <div class="tool-tags">
+          <span class="tool-tag">english</span>
+          <span class="tool-tag">mandarin</span>
+          <span class="tool-tag">spanish</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="section-label">contact</div>
+    <p class="contact-intro">open to internships and conversations with anyone working on interesting problems. the fastest way to reach me is email — i'll get back to you within a day or two.</p>
+
+    <div class="contact-list">
+      <a href="mailto:jeremy@jeremyxiang.com" class="contact-item">
+        <span class="contact-label">email</span>
+        <span class="contact-value">jeremy@jeremyxiang.com</span>
+      </a>
+      <a href="https://www.linkedin.com/in/jeremy-x-6a8292222/" target="_blank" rel="noopener" class="contact-item">
+        <span class="contact-label">linkedin</span>
+        <span class="contact-value">jeremy-x</span>
+      </a>
+      <a href="Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener" class="contact-item">
+        <span class="contact-label">resume</span>
+        <span class="contact-value">download pdf</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div>© 2026 jeremy xiang · built with care</div>
+    <div class="social">
+      <a href="mailto:jeremy@jeremyxiang.com">email</a>
+      <a href="https://www.linkedin.com/in/jeremy-x-6a8292222/" target="_blank" rel="noopener">linkedin</a>
+      <a href="Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener">resume</a>
+    </div>
+  </footer>
+
+</main>
+</div>
+
+<!-- scripts -->
+<script src="script.js"></script>
+
+</body>
+</html>
