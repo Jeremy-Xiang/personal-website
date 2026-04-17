@@ -34,10 +34,10 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  /* The solid background fades first, then the rings keep expanding
-     briefly over now-visible content for visual flourish */
-  animation: domainExit 0.4s cubic-bezier(0.77, 0, 0.175, 1) forwards;
-  animation-delay: 0.35s;
+  /* Background fades quickly so content is visible ~0.6s in,
+     but rings keep expanding on top as a flourish over visible content */
+  animation: domainExit 0.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  animation-delay: 0.55s;
 }
 
 .domain-ring {
@@ -47,13 +47,15 @@
   border-radius: 50%;
   opacity: 0;
 }
-.domain-ring.r1 { animation: ringExpand 0.9s ease-out 0s forwards; }
-.domain-ring.r2 { animation: ringExpand 0.9s ease-out 0.1s forwards; opacity: 0.5; }
-.domain-ring.r3 { animation: ringExpand 0.9s ease-out 0.2s forwards; opacity: 0.3; }
+/* rings total about 1.3s of visible animation, but after 0.6s
+   they're expanding *over* already-visible content */
+.domain-ring.r1 { animation: ringExpand 1.2s ease-out 0s forwards; }
+.domain-ring.r2 { animation: ringExpand 1.2s ease-out 0.12s forwards; opacity: 0.5; }
+.domain-ring.r3 { animation: ringExpand 1.2s ease-out 0.24s forwards; opacity: 0.3; }
 
 @keyframes ringExpand {
   0% { opacity: 0; transform: scale(0.4); }
-  20% { opacity: 1; }
+  15% { opacity: 1; }
   100% { opacity: 0; transform: scale(20); }
 }
 
@@ -65,11 +67,11 @@
   letter-spacing: 0.1em;
   color: var(--accent);
   opacity: 0;
-  animation: domainText 0.75s ease-in-out forwards;
+  animation: domainText 1s ease-in-out forwards;
 }
 @keyframes domainText {
   0% { opacity: 0; letter-spacing: 0.3em; }
-  30%, 70% { opacity: 1; letter-spacing: 0.1em; }
+  25%, 65% { opacity: 1; letter-spacing: 0.1em; }
   100% { opacity: 0; letter-spacing: 0.02em; }
 }
 

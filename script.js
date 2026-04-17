@@ -86,7 +86,7 @@
       setTimeout(() => {
         sessionStorage.setItem('introPlayed', '1');
         document.documentElement.classList.add('intro-done');
-      }, 800); // intro is ~0.75s long
+      }, 1400); // intro is ~1.3s long
     }
   } catch(e) {}
 })();
@@ -325,9 +325,9 @@
 
   // Schedule after initial paint so hero and content render immediately
   if ('requestIdleCallback' in window) {
-    requestIdleCallback(buildAmbient, { timeout: 500 });
+    requestIdleCallback(buildAmbient, { timeout: 200 });
   } else {
-    setTimeout(buildAmbient, 50);
+    setTimeout(buildAmbient, 30);
   }
 })();
 
@@ -348,7 +348,18 @@ const observer = new IntersectionObserver((entries) => {
     }
   });
 }, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Show above-the-fold reveal elements immediately — no waiting for scroll.
+// Elements below the fold still get the fade-in as you scroll to them.
+const viewportH = window.innerHeight;
+document.querySelectorAll('.reveal').forEach(el => {
+  const rect = el.getBoundingClientRect();
+  if (rect.top < viewportH) {
+    el.classList.add('visible');
+  } else {
+    observer.observe(el);
+  }
+});
 
 // section label line-draw
 const sectionObserver = new IntersectionObserver((entries) => {
@@ -358,7 +369,14 @@ const sectionObserver = new IntersectionObserver((entries) => {
     }
   });
 }, { threshold: 0.2 });
-document.querySelectorAll('section').forEach(el => sectionObserver.observe(el));
+document.querySelectorAll('section').forEach(el => {
+  const rect = el.getBoundingClientRect();
+  if (rect.top < viewportH * 0.8) {
+    el.classList.add('visible');
+  } else {
+    sectionObserver.observe(el);
+  }
+});
 
 document.querySelectorAll('.tool-card').forEach((card, i) => {
   card.style.transitionDelay = (i * 0.05) + 's';
