@@ -75,17 +75,14 @@
 })();
 
 // ----- mark intro animation as played (once per session) -----
-// so re-enabling motion doesn't replay the Domain Expansion
+// Inline script in <head> handles adding the class to skip the intro
+// on repeat visits. Here we just mark sessionStorage after intro plays.
 (function() {
   try {
     const played = sessionStorage.getItem('introPlayed') === '1';
-    if (played) {
-      document.documentElement.classList.add('intro-done');
-    } else {
-      // mark it after a short delay so intro has time to play
+    if (!played) {
       setTimeout(() => {
         sessionStorage.setItem('introPlayed', '1');
-        document.documentElement.classList.add('intro-done');
       }, 1400); // intro is ~1.3s long
     }
   } catch(e) {}
@@ -478,4 +475,24 @@ document.querySelector('.logo').addEventListener('click', () => {
       inf.style.transform = '';
     }, 1100);
   });
+})();
+// ----- nav scroll detection -----
+// Adds .scrolled class to nav when user has scrolled past the top.
+// Needed so nav stays transparent at top-of-page (no black box on mobile).
+(function() {
+  const nav = document.querySelector('nav');
+  if (!nav) return;
+  let ticking = false;
+  function update() {
+    const scrolled = window.scrollY > 10;
+    nav.classList.toggle('scrolled', scrolled);
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+  update(); // initial state
 })();

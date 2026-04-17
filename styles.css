@@ -357,14 +357,20 @@ nav {
   top: 0;
   z-index: 50;
   padding: 1rem 0;
-  /* subtle backdrop so content doesn't bleed through */
+  /* Default: fully transparent. Background appears only after scroll. */
+  background: transparent;
+  transition: background 0.25s ease, backdrop-filter 0.25s ease;
+}
+/* Only apply backdrop when user has scrolled past the top — prevents
+   the "black box at top of page" issue on mobile where the solid
+   background is visible against nothing. JS adds .scrolled class. */
+nav.scrolled {
   background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  /* graceful fallback for browsers without color-mix */
 }
-/* Windows + backdrop-filter can look muddy — use a solid semi-transparent bg */
-:root.is-windows nav {
+/* Windows fallback: solid background when scrolled, but only when scrolled */
+:root.is-windows nav.scrolled {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   background: var(--bg);
