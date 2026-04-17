@@ -508,6 +508,15 @@ section.visible .section-label::after {
   color: var(--soft);
   letter-spacing: 0.01em;
 }
+.entry-meta a {
+  color: var(--soft);
+  border-bottom: 1px solid var(--line);
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+.entry-meta a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
 
 .tools-grid {
   display: grid;
@@ -520,8 +529,11 @@ section.visible .section-label::after {
   background: transparent;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   animation: toolBob 6s ease-in-out infinite;
+}
+.tool-card:hover {
+  transform: translateY(-6px);
 }
 /* remove right border from last column, bottom border from last row */
 .tool-card:nth-child(2n) { border-right: none; }
@@ -829,3 +841,26 @@ footer {
   }
   .domain { display: none; }
 }
+
+/* low-performance mode: triggered automatically when FPS is low,
+   or manually via toggle. Kills the most expensive effects. */
+:root.low-perf .blob,
+:root.low-perf .shooting-star,
+:root.low-perf .ambient::before,
+:root.low-perf .cursor-dot {
+  display: none !important;
+}
+:root.low-perf .const-line,
+:root.low-perf .const-star,
+:root.low-perf .star {
+  animation: none !important;
+}
+:root.low-perf .constellation {
+  animation: constFade 2s ease-out forwards !important;
+}
+:root.low-perf .tool-card,
+:root.low-perf .trait-glyph,
+:root.low-perf .infinity {
+  animation: none !important;
+}
+:root.low-perf .domain { display: none; }

@@ -1,3 +1,69 @@
+// ----- performance detection -----
+// Measures frames-per-second for ~1.5 seconds after load. If FPS is
+// consistently low, adds `low-perf` class to html, which disables the
+// most expensive visual effects via CSS.
+(function() {
+  // respect saved user preference first (from motion toggle)
+  try {
+    if (localStorage.getItem('motion') === 'reduced') {
+      document.documentElement.classList.add('low-perf');
+      return;
+    }
+  } catch(e) {}
+
+  // also check for "save data" preference and low-memory devices up front
+  const saveData = navigator.connection && navigator.connection.saveData;
+  const lowMemory = navigator.deviceMemory && navigator.deviceMemory <= 2;
+  if (saveData || lowMemory) {
+    document.documentElement.classList.add('low-perf');
+    return;
+  }
+
+  let frames = 0;
+  let start = null;
+  const DURATION_MS = 1500;
+  const FPS_THRESHOLD = 40; // below this = degrade
+
+  function tick(now) {
+    if (!start) start = now;
+    frames++;
+    const elapsed = now - start;
+    if (elapsed < DURATION_MS) {
+      requestAnimationFrame(tick);
+    } else {
+      const fps = (frames / elapsed) * 1000;
+      if (fps < FPS_THRESHOLD) {
+        document.documentElement.classList.add('low-perf');
+      }
+    }
+  }
+  // delay by one frame so the initial page-load stutter isn't counted
+  requestAnimationFrame(() => requestAnimationFrame(tick));
+})();
+
+// ----- manual motion toggle -----
+(function() {
+  const toggle = document.getElementById('motionToggle');
+  if (!toggle) return;
+
+  function syncLabel() {
+    const on = document.documentElement.classList.contains('low-perf');
+    toggle.textContent = on ? 'enable motion' : 'reduce motion';
+  }
+  syncLabel();
+
+  toggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    const root = document.documentElement;
+    const nowReduced = !root.classList.contains('low-perf');
+    root.classList.toggle('low-perf', nowReduced);
+    try {
+      localStorage.setItem('motion', nowReduced ? 'reduced' : 'normal');
+    } catch(e) {}
+    syncLabel();
+  });
+})();
+
 // build ambient background: constellations + scattered stars
 (function() {
   const ambient = document.querySelector('.ambient');
