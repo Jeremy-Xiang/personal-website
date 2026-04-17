@@ -86,13 +86,16 @@
       setTimeout(() => {
         sessionStorage.setItem('introPlayed', '1');
         document.documentElement.classList.add('intro-done');
-      }, 2800); // intro is ~2.5s long
+      }, 800); // intro is ~0.75s long
     }
   } catch(e) {}
 })();
 
 // build ambient background: constellations + scattered stars
+// Deferred via requestIdleCallback so the hero/content render first.
+// Falls back to setTimeout for older browsers.
 (function() {
+  function buildAmbient() {
   const ambient = document.querySelector('.ambient');
 
   // --- real constellations, coords normalized 0-100 within each region ---
@@ -268,8 +271,10 @@
   });
 
   // --- scattered background stars ---
-  // edge layer: denser, pushed away from central content
+  // edge layer: denser, pushed away from central content.
+  // Build in a DocumentFragment first to avoid repeated layout thrash.
   const edgeCount = 80;
+  const edgeFrag = document.createDocumentFragment();
   for (let i = 0; i < edgeCount; i++) {
     const s = document.createElement('div');
     const size = Math.random();
@@ -290,11 +295,13 @@
     s.style.setProperty('--dy', dy);
     s.style.setProperty('--star-opacity', op);
     s.style.animation = `starDrift ${dur}s ease-in-out ${delay}s infinite`;
-    ambient.appendChild(s);
+    edgeFrag.appendChild(s);
   }
+  ambient.appendChild(edgeFrag);
 
   // center layer: very faint, smaller, peppers the reading column softly
   const centerCount = 35;
+  const centerFrag = document.createDocumentFragment();
   for (let i = 0; i < centerCount; i++) {
     const s = document.createElement('div');
     s.className = 'star';
@@ -311,7 +318,16 @@
     s.style.setProperty('--dy', dy);
     s.style.setProperty('--star-opacity', op);
     s.style.animation = `starDrift ${dur}s ease-in-out ${delay}s infinite`;
-    ambient.appendChild(s);
+    centerFrag.appendChild(s);
+  }
+  ambient.appendChild(centerFrag);
+  } // end buildAmbient
+
+  // Schedule after initial paint so hero and content render immediately
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(buildAmbient, { timeout: 500 });
+  } else {
+    setTimeout(buildAmbient, 50);
   }
 })();
 

@@ -34,8 +34,10 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  animation: domainExit 1.4s cubic-bezier(0.77, 0, 0.175, 1) forwards;
-  animation-delay: 1.8s;
+  /* The solid background fades first, then the rings keep expanding
+     briefly over now-visible content for visual flourish */
+  animation: domainExit 0.4s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  animation-delay: 0.35s;
 }
 
 .domain-ring {
@@ -45,9 +47,9 @@
   border-radius: 50%;
   opacity: 0;
 }
-.domain-ring.r1 { animation: ringExpand 1.8s ease-out 0s forwards; }
-.domain-ring.r2 { animation: ringExpand 1.8s ease-out 0.25s forwards; opacity: 0.5; }
-.domain-ring.r3 { animation: ringExpand 1.8s ease-out 0.5s forwards; opacity: 0.3; }
+.domain-ring.r1 { animation: ringExpand 0.9s ease-out 0s forwards; }
+.domain-ring.r2 { animation: ringExpand 0.9s ease-out 0.1s forwards; opacity: 0.5; }
+.domain-ring.r3 { animation: ringExpand 0.9s ease-out 0.2s forwards; opacity: 0.3; }
 
 @keyframes ringExpand {
   0% { opacity: 0; transform: scale(0.4); }
@@ -63,7 +65,7 @@
   letter-spacing: 0.1em;
   color: var(--accent);
   opacity: 0;
-  animation: domainText 1.8s ease-in-out forwards;
+  animation: domainText 0.75s ease-in-out forwards;
 }
 @keyframes domainText {
   0% { opacity: 0; letter-spacing: 0.3em; }
