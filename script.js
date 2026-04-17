@@ -1,3 +1,13 @@
+// ----- platform detection -----
+// Windows + heavy blur/mix-blend-mode combos cause rendering glitches
+// on some GPU drivers. Detect Windows and flag for CSS-level mitigations.
+(function() {
+  const ua = navigator.userAgent || '';
+  if (/Windows|Win64|Win32/.test(ua)) {
+    document.documentElement.classList.add('is-windows');
+  }
+})();
+
 // ----- performance detection -----
 // Measures frames-per-second for ~1.5 seconds after load. If FPS is
 // consistently low, adds `low-perf` class to html, which disables the

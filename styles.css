@@ -864,3 +864,21 @@ footer {
   animation: none !important;
 }
 :root.low-perf .domain { display: none; }
+
+/* Windows-specific mitigations: heavy blurs and mix-blend-mode cause
+   rendering glitches on many Windows GPU/driver combinations. */
+:root.is-windows .blob {
+  filter: blur(40px); /* reduced from 80px */
+  opacity: 0.25;
+}
+:root.is-windows .ambient::before {
+  display: none; /* dotted grid overlay compounds the issue */
+}
+:root.is-windows .cursor-dot {
+  mix-blend-mode: normal; /* mix-blend-mode is the biggest rendering-glitch culprit */
+  background: var(--accent);
+  opacity: 0.7;
+}
+:root.is-windows .shooting-star {
+  display: none; /* shooting streaks with gradient + rotation flicker on Windows */
+}
