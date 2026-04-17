@@ -56,7 +56,7 @@
 }
 
 .domain-text {
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces', 'Georgia', 'Cambria', 'Times New Roman', serif;
   font-style: italic;
   font-weight: 300;
   font-size: 1.6rem;
@@ -80,7 +80,7 @@
 .infinity {
   display: inline-block;
   color: var(--accent);
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces', 'Georgia', 'Cambria', 'Times New Roman', serif;
   font-weight: 300;
   margin-right: 0.2em;
   animation: floaty 4s ease-in-out infinite;
@@ -99,7 +99,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background: var(--bg);
   color: var(--ink);
   font-size: 15px;
@@ -351,7 +351,7 @@ nav {
 }
 
 .logo {
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces', 'Georgia', 'Cambria', 'Times New Roman', serif;
   font-weight: 400;
   font-size: 1.05rem;
   letter-spacing: -0.01em;
@@ -377,7 +377,7 @@ nav {
 .hero { margin-bottom: 5rem; }
 
 h1 {
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces', 'Georgia', 'Cambria', 'Times New Roman', serif;
   font-size: 2rem;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -425,7 +425,7 @@ h1 em {
   vertical-align: baseline;
   color: var(--accent);
   font-style: italic;
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces', 'Georgia', 'Cambria', 'Times New Roman', serif;
   white-space: nowrap;
 }
 .rotator .sizer {
@@ -455,7 +455,7 @@ h1 em {
 section { margin-bottom: 4.5rem; }
 
 .section-label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -503,7 +503,7 @@ section.visible .section-label::after {
 }
 
 .entry-meta {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
   font-size: 0.75rem;
   color: var(--soft);
   letter-spacing: 0.01em;
@@ -567,7 +567,7 @@ section.visible .section-label::after {
   transform: translateY(-3px);
 }
 .trait-glyph {
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces', 'Georgia', 'Cambria', 'Times New Roman', serif;
   font-size: 1.5rem;
   font-style: italic;
   color: var(--accent);
@@ -587,13 +587,13 @@ section.visible .section-label::after {
   50% { transform: scale(1.08); opacity: 0.85; }
 }
 .trait-name {
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces', 'Georgia', 'Cambria', 'Times New Roman', serif;
   font-size: 0.95rem;
   color: var(--ink);
   margin-bottom: 0.15rem;
 }
 .trait-desc {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
   font-size: 0.7rem;
   color: var(--soft);
   letter-spacing: 0.02em;
@@ -601,7 +601,7 @@ section.visible .section-label::after {
 }
 
 .tool-icon {
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces', 'Georgia', 'Cambria', 'Times New Roman', serif;
   font-size: 1.4rem;
   color: var(--accent);
   margin-bottom: 0.75rem;
@@ -610,7 +610,7 @@ section.visible .section-label::after {
 }
 
 .tool-card h3 {
-  font-family: 'Fraunces', serif;
+  font-family: 'Fraunces', 'Georgia', 'Cambria', 'Times New Roman', serif;
   font-size: 1.05rem;
   font-weight: 400;
   margin-bottom: 0.5rem;
@@ -630,7 +630,7 @@ section.visible .section-label::after {
   gap: 0.3rem;
 }
 .tool-tag {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
   font-size: 0.65rem;
   color: var(--soft);
   background: transparent;
@@ -663,7 +663,7 @@ section.visible .section-label::after {
   padding-left: 0.4rem;
 }
 .now-label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -676,7 +676,7 @@ section.visible .section-label::after {
   line-height: 1.5;
 }
 .now-meta {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
   font-size: 0.7rem;
   color: var(--soft);
   letter-spacing: 0.05em;
@@ -743,7 +743,7 @@ section.visible .section-label::after {
   color: var(--accent);
 }
 .contact-label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -763,7 +763,7 @@ footer {
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
   font-size: 0.75rem;
   color: var(--soft);
 }
