@@ -83,7 +83,7 @@
     if (!played) {
       setTimeout(() => {
         sessionStorage.setItem('introPlayed', '1');
-      }, 1400); // intro is ~1.3s long
+      }, 1900); // intro is ~1.8s long
     }
   } catch(e) {}
 })();
@@ -268,9 +268,10 @@
   });
 
   // --- scattered background stars ---
-  // edge layer: denser, pushed away from central content.
-  // Build in a DocumentFragment first to avoid repeated layout thrash.
-  const edgeCount = 80;
+  // When motion is reduced, constellations are hidden — boost star count
+  // slightly so the sky doesn't feel too empty.
+  const lowPerf = document.documentElement.classList.contains('low-perf');
+  const edgeCount = lowPerf ? 140 : 80;
   const edgeFrag = document.createDocumentFragment();
   for (let i = 0; i < edgeCount; i++) {
     const s = document.createElement('div');
@@ -297,7 +298,7 @@
   ambient.appendChild(edgeFrag);
 
   // center layer: very faint, smaller, peppers the reading column softly
-  const centerCount = 35;
+  const centerCount = lowPerf ? 80 : 35;
   const centerFrag = document.createDocumentFragment();
   for (let i = 0; i < centerCount; i++) {
     const s = document.createElement('div');
@@ -418,57 +419,29 @@ document.querySelector('.logo').addEventListener('click', () => {
   tick();
 })();
 
-// infinity easter egg — click briefly speeds up constellation drift
+// infinity easter egg — click speeds up constellation drift
+// Uses CSS class toggle; speed transitions are handled via CSS
+// so there are no JS-driven interpolation steps to look janky.
 (function() {
   const inf = document.querySelector('.infinity');
   if (!inf) return;
   inf.style.cursor = 'pointer';
 
-  let cooldown = false;
+  let timer = null;
   inf.addEventListener('click', (e) => {
     e.stopPropagation();  // don't trigger logo scroll
-    if (cooldown) return;
-    cooldown = true;
 
-    const constellations = document.querySelectorAll('.constellation');
+    // add fast class — CSS handles the actual speed change
+    document.documentElement.classList.add('fast-drift');
 
-    // Speed up phase: 0 -> 4s. Ease back: 4s -> 6s.
-    // We interpolate the animation-duration in steps so there's no snap.
-    const fastDur = [2, 8];   // [const-drift, twinkle]
-    const normDur = [null, null]; // empty means restore default from CSS
+    // clear any pending remove so rapid clicks just extend the fast phase
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      document.documentElement.classList.remove('fast-drift');
+      timer = null;
+    }, 4500);
 
-    constellations.forEach(c => {
-      c.style.animationDuration = `${fastDur[0]}s, ${fastDur[1]}s`;
-    });
-
-    // after 4s, ease back in 6 steps over 2 seconds
-    setTimeout(() => {
-      const steps = 12;
-      const stepMs = 180;
-      let i = 0;
-      const timer = setInterval(() => {
-        i++;
-        const t = i / steps; // 0 -> 1
-        const eased = t * t * (3 - 2 * t); // smoothstep
-        // interpolate toward original CSS durations (approx 60s const, 180s twinkle on defaults)
-        // we approximate by scaling the fast values toward a "slow" target
-        const targetConst = 60;
-        const targetTwink = 180;
-        const curConst = fastDur[0] + (targetConst - fastDur[0]) * eased;
-        const curTwink = fastDur[1] + (targetTwink - fastDur[1]) * eased;
-        constellations.forEach(c => {
-          c.style.animationDuration = `${curConst.toFixed(1)}s, ${curTwink.toFixed(1)}s`;
-        });
-        if (i >= steps) {
-          clearInterval(timer);
-          // clear inline override so CSS defaults (per-constellation) take over again
-          constellations.forEach(c => { c.style.animationDuration = ''; });
-          cooldown = false;
-        }
-      }, stepMs);
-    }, 4000);
-
-    // spin infinity as feedback
+    // spin infinity as visual feedback
     inf.style.transition = 'transform 1s cubic-bezier(0.77, 0, 0.175, 1)';
     inf.style.transform = 'rotate(720deg)';
     setTimeout(() => {
