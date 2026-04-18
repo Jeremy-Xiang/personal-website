@@ -109,7 +109,7 @@ body {
   text-rendering: optimizeLegibility;
   transition: background 0.4s ease, color 0.4s ease;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* soft drifting ambient background */
@@ -913,8 +913,7 @@ footer {
 :root.light .theme-toggle .moon { display: none; }
 
 @media (max-width: 600px) {
-  html { overflow-x: clip; }
-  body { overflow-x: hidden; }
+  html, body { overflow-x: clip; }
   .container { padding: 3rem 1.25rem 4rem; max-width: 100%; }
   nav { margin-bottom: 3rem; gap: 0.5rem; padding: 0.75rem 0; }
   .nav-links { gap: 1rem; font-size: 0.8rem; flex-wrap: wrap; }
