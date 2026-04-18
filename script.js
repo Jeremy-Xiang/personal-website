@@ -1,10 +1,15 @@
 // ----- platform detection -----
 // Windows + heavy blur/mix-blend-mode combos cause rendering glitches
-// on some GPU drivers. Detect Windows and flag for CSS-level mitigations.
+// on some GPU drivers. iOS Safari has the same issue with large blurs +
+// compositor-heavy animations. Detect both and flag for CSS mitigations.
 (function() {
   const ua = navigator.userAgent || '';
   if (/Windows|Win64|Win32/.test(ua)) {
     document.documentElement.classList.add('is-windows');
+  }
+  if (/iPhone|iPad|iPod/.test(ua) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+    document.documentElement.classList.add('is-ios');
   }
 })();
 

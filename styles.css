@@ -940,6 +940,12 @@ footer {
     transition-duration: 0.01ms !important;
   }
   .domain { display: none; }
+  /* infinite looping animations at 0.01ms strobe thousands of times/sec —
+     disable them entirely instead of just speeding them up */
+  .blob, .shooting-star, .star, .constellation,
+  .const-line, .tool-card, .trait-glyph, .infinity {
+    animation: none !important;
+  }
 }
 
 /* low-performance / reduced motion mode: triggered automatically when
@@ -990,4 +996,18 @@ footer {
 }
 :root.is-windows .shooting-star {
   display: none; /* shooting streaks with gradient + rotation flicker on Windows */
+}
+
+/* iOS Safari mitigations: same GPU compositing issues as Windows —
+   large blur radii + animated fixed elements cause flickering on some devices. */
+:root.is-ios .blob {
+  filter: blur(40px);
+  opacity: 0.18;
+  animation: none; /* static blobs — motion is the main flicker trigger */
+}
+:root.is-ios .shooting-star {
+  display: none;
+}
+:root.is-ios .ambient::before {
+  display: none;
 }
