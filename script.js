@@ -341,6 +341,42 @@ themeBtn.addEventListener('click', () => {
   localStorage.setItem('theme', root.classList.contains('light') ? 'light' : 'dark');
 });
 
+// ----- rotating word with dynamic width -----
+// Updates the hidden sizer text to match each word so the container
+// width reflows naturally — no explicit pixel measurement needed.
+(function() {
+  const rotator = document.querySelector('.rotator');
+  if (!rotator) return;
+  const sizer = rotator.querySelector('.sizer');
+  const words = Array.from(rotator.querySelectorAll('.word'));
+  if (!words.length) return;
+
+  const SHOW_MS = 3000;
+  const FADE_MS = 400;
+  let idx = 0;
+
+  function activate(i, instant) {
+    if (!instant) {
+      words.forEach(w => {
+        w.style.opacity = '0';
+        w.style.transform = 'translateY(6px) translateZ(0)';
+      });
+    }
+    sizer.textContent = words[i].textContent;
+    setTimeout(() => {
+      words[i].style.opacity = '1';
+      words[i].style.transform = 'translateY(0) translateZ(0)';
+    }, instant ? 0 : 100);
+    idx = i;
+  }
+
+  const wait = Math.max(0, 2700 - performance.now());
+  setTimeout(() => {
+    activate(0, true);
+    setInterval(() => activate((idx + 1) % words.length, false), SHOW_MS + FADE_MS);
+  }, wait);
+})();
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -470,4 +506,45 @@ document.querySelector('.logo').addEventListener('click', () => {
     }
   }, { passive: true });
   update(); // initial state
+})();
+
+// ----- nav proximity fade -----
+// Fades content elements as they scroll up into the nav zone,
+// and restores opacity as they scroll back down away from it.
+(function() {
+  const nav = document.querySelector('nav');
+  if (!nav) return;
+
+  const FADE_PX = 80; // px below nav bottom over which to fade
+  const MIN_OP = 0.05;
+
+  const targets = Array.from(document.querySelectorAll(
+    'h1, h2, p, .entry-title, .entry-meta, .section-label, ' +
+    '.trait-name, .trait-desc, .now-text, .now-label, ' +
+    '.contact-item, .tool-card h3, .tool-card p, footer'
+  ));
+
+  let ticking = false;
+
+  function update() {
+    const navBottom = nav.getBoundingClientRect().bottom;
+    targets.forEach(el => {
+      const dist = el.getBoundingClientRect().top - navBottom;
+      if (dist >= FADE_PX) {
+        el.style.opacity = '';
+      } else if (dist <= 0) {
+        el.style.opacity = MIN_OP;
+      } else {
+        el.style.opacity = (MIN_OP + (1 - MIN_OP) * (dist / FADE_PX)).toFixed(3);
+      }
+    });
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
 })();
