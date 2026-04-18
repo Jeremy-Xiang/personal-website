@@ -70,6 +70,10 @@
     try {
       localStorage.setItem('motion', nowReduced ? 'reduced' : 'normal');
     } catch(e) {}
+    // Mark intro as "done" the moment the user touches the toggle, so
+    // toggling motion back ON does NOT re-reveal an in-progress intro.
+    root.classList.add('intro-done');
+    try { sessionStorage.setItem('introPlayed', '1'); } catch(e) {}
     sync();
   });
 })();
@@ -271,17 +275,15 @@
   // When motion is reduced, constellations are hidden — boost star count
   // slightly so the sky doesn't feel too empty.
   const lowPerf = document.documentElement.classList.contains('low-perf');
-  const edgeCount = lowPerf ? 140 : 80;
+  const edgeCount = lowPerf ? 160 : 100;
   const edgeFrag = document.createDocumentFragment();
   for (let i = 0; i < edgeCount; i++) {
     const s = document.createElement('div');
     const size = Math.random();
     s.className = 'star' + (size > 0.9 ? ' lg' : '');
-    let x = Math.random() * 100;
-    let y = Math.random() * 100;
-    if (x > 28 && x < 72) {
-      x = x < 50 ? x * 0.5 : 100 - (100 - x) * 0.5;
-    }
+    // scatter uniformly across the whole viewport — no center avoidance
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
     s.style.left = x + '%';
     s.style.top = y + '%';
     const dur = 14 + Math.random() * 20;
@@ -297,8 +299,8 @@
   }
   ambient.appendChild(edgeFrag);
 
-  // center layer: very faint, smaller, peppers the reading column softly
-  const centerCount = lowPerf ? 80 : 35;
+  // center layer: slightly fainter, peppers the reading column softly
+  const centerCount = lowPerf ? 120 : 70;
   const centerFrag = document.createDocumentFragment();
   for (let i = 0; i < centerCount; i++) {
     const s = document.createElement('div');

@@ -484,7 +484,16 @@ h1 em {
   100% { opacity: 0; transform: translateY(-6px) translateZ(0); }
 }
 
-section { margin-bottom: 4.5rem; }
+section {
+  margin-bottom: 4.5rem;
+  /* content-visibility: auto lets the browser skip rendering work for
+     sections that aren't yet in the viewport. Dramatic improvement on
+     initial paint for pages with lots of off-screen content. */
+  content-visibility: auto;
+  /* estimated height helps the browser reserve space without rendering;
+     prevents scrollbar jumping as sections come into view */
+  contain-intrinsic-size: auto 400px;
+}
 
 h2.section-label,
 .section-label {

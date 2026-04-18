@@ -76,14 +76,16 @@
   } catch(e) {}
 </script>
 
-<!-- fonts — loaded async so they don't block first paint (improves LCP) -->
+<!-- fonts — async, only weights actually used (faster load) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+<link rel="preload" as="style" fetchpriority="high" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,300;1,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,300;1,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"></noscript>
 
-<!-- styles -->
-<link rel="stylesheet" href="styles.css?v=14">
+<!-- preload critical assets with high priority so they download first -->
+<link rel="preload" as="style" fetchpriority="high" href="styles.css?v=16">
+<link rel="preload" as="script" fetchpriority="low" href="script.js?v=16">
+<link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
 
@@ -357,7 +359,7 @@
 </div>
 
 <!-- scripts -->
-<script src="script.js?v=14" defer></script>
+<script src="script.js?v=16" defer></script>
 
 </body>
 </html>
