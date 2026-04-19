@@ -943,7 +943,7 @@ footer {
   /* infinite looping animations at 0.01ms strobe thousands of times/sec —
      disable them entirely instead of just speeding them up */
   .blob, .shooting-star, .star, .constellation,
-  .const-line, .tool-card, .trait-glyph, .infinity {
+  .const-line, .tool-card, .trait-glyph, .infinity, .cursor {
     animation: none !important;
   }
 }
