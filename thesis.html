@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>THESIS — Thematic Investment Dashboard · Jeremy Xiang</title>
+
+<meta name="description" content="THESIS is a live investment dashboard that tracks portfolio performance by investment theme — AI infrastructure, defense, biodefense. Built with Python, FastAPI, scikit-learn, and React." />
+<meta name="author" content="Jeremy Xiang" />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#0e0f13" />
+<link rel="canonical" href="https://jeremyxiang.com/thesis" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://jeremyxiang.com/thesis" />
+<meta property="og:title" content="THESIS — Thematic Investment Dashboard" />
+<meta property="og:description" content="A live dashboard tracking portfolio performance by investment thesis. Python, FastAPI, scikit-learn, FinBERT, React." />
+<meta property="og:site_name" content="Jeremy Xiang" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cstyle%3Etext%7Bfont-family:serif;font-style:italic;font-weight:300;fill:%236b8aff%7D%3C/style%3E%3Ctext x='50' y='78' font-size='100' text-anchor='middle'%3E%E2%88%9E%3C/text%3E%3C/svg%3E" />
+
+<script>
+  try {
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.classList.add('light');
+    }
+    // Skip intro animation on sub-pages
+    document.documentElement.classList.add('intro-done');
+  } catch(e) {}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" fetchpriority="high"
+  href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,300;1,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
+  onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,300;1,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"></noscript>
+
+<link rel="stylesheet" href="styles.css?v=16">
+
+<style>
+  /* ── Page-specific overrides ── */
+
+  .thesis-hero {
+    padding: 3.5rem 0 2rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 3rem;
+  }
+
+  .thesis-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .thesis-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .thesis-hero h1 {
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+  }
+
+  .thesis-hero h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+  }
+
+  .thesis-hero p {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: 2rem;
+  }
+
+  .thesis-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.25rem;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    font-weight: 400;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.25rem;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s, transform 0.15s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  /* ── Stats row ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 3.5rem;
+  }
+
+  .stat-cell {
+    padding: 1.25rem 1.5rem;
+    border-right: 1px solid var(--line);
+    background: var(--card);
+  }
+
+  .stat-cell:last-child { border-right: none; }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--soft);
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-value {
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .stat-value.positive { color: #22c55e; }
+  .stat-value.accent   { color: var(--accent); }
+
+  .stat-sub {
+    font-size: 0.78rem;
+    color: var(--soft);
+    margin-top: 0.25rem;
+  }
+
+  /* ── Theme returns ── */
+  .thesis-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .thesis-section h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--soft);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .theme-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .theme-bar-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 80px;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .theme-bar-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .theme-bar-label span {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--soft);
+    margin-top: 2px;
+  }
+
+  .theme-bar-track {
+    height: 6px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .theme-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .theme-bar-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--ink);
+    text-align: right;
+  }
+
+  .theme-bar-pct.positive { color: #22c55e; }
+
+  /* ── How it works ── */
+  .how-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .how-cell {
+    background: var(--card);
+    padding: 1.5rem;
+  }
+
+  .how-cell-icon {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: var(--accent);
+  }
+
+  .how-cell h3 {
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .how-cell p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── Stack ── */
+  .stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .stack-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.3rem 0.7rem;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+
+  .stack-tag.highlight {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: transparent;
+  }
+
+  /* ── Signal preview ── */
+  .signal-preview {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 1rem;
+  }
+
+  .signal-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 0.9rem 1rem;
+    border-top: 2px solid var(--line);
+  }
+
+  .signal-card.buy   { border-top-color: #22c55e; }
+  .signal-card.hold  { border-top-color: #f0b429; }
+  .signal-card.reduce{ border-top-color: #ef4444; }
+
+  .signal-theme {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--soft);
+    margin-bottom: 0.5rem;
+  }
+
+  .signal-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 0.3rem;
+  }
+
+  .signal-label.buy    { color: #22c55e; }
+  .signal-label.hold   { color: #f0b429; }
+  .signal-label.reduce { color: #ef4444; }
+
+  .signal-bar-track {
+    height: 3px;
+    background: var(--line);
+    border-radius: 1px;
+    overflow: hidden;
+    margin-top: 0.4rem;
+  }
+
+  .signal-bar-fill {
+    height: 100%;
+    border-radius: 1px;
+  }
+
+  .signal-bar-fill.buy    { background: #22c55e; }
+  .signal-bar-fill.hold   { background: #f0b429; }
+  .signal-bar-fill.reduce { background: #ef4444; }
+
+  /* ── Back link ── */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--soft);
+    text-decoration: none;
+    margin-bottom: 2.5rem;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover { color: var(--accent); }
+
+  /* ── Responsive ── */
+  /* Skip intro fade-in delay on sub-pages */
+  .intro-done main, main {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* Theme toggle SVG fix */
+  .theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    padding: 0;
+  }
+  .theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  :root:not(.light) .sun { display: none; }
+  :root.light .moon { display: none; }
+
+  @media (max-width: 640px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .stat-cell:nth-child(2) { border-right: none; }
+    .stat-cell:nth-child(3) { border-top: 1px solid var(--line); }
+    .how-grid { grid-template-columns: 1fr; }
+    .signal-preview { grid-template-columns: repeat(3, 1fr); }
+    .theme-bar-row { grid-template-columns: 100px 1fr 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+<div class="container">
+<main>
+
+  <nav>
+    <div class="logo"><a href="/" style="text-decoration:none;color:inherit"><span class="infinity">∞</span>jeremy xiang<span class="dot">.</span></a></div>
+    <ul class="nav-links">
+      <li><a href="/#now">now</a></li>
+      <li><a href="/#experience">experience</a></li>
+      <li><a href="/#contact">contact</a></li>
+      <li><a href="Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener">resume</a></li>
+      <li>
+        <button class="theme-toggle" id="themeToggle" aria-label="toggle theme">
+          <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Back -->
+  <a href="/" class="back-link">← back to home</a>
+
+  <!-- Hero -->
+  <div class="thesis-hero">
+    <div class="thesis-eyebrow">project · 2025–2026</div>
+    <h1>THESIS — <em>thematic<br>investment dashboard.</em></h1>
+    <p>A live dashboard that tracks a portfolio organized by investment thesis — AI infrastructure, defense, biodefense — rather than individual tickers. Pulls real prices, scores financial headlines with NLP, and runs a Random Forest model to predict 30-day outperformance vs SPY.</p>
+    <div class="thesis-cta">
+      <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener" class="btn-primary">
+        live dashboard ↗
+      </a>
+      <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-api" target="_blank" rel="noopener" class="btn-secondary">
+        backend repo ↗
+      </a>
+      <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-frontend" target="_blank" rel="noopener" class="btn-secondary">
+        frontend repo ↗
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-cell">
+      <div class="stat-label">Starting capital</div>
+      <div class="stat-value accent">$15k</div>
+      <div class="stat-sub">Jan 2023</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Peak value</div>
+      <div class="stat-value positive">$400k+</div>
+      <div class="stat-sub">3-year thesis return</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Tickers tracked</div>
+      <div class="stat-value">53</div>
+      <div class="stat-sub">across 5 themes</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">News scored daily</div>
+      <div class="stat-value">2,000+</div>
+      <div class="stat-sub">via FinBERT + Cohere</div>
+    </div>
+  </div>
+
+  <!-- Theme returns -->
+  <div class="thesis-section">
+    <h2>theme returns</h2>
+    <div class="theme-bars" id="themeBars">
+      <div class="theme-bar-row">
+        <div class="theme-bar-label">AI Infrastructure<span>NVDA, AMD, TSM, MSFT…</span></div>
+        <div class="theme-bar-track"><div class="theme-bar-fill" style="width:0%;background:#60a5fa" data-width="85%"></div></div>
+        <div class="theme-bar-pct positive">+274.6%</div>
+      </div>
+      <div class="theme-bar-row">
+        <div class="theme-bar-label">Energy Transition<span>CEG, VST, NEE, FSLR…</span></div>
+        <div class="theme-bar-track"><div class="theme-bar-fill" style="width:0%;background:#4ade80" data-width="100%"></div></div>
+        <div class="theme-bar-pct positive">+362.2%</div>
+      </div>
+      <div class="theme-bar-row">
+        <div class="theme-bar-label">Defense<span>LMT, RTX, PLTR, KTOS…</span></div>
+        <div class="theme-bar-track"><div class="theme-bar-fill" style="width:0%;background:#f97316" data-width="64%"></div></div>
+        <div class="theme-bar-pct positive">+202.9%</div>
+      </div>
+      <div class="theme-bar-row">
+        <div class="theme-bar-label">Healthcare<span>UNH, TMO, ISRG, DHR…</span></div>
+        <div class="theme-bar-track"><div class="theme-bar-fill" style="width:0%;background:#f472b6" data-width="12%"></div></div>
+        <div class="theme-bar-pct positive">+0.1%</div>
+      </div>
+      <div class="theme-bar-row">
+        <div class="theme-bar-label">Biodefense<span>MRNA, SIGA, ILMN, GILD…</span></div>
+        <div class="theme-bar-track"><div class="theme-bar-fill" style="width:0%;background:#c084fc" data-width="20%"></div></div>
+        <div class="theme-bar-pct" style="color:#ef4444">−16.8%</div>
+      </div>
+    </div>
+    <p style="font-size:0.78rem;color:var(--soft);margin-top:1rem;font-family:'JetBrains Mono',monospace;">
+      Biodefense initiated Jan 2025 at beaten-down mRNA valuations — thesis is pre-event positioning ahead of next outbreak cycle.
+    </p>
+  </div>
+
+  <!-- Prediction signals preview -->
+  <div class="thesis-section">
+    <h2>prediction signals — live</h2>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;line-height:1.65;">
+      A Random Forest classifier trained on 3 years of daily price history predicts the probability each theme outperforms SPY over the next 30 days. One model per theme, one per ticker. Updated weekly.
+    </p>
+    <div class="signal-preview">
+      <div class="signal-card buy">
+        <div class="signal-theme">AI</div>
+        <div class="signal-label buy">BUY</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--soft)">72% prob</div>
+        <div class="signal-bar-track"><div class="signal-bar-fill buy" style="width:72%"></div></div>
+      </div>
+      <div class="signal-card hold">
+        <div class="signal-theme">DEF</div>
+        <div class="signal-label hold">HOLD</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--soft)">54% prob</div>
+        <div class="signal-bar-track"><div class="signal-bar-fill hold" style="width:54%"></div></div>
+      </div>
+      <div class="signal-card buy">
+        <div class="signal-theme">NRG</div>
+        <div class="signal-label buy">BUY</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--soft)">68% prob</div>
+        <div class="signal-bar-track"><div class="signal-bar-fill buy" style="width:68%"></div></div>
+      </div>
+      <div class="signal-card hold">
+        <div class="signal-theme">BIO</div>
+        <div class="signal-label hold">HOLD</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--soft)">51% prob</div>
+        <div class="signal-bar-track"><div class="signal-bar-fill hold" style="width:51%"></div></div>
+      </div>
+      <div class="signal-card hold">
+        <div class="signal-theme">MED</div>
+        <div class="signal-label hold">HOLD</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--soft)">48% prob</div>
+        <div class="signal-bar-track"><div class="signal-bar-fill hold" style="width:48%"></div></div>
+      </div>
+    </div>
+    <p style="font-size:0.72rem;color:var(--soft);margin-top:0.75rem;font-family:'JetBrains Mono',monospace;">
+      Signal cards are illustrative — see live values on the dashboard.
+    </p>
+  </div>
+
+  <!-- How it works -->
+  <div class="thesis-section">
+    <h2>how it works</h2>
+    <div class="how-grid">
+      <div class="how-cell">
+        <div class="how-cell-icon">◈</div>
+        <h3>Theme buckets, not tickers</h3>
+        <p>The portfolio is organized around investment theses — "AI infrastructure is undersupplied" — not individual stocks. NVDA, AMD, TSM, and MSFT are all expressions of the same thesis. The dashboard tracks each bucket's aggregate performance.</p>
+      </div>
+      <div class="how-cell">
+        <div class="how-cell-icon">λ</div>
+        <h3>NLP sentiment on 2,000+ headlines</h3>
+        <p>Every headline from Yahoo Finance RSS, CNBC, WSJ, ProMED, CDC alerts, STAT News, and Breaking Defense is scored daily. FinBERT (fine-tuned on financial text) scores positive/neutral/negative — not VADER. Sentiment feeds directly into the prediction model.</p>
+      </div>
+      <div class="how-cell">
+        <div class="how-cell-icon">∑</div>
+        <h3>Random Forest prediction</h3>
+        <p>Trained on 3 years of daily price data. Features: 5/20/60-day momentum, realized volatility, and theme-vs-SPY relative return. Predicts probability that a theme or individual ticker outperforms SPY over the next 30 days. One model per theme, one per ticker.</p>
+      </div>
+      <div class="how-cell">
+        <div class="how-cell-icon">◉</div>
+        <h3>Biodefense early warning</h3>
+        <p>The Biodefense bucket specifically monitors ProMED outbreak reports, WHO news, and CDC health alerts. The thesis: mRNA platforms like MRNA and BNTX can compress vaccine development from years to months. SIGA holds the only FDA-approved smallpox antiviral. Positioning pre-event.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stack -->
+  <div class="thesis-section">
+    <h2>stack</h2>
+    <div class="stack-list">
+      <span class="stack-tag highlight">python</span>
+      <span class="stack-tag highlight">fastapi</span>
+      <span class="stack-tag highlight">scikit-learn</span>
+      <span class="stack-tag highlight">react</span>
+      <span class="stack-tag">yfinance</span>
+      <span class="stack-tag">pandas</span>
+      <span class="stack-tag">numpy</span>
+      <span class="stack-tag">transformers</span>
+      <span class="stack-tag">finbert</span>
+      <span class="stack-tag">cohere</span>
+      <span class="stack-tag">recharts</span>
+      <span class="stack-tag">render</span>
+      <span class="stack-tag">vercel</span>
+      <span class="stack-tag">rss feeds</span>
+      <span class="stack-tag">apscheduler</span>
+      <span class="stack-tag">slowapi</span>
+    </div>
+  </div>
+
+  <!-- The thesis -->
+  <div class="thesis-section">
+    <h2>the thesis journal</h2>
+    <div style="display:flex;flex-direction:column;gap:0;">
+      <div class="entry reveal" style="padding:1rem 0;border-bottom:1px solid var(--line)">
+        <div class="entry-title" style="margin-bottom:0.3rem">Jan 2023 — AI Infrastructure</div>
+        <div class="entry-meta">Initiated NVDA. AI training compute will be undersupplied for 3–5 years. GPU shortage = picks-and-shovels. Added MSFT, GOOGL, META as hyperscaler beneficiaries.</div>
+      </div>
+      <div class="entry reveal" style="padding:1rem 0;border-bottom:1px solid var(--line)">
+        <div class="entry-title" style="margin-bottom:0.3rem">Apr 2023 — Defense</div>
+        <div class="entry-meta">Added LMT, RTX. Ukraine conflict exposes Western stockpile depletion — multi-year re-armament cycle. Added PLTR: AI battlefield analytics is structural, not a one-time contract.</div>
+      </div>
+      <div class="entry reveal" style="padding:1rem 0;border-bottom:1px solid var(--line)">
+        <div class="entry-title" style="margin-bottom:0.3rem">Sep 2024 — Energy Transition</div>
+        <div class="entry-meta">Initiated nuclear basket (CEG, VST). AI data center power demand creates sustained need for carbon-free baseload. Thesis: AI → energy scarcity → nuclear.</div>
+      </div>
+      <div class="entry reveal" style="padding:1rem 0;border-bottom:1px solid var(--line)">
+        <div class="entry-title" style="margin-bottom:0.3rem">Jan 2025 — Biodefense & Pandemic</div>
+        <div class="entry-meta">Initiated biodefense basket. CDC tracking elevated hantavirus cases — 38% case fatality rate, no approved antiviral. mRNA platforms compress vaccine timelines from years to months. SIGA holds the only FDA-approved smallpox antiviral (TPOXX), funded by BARDA stockpile contracts.</div>
+      </div>
+      <div class="entry reveal" style="padding:1rem 0;">
+        <div class="entry-title" style="margin-bottom:0.3rem">Mar 2025 — Healthcare Infrastructure</div>
+        <div class="entry-meta">Added TMO, DHR — lab infrastructure is picks-and-shovels for pandemic response and genomics. ABT rapid testing was proven at scale during COVID and positioned for the next outbreak.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>© 2026 jeremy xiang · <a href="/">back to home</a></div>
+  </footer>
+
+</main>
+</div>
+
+<script src="script.js?v=16" defer></script>
+
+<script>
+  // Animate theme bars on scroll
+  const bars = document.querySelectorAll('.theme-bar-fill');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const target = entry.target.dataset.width;
+        entry.target.style.width = target;
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  bars.forEach(b => observer.observe(b));
+</script>
+
+</body>
+</html>
