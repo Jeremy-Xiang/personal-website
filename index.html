@@ -228,8 +228,6 @@ main{
 
 .section-panel{
   max-width:720px;width:100%;
-  background:rgba(7,8,15,0.38);
-  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
   border-radius:12px;
   padding:36px 48px;
   /* scroll reveal: slide up from below */
@@ -240,7 +238,7 @@ main{
 }
 .section-panel.visible{opacity:1;transform:translateY(0) scale(1)}
 .section-panel:hover{box-shadow:var(--shadow)}
-[data-theme="light"] .section-panel{background:rgba(240,241,248,0.42)}
+
 
 /* ── Staggered child reveal inside visible panels ── */
 .section-panel.visible .now-item,
@@ -290,13 +288,13 @@ main{
 /* ── Traits ── */
 .traits-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
 .trait{
-  background:rgba(17,20,34,0.6);border-radius:6px;
+  border-radius:6px;
   padding:20px 16px;cursor:default;
   transform-style:preserve-3d;
   transition:background .25s,box-shadow .25s,transform .08s ease-out;will-change:transform;
 }
-[data-theme="light"] .trait{background:rgba(232,234,245,0.8)}
-.trait:hover{background:var(--card-hover);box-shadow:var(--shadow)}
+
+.trait:hover{box-shadow:var(--shadow)}
 .trait-glyph{font-size:.9rem;color:var(--accent);margin-bottom:9px;opacity:.7}
 .trait-name{font-family:var(--font-d);font-size:1.1rem;font-style:italic;font-weight:400;color:var(--text);margin-bottom:4px}
 .trait-desc{font-family:var(--font-m);font-size:.6rem;color:var(--muted);letter-spacing:.07em;opacity:.65}
@@ -304,13 +302,13 @@ main{
 /* ── Tools ── */
 .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
 .tool-card{
-  background:rgba(17,20,34,0.6);border-radius:6px;
+  border-radius:6px;
   padding:22px 18px;cursor:default;
   transform-style:preserve-3d;
   transition:background .25s,box-shadow .25s,transform .08s ease-out;will-change:transform;
 }
-[data-theme="light"] .tool-card{background:rgba(232,234,245,0.8)}
-.tool-card:hover{background:var(--card-hover);box-shadow:var(--shadow)}
+
+.tool-card:hover{box-shadow:var(--shadow)}
 .tool-icon{font-family:var(--font-m);font-size:1.05rem;color:var(--accent);margin-bottom:12px;opacity:.6}
 .tool-card h3{font-family:var(--font-d);font-weight:500;font-size:1rem;color:var(--text);margin-bottom:6px}
 .tool-card p{font-size:.8rem;color:var(--muted);margin-bottom:12px;line-height:1.6;font-weight:300}
