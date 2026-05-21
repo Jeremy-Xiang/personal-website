@@ -222,16 +222,16 @@ main{
    SCROLL SECTIONS — appear over starfield
 ══════════════════════════════════════ */
 .scroll-section{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  padding:100px 40px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  padding:80px 40px;position:relative;
 }
 
 .section-panel{
-  max-width:560px;width:100%;
-  background:rgba(7,8,15,0.72);
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  border:1px solid var(--border);border-radius:8px;
-  padding:40px 44px;
+  max-width:720px;width:100%;
+  background:rgba(7,8,15,0.55);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-radius:12px;
+  padding:44px 52px;
   /* scroll reveal: slide up from below */
   opacity:0;transform:translateY(48px) scale(.97);
   transition:opacity .75s cubic-bezier(.22,1,.36,1),
@@ -240,7 +240,7 @@ main{
 }
 .section-panel.visible{opacity:1;transform:translateY(0) scale(1)}
 .section-panel:hover{box-shadow:var(--shadow)}
-[data-theme="light"] .section-panel{background:rgba(240,241,248,0.82)}
+[data-theme="light"] .section-panel{background:rgba(240,241,248,0.65)}
 
 /* ── Staggered child reveal inside visible panels ── */
 .section-panel.visible .now-item,
@@ -290,7 +290,7 @@ main{
 /* ── Traits ── */
 .traits-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
 .trait{
-  background:rgba(17,20,34,0.8);border:1px solid var(--border);border-radius:6px;
+  background:rgba(17,20,34,0.6);border-radius:6px;
   padding:20px 16px;cursor:default;
   transform-style:preserve-3d;
   transition:background .25s,box-shadow .25s,transform .08s ease-out;will-change:transform;
@@ -304,7 +304,7 @@ main{
 /* ── Tools ── */
 .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
 .tool-card{
-  background:rgba(17,20,34,0.8);border:1px solid var(--border);border-radius:6px;
+  background:rgba(17,20,34,0.6);border-radius:6px;
   padding:22px 18px;cursor:default;
   transform-style:preserve-3d;
   transition:background .25s,box-shadow .25s,transform .08s ease-out;will-change:transform;
@@ -319,7 +319,7 @@ main{
 
 /* ── Contact ── */
 .contact-intro{font-size:.91rem;color:var(--muted);max-width:440px;margin-bottom:28px;font-weight:300}
-.contact-list{border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.contact-list{border-radius:4px;overflow:hidden}
 .contact-item{
   display:flex;align-items:center;justify-content:space-between;
   padding:17px 20px;border-bottom:1px solid var(--border);
@@ -347,8 +347,8 @@ footer{
   nav{padding:16px 20px}
   .nav-links{gap:14px;flex-wrap:wrap}
   .hero{padding:0 20px}
-  .scroll-section{padding:80px 20px}
-  .section-panel{padding:28px 24px}
+  .scroll-section{padding:60px 20px}
+  .section-panel{padding:32px 24px}
   .now-item{grid-template-columns:1fr;gap:3px}
   .traits-grid{grid-template-columns:repeat(2,1fr)}
   .tools-grid{grid-template-columns:1fr}
@@ -461,7 +461,7 @@ footer{
 
   <!-- TOOLS -->
   <section class="scroll-section" id="tools">
-    <div class="section-panel" style="max-width:700px">
+    <div class="section-panel" style="max-width:860px">
       <h2 class="section-label">tools</h2>
       <div class="tools-grid">
         <div class="tool-card"><div class="tool-icon">⟨/⟩</div><h3>languages</h3><p>from systems-level C/C++ to typescript and python.</p><div class="tags"><span class="tag">typescript</span><span class="tag">python</span><span class="tag">java</span><span class="tag">c / c++</span></div></div>
@@ -532,7 +532,7 @@ for (let i = 0; i < NUM_STARS; i++) {
     bright: Math.random() > 0.8,
     twinkle: rand(0, Math.PI * 2),
     twinkleSpeed: rand(0.01, 0.04),
-    baseAlpha: rand(0.3, 0.95),
+    baseAlpha: rand(0.65, 1.0),
   });
 }
 
@@ -611,16 +611,16 @@ function render3d() {
       ctx.fillStyle = `rgba(20,40,120,${alpha * 0.7})`;
     } else {
       if (s.bright) {
-        ctx.fillStyle = `rgba(220,230,255,${alpha})`;
+        ctx.fillStyle = `rgba(245,248,255,${alpha})`;
       } else {
-        ctx.fillStyle = `rgba(180,200,255,${alpha * 0.7})`;
+        ctx.fillStyle = `rgba(210,225,255,${alpha * 0.88})`;
       }
     }
 
     // Glow for bright close stars
     if (s.bright && depth > 0.6 && !light) {
-      ctx.shadowBlur = size * 4;
-      ctx.shadowColor = `rgba(110,143,255,${alpha * 0.5})`;
+      ctx.shadowBlur = size * 7;
+      ctx.shadowColor = `rgba(150,175,255,${alpha * 0.75})`;
     }
 
     ctx.beginPath();
