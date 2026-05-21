@@ -739,20 +739,19 @@ window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
   dot.style.left = mx + 'px'; dot.style.top = my + 'px';
   ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
 })();
-// ── Paper rustle synthesiser ──
+// ── Paper rustle sound (synthesised, no files) ──
 (function(){
   let ctx = null;
-  window._rustle = function() {
+  function rustle() {
     try {
       if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
       if (ctx.state === 'suspended') ctx.resume();
-      const t   = ctx.currentTime;
-      const dur = 0.06;
-      const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
-      const d   = buf.getChannelData(0);
+      const t = ctx.currentTime, dur = 0.055;
+      const buf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * dur), ctx.sampleRate);
+      const d = buf.getChannelData(0);
       for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
       const src = ctx.createBufferSource(); src.buffer = buf;
-      const bp  = ctx.createBiquadFilter();
+      const bp = ctx.createBiquadFilter();
       bp.type = 'bandpass'; bp.frequency.value = 2800; bp.Q.value = 0.8;
       const g = ctx.createGain();
       g.gain.setValueAtTime(0.06, t);
@@ -760,13 +759,17 @@ window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
       src.connect(bp); bp.connect(g); g.connect(ctx.destination);
       src.start(t); src.stop(t + dur);
     } catch(e) {}
-  };
+  }
+  // sound triggers when entering each section panel
+  document.querySelectorAll('.section-panel').forEach(el => {
+    el.addEventListener('mouseenter', rustle);
+  });
+  // cursor hover state on interactive elements
+  document.querySelectorAll('a, button, .trait, .tool-card, .entry, .contact-item').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+  });
 })();
-
-document.querySelectorAll('a, button, .trait, .tool-card, .entry, .contact-item').forEach(el => {
-  el.addEventListener('mouseenter', () => { document.body.classList.add('hov'); window._rustle(); });
-  el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
-});
 
 // ══════════════════════════════════════
 // 4. HERO 3D TILT
