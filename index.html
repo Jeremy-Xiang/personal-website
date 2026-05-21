@@ -503,7 +503,7 @@ const ctx = canvas.getContext('2d');
 let W, H;
 
 // 3D star: x,y,z in [-1,1] space, z controls depth
-const NUM_STARS = 600;
+const NUM_STARS = 1100;
 const stars3d = [];
 
 function initCanvas() {
@@ -522,9 +522,9 @@ for (let i = 0; i < NUM_STARS; i++) {
   const phi   = Math.acos(rand(-1, 1));
   const r     = Math.cbrt(Math.random()); // cube root = uniform sphere
   stars3d.push({
-    ox: Math.sin(phi) * Math.cos(theta) * 2.5,
-    oy: Math.sin(phi) * Math.sin(theta) * 2.5,
-    oz: Math.cos(phi) * 2.5,
+    ox: Math.sin(phi) * Math.cos(theta) * 3.8,
+    oy: Math.sin(phi) * Math.sin(theta) * 3.8,
+    oz: Math.cos(phi) * 3.8,
     x: 0, y: 0, // projected screen coords
     size: rand(0.4, 1.8),
     bright: Math.random() > 0.8,
@@ -563,8 +563,8 @@ function projectStar(s, camZ, tiltX, tiltY) {
   x = nx; y = ny; z = nz;
 
   // Camera position shifts with scroll (fly forward) and tilts plane
-  const scrollTiltX = scrollRatio * 0.6;  // tilt on x axis as we scroll
-  const camOffsetZ = scrollRatio * 3.5;    // fly forward
+  const scrollTiltX = scrollRatio * 0.3;  // tilt on x axis as we scroll
+  const camOffsetZ = scrollRatio * 1.8;    // fly forward
 
   // Rotate entire field to tilt the plane like HELIOS
   const ct = Math.cos(scrollTiltX), st = Math.sin(scrollTiltX);
@@ -575,7 +575,7 @@ function projectStar(s, camZ, tiltX, tiltY) {
   const dz = z - (-1 + camOffsetZ);
   if (dz <= 0.01) return null;
 
-  const fov = 400;
+  const fov = 480;
   const sx = (x / dz) * fov + W / 2;
   const sy = (y / dz) * fov + H / 2;
   const depth = 1 - Math.min(1, dz / 5);  // 0=far,1=close
