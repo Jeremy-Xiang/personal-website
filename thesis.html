@@ -653,18 +653,66 @@
 <script src="script.js?v=16" defer></script>
 
 <script>
-  // Animate theme bars on scroll
+  // ── Theme bar fill animation ──
   const bars = document.querySelectorAll('.theme-bar-fill');
-  const observer = new IntersectionObserver((entries) => {
+  const barObs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const target = entry.target.dataset.width;
-        entry.target.style.width = target;
-        observer.unobserve(entry.target);
+        setTimeout(() => {
+          entry.target.style.width = entry.target.dataset.width;
+        }, 200);
+        barObs.unobserve(entry.target);
       }
     });
   }, { threshold: 0.3 });
-  bars.forEach(b => observer.observe(b));
+  bars.forEach(b => barObs.observe(b));
+
+  // ── Scroll reveal for thesis sections + stats row ──
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.thesis-section, .stats-row').forEach(el => revealObs.observe(el));
+
+  // ── Animated number counters on stats ──
+  function animateCount(el, target, prefix, suffix, duration) {
+    const isFloat = target % 1 !== 0;
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3); // cubic ease-out
+      const val = ease * target;
+      el.textContent = prefix + (isFloat ? val.toFixed(1) : Math.floor(val)) + suffix;
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = prefix + target + suffix;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const counters = [
+          { el: e.target.querySelector('.stat-value.accent'), target: 15, prefix: '$', suffix: 'k' },
+          { el: e.target.querySelector('.stat-value.positive'), target: 400, prefix: '$', suffix: 'k+' },
+          { el: e.target.querySelectorAll('.stat-value')[2], target: 53, prefix: '', suffix: '' },
+          { el: e.target.querySelectorAll('.stat-value')[3], target: 300, prefix: '', suffix: '+' },
+        ];
+        counters.forEach(({ el, target, prefix, suffix }) => {
+          if (el) animateCount(el, target, prefix, suffix, 1400);
+        });
+        counterObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const statsRow = document.querySelector('.stats-row');
+  if (statsRow) counterObs.observe(statsRow);
 </script>
 
 </body>
