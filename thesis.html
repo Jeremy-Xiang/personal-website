@@ -1,719 +1,513 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>THESIS — Thematic Investment Dashboard · Jeremy Xiang</title>
-
-<meta name="description" content="THESIS is a live investment dashboard that tracks portfolio performance by investment theme — AI infrastructure, defense, biodefense. Built with Python, FastAPI, scikit-learn, and React." />
-<meta name="author" content="Jeremy Xiang" />
-<meta name="robots" content="index, follow" />
-<meta name="theme-color" content="#0e0f13" />
-<link rel="canonical" href="https://jeremyxiang.com/thesis" />
-
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://jeremyxiang.com/thesis" />
-<meta property="og:title" content="THESIS — Thematic Investment Dashboard" />
-<meta property="og:description" content="A live dashboard tracking portfolio performance by investment thesis. Python, FastAPI, scikit-learn, FinBERT, React." />
-<meta property="og:site_name" content="Jeremy Xiang" />
-
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cstyle%3Etext%7Bfont-family:serif;font-style:italic;font-weight:300;fill:%236b8aff%7D%3C/style%3E%3Ctext x='50' y='78' font-size='100' text-anchor='middle'%3E%E2%88%9E%3C/text%3E%3C/svg%3E" />
-
-<script>
-  try {
-    if (localStorage.getItem('theme') === 'light') {
-      document.documentElement.classList.add('light');
-    }
-    // Skip intro animation on sub-pages
-    document.documentElement.classList.add('intro-done');
-  } catch(e) {}
-</script>
-
+<meta name="description" content="THESIS is a live investment dashboard that tracks portfolio performance by investment theme — AI infrastructure, defense, biodefense. Built with Python, FastAPI, scikit-learn, and React."/>
+<meta name="author" content="Jeremy Xiang"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://jeremyxiang.com/thesis"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://jeremyxiang.com/thesis"/>
+<meta property="og:title" content="THESIS — Thematic Investment Dashboard"/>
+<meta property="og:description" content="A live dashboard tracking portfolio performance by investment thesis."/>
+<meta property="og:site_name" content="Jeremy Xiang"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cstyle%3Etext%7Bfont-family:serif;font-style:italic;font-weight:300;fill:%236b8aff%7D%3C/style%3E%3Ctext x='50' y='78' font-size='100' text-anchor='middle'%3E%E2%88%9E%3C/text%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" fetchpriority="high"
-  href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,300;1,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
-  onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,300;1,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"></noscript>
-
-<link rel="stylesheet" href="styles.css?v=16">
-
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
-  /* ── Page-specific overrides ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080f;--surface:#111422;--border:rgba(255,255,255,0.07);
+  --text:#e4e6f5;--muted:rgba(200,205,235,0.44);
+  --accent:#6e8fff;--accent2:#b8a8ff;--accent-glow:rgba(110,143,255,0.13);
+  --nav-bg:rgba(7,8,15,0.88);--card-hover:#161a2e;
+  --shadow:0 20px 60px rgba(0,0,0,0.55),0 2px 8px rgba(0,0,0,0.3);
+  --line-col:rgba(110,143,255,0.22);
+  --font-d:'Playfair Display',Georgia,serif;
+  --font-b:'DM Sans',sans-serif;--font-m:'DM Mono',monospace;
+}
+[data-theme="light"]{
+  --bg:#f0f1f8;--text:#10111e;--muted:rgba(20,25,60,0.5);
+  --accent:#2a4fff;--accent2:#7244cc;--accent-glow:rgba(42,79,255,0.08);
+  --nav-bg:rgba(240,241,248,0.92);--card-hover:#dfe1f0;
+  --shadow:0 8px 32px rgba(0,0,0,0.1);--line-col:rgba(42,79,255,0.18);
+  --border:rgba(0,0,0,0.08);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:15px;line-height:1.72;overflow-x:hidden;cursor:none;transition:background .4s,color .4s}
 
-  .thesis-hero {
-    padding: 3.5rem 0 2rem;
-    border-bottom: 1px solid var(--line);
-    margin-bottom: 3rem;
-  }
+/* ── Cursor ── */
+#cur-dot{position:fixed;width:7px;height:7px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;left:0;top:0;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;will-change:left,top}
+#cur-ring{position:fixed;width:28px;height:28px;border:1px solid rgba(110,143,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;left:0;top:0;transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.25,.46,.45,.94),height .35s cubic-bezier(.25,.46,.45,.94),border-color .3s;will-change:left,top}
+body.hov #cur-dot{width:11px;height:11px;background:var(--accent2)}
+body.hov #cur-ring{width:46px;height:46px;border-color:rgba(184,168,255,0.6)}
 
-  .thesis-eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
+/* ── Star canvas ── */
+#starfield{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-  .thesis-eyebrow::before {
-    content: '';
-    display: inline-block;
-    width: 2rem;
-    height: 1px;
-    background: var(--accent);
-  }
+/* ── Scroll progress ── */
+#progress{position:fixed;top:0;left:0;height:1px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:100;transition:width .05s linear}
 
-  .thesis-hero h1 {
-    font-family: 'Fraunces', 'Georgia', serif;
-    font-size: clamp(2.2rem, 5vw, 3.4rem);
-    font-weight: 400;
-    line-height: 1.15;
-    color: var(--ink);
-    margin-bottom: 1.25rem;
-  }
+/* ── Nav ── */
+nav{display:flex;align-items:center;justify-content:space-between;position:fixed;top:1px;left:0;right:0;z-index:60;background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:20px 40px;transition:background .4s}
+.logo{font-family:var(--font-d);font-size:1.05rem;font-style:italic;font-weight:400;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo .inf{color:var(--accent);font-style:normal;font-size:1.2rem}
+.nav-links{list-style:none;display:flex;gap:22px;align-items:center}
+.nav-links a{font-family:var(--font-m);font-size:.68rem;color:var(--muted);text-decoration:none;letter-spacing:.09em;text-transform:lowercase;transition:color .18s}
+.nav-links a:hover{color:var(--text)}
+.theme-btn{background:none;border:1px solid var(--border);width:30px;height:30px;border-radius:50%;cursor:none;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.78rem;transition:background .2s,color .2s}
+.theme-btn:hover{background:var(--accent-glow);color:var(--accent)}
 
-  .thesis-hero h1 em {
-    font-style: italic;
-    font-weight: 300;
-    color: var(--accent);
-  }
+/* ── Ambient blobs ── */
+.gblob{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(100px);opacity:.08}
+.gb1{width:600px;height:600px;background:#1e40cc;top:-100px;right:-80px;animation:gd1 22s ease-in-out infinite alternate}
+.gb2{width:380px;height:380px;background:#5520aa;bottom:18%;left:-60px;animation:gd2 28s ease-in-out infinite alternate}
+.gb3{width:260px;height:260px;background:#0e7acc;bottom:-30px;right:25%;animation:gd3 19s ease-in-out infinite alternate}
+[data-theme="light"] .gblob{opacity:.04}
+@keyframes gd1{to{transform:translate(45px,65px)}}
+@keyframes gd2{to{transform:translate(55px,-45px)}}
+@keyframes gd3{to{transform:translate(-28px,38px)}}
 
-  .thesis-hero p {
-    font-size: 1.05rem;
-    color: var(--muted);
-    line-height: 1.7;
-    max-width: 560px;
-    margin-bottom: 2rem;
-  }
+/* ── Constellation overlay ── */
+#sky{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.constellation{position:absolute;animation:cDrift var(--drift-dur,44s) ease-in-out infinite alternate,cFadeIn 1.4s ease both}
+@keyframes cDrift{0%{transform:translate(0,0)}33%{transform:translate(var(--dx1,0),var(--dy1,0))}66%{transform:translate(var(--dx2,0),var(--dy2,0))}100%{transform:translate(var(--dx3,0),var(--dy3,0))}}
+@keyframes cFadeIn{from{opacity:0}to{opacity:1}}
+.const-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.const-line{stroke:var(--line-col);stroke-width:0.5;stroke-linecap:round;animation:lineIn 1.6s ease both,linePulse 6s ease-in-out infinite alternate}
+@keyframes lineIn{from{opacity:0;stroke-dasharray:200;stroke-dashoffset:200}to{opacity:1;stroke-dashoffset:0}}
+@keyframes linePulse{from{opacity:0.35}to{opacity:0.9}}
+.const-star{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(200,210,255,0.58);box-shadow:0 0 4px 1px rgba(110,143,255,0.3);animation:starTwinkle 3s ease-in-out infinite alternate}
+.const-star.bright{width:4.5px;height:4.5px;background:rgba(230,235,255,0.95);box-shadow:0 0 7px 2px rgba(140,170,255,0.55)}
+.const-star.faint{width:2px;height:2px;background:rgba(180,195,255,0.32);box-shadow:none}
+@keyframes starTwinkle{from{opacity:var(--tw,.55);transform:translate(-50%,-50%) scale(1)}to{opacity:calc(var(--tw,.55)*.45);transform:translate(-50%,-50%) scale(.82)}}
 
-  .thesis-cta {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
+/* ── Wrap ── */
+main{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:120px 40px 80px}
 
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.6rem 1.25rem;
-    background: var(--accent);
-    color: var(--bg);
-    border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.05em;
-    text-decoration: none;
-    font-weight: 400;
-    transition: opacity 0.15s, transform 0.15s;
-  }
+/* ── Back ── */
+.back-link{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-m);font-size:.68rem;letter-spacing:.08em;color:var(--muted);text-decoration:none;margin-bottom:2.5rem;transition:color .18s,transform .2s}
+.back-link:hover{color:var(--accent);transform:translateX(-4px)}
 
-  .btn-primary:hover {
-    opacity: 0.88;
-    transform: translateY(-1px);
-  }
+/* ── Hero ── */
+.hero-eyebrow{font-family:var(--font-m);font-size:.67rem;color:var(--accent);letter-spacing:.19em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeUp .7s ease .1s forwards}
+.hero-eyebrow::before{content:'';width:26px;height:1px;background:var(--accent)}
+.hero h1{font-family:var(--font-d);font-size:clamp(2.4rem,6vw,4.2rem);font-weight:500;line-height:1.08;letter-spacing:-.015em;margin-bottom:22px;color:var(--text);opacity:0;animation:fadeUp .85s cubic-bezier(.22,1,.36,1) .25s forwards}
+.hero h1 em{font-style:italic;color:var(--accent2);font-weight:400}
+.hero p{font-size:.97rem;color:var(--muted);max-width:560px;line-height:1.78;font-weight:300;margin-bottom:32px;opacity:0;animation:fadeUp .7s ease .45s forwards}
+.cta-row{display:flex;gap:.75rem;flex-wrap:wrap;opacity:0;animation:fadeUp .7s ease .6s forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.6rem 1.25rem;
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.05em;
-    text-decoration: none;
-    transition: border-color 0.15s, color 0.15s, transform 0.15s;
-  }
+.btn-primary{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.3rem;background:var(--accent);color:#fff;border-radius:4px;font-family:var(--font-m);font-size:.74rem;letter-spacing:.05em;text-decoration:none;transition:opacity .15s,transform .2s cubic-bezier(.34,1.56,.64,1)}
+.btn-primary:hover{opacity:.88;transform:translateY(-2px) scale(1.03)}
+.btn-secondary{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.3rem;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:4px;font-family:var(--font-m);font-size:.74rem;letter-spacing:.05em;text-decoration:none;transition:border-color .15s,color .15s,transform .2s cubic-bezier(.34,1.56,.64,1)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px) scale(1.03)}
 
-  .btn-secondary:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: translateY(-1px);
-  }
+/* ── Section label ── */
+.section-label{font-family:var(--font-m);font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;display:flex;align-items:center;gap:14px}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.77,0,.175,1)}
+section.vis .section-label::after{transform:scaleX(1)}
 
-  /* ── Stats row ── */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 3.5rem;
-  }
+/* ── Sections ── */
+section{margin-bottom:4rem;opacity:0;transform:translateY(28px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1)}
+section.vis{opacity:1;transform:translateY(0)}
 
-  .stat-cell {
-    padding: 1.25rem 1.5rem;
-    border-right: 1px solid var(--line);
-    background: var(--card);
-  }
+/* ── Stats ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden}
+.stat-cell{padding:1.4rem 1.2rem;background:rgba(7,8,15,0);cursor:default;transform-style:preserve-3d;transition:background .25s,transform .12s ease-out;will-change:transform}
+[data-theme="light"] .stat-cell{background:rgba(240,241,248,0)}
+.stat-cell:hover{background:rgba(110,143,255,.07)}
+.stat-label{font-family:var(--font-m);font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.stat-value{font-family:var(--font-d);font-size:2rem;font-weight:500;color:var(--text);line-height:1.1}
+.stat-value.pos{color:#4ade80}.stat-value.acc{color:var(--accent)}
+.stat-sub{font-size:.75rem;color:var(--muted);margin-top:.2rem;font-weight:300}
 
-  .stat-cell:last-child { border-right: none; }
+/* ── Theme bars ── */
+.theme-bars{display:flex;flex-direction:column;gap:.8rem}
+.bar-row{display:grid;grid-template-columns:150px 1fr 90px;align-items:center;gap:1rem;padding:.45rem .5rem;border-radius:6px;transition:background .2s,transform .3s cubic-bezier(.34,1.56,.64,1);cursor:default}
+.bar-row:hover{background:rgba(110,143,255,.06);transform:translateX(5px)}
+.bar-label{font-family:var(--font-m);font-size:.72rem;color:var(--muted)}
+.bar-label span{display:block;font-size:.6rem;color:var(--muted);opacity:.55;margin-top:2px}
+.bar-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;width:0;transition:width 1.1s cubic-bezier(.16,1,.3,1)}
+.bar-pct{font-family:var(--font-m);font-size:.78rem;color:var(--text);text-align:right}
+.bar-pct.pos{color:#4ade80}
 
-  .stat-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--soft);
-    margin-bottom: 0.4rem;
-  }
+/* ── How-grid ── */
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:8px;overflow:hidden}
+.how-cell{padding:1.6rem;background:rgba(7,8,15,0);cursor:default;transform-style:preserve-3d;transition:background .25s,transform .12s ease-out,box-shadow .25s;will-change:transform}
+[data-theme="light"] .how-cell{background:rgba(240,241,248,0)}
+.how-cell:hover{background:rgba(110,143,255,.07);box-shadow:inset 0 0 0 1px rgba(110,143,255,.2)}
+.how-icon{font-size:1.1rem;color:var(--accent);margin-bottom:.75rem;display:inline-block;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.how-cell:hover .how-icon{transform:scale(1.35) rotate(-10deg)}
+.how-cell h3{font-family:var(--font-d);font-size:1.05rem;font-weight:400;color:var(--text);margin-bottom:.5rem}
+.how-cell p{font-size:.86rem;color:var(--muted);line-height:1.65;font-weight:300}
 
-  .stat-value {
-    font-family: 'Fraunces', 'Georgia', serif;
-    font-size: 1.8rem;
-    font-weight: 500;
-    color: var(--ink);
-    line-height: 1.1;
-  }
+/* ── Signal cards ── */
+.signal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:.75rem}
+.sig-card{border:1px solid var(--border);border-radius:6px;border-top:2px solid var(--border);padding:.9rem;cursor:default;transform-style:preserve-3d;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;will-change:transform}
+.sig-card.buy{border-top-color:#22c55e}.sig-card.hold{border-top-color:#f0b429}.sig-card.reduce{border-top-color:#ef4444}
+.sig-card:hover{transform:translateY(-7px) scale(1.04) rotateX(4deg);box-shadow:var(--shadow)}
+.sig-theme{font-family:var(--font-m);font-size:.62rem;letter-spacing:.08em;color:var(--muted);margin-bottom:.4rem}
+.sig-label{font-family:var(--font-m);font-size:.95rem;margin-bottom:.25rem}
+.sig-label.buy{color:#22c55e}.sig-label.hold{color:#f0b429}.sig-label.reduce{color:#ef4444}
+.sig-prob{font-family:var(--font-m);font-size:.67rem;color:var(--muted)}
+.sig-bar{height:3px;background:var(--border);border-radius:1px;overflow:hidden;margin-top:.3rem}
+.sig-fill{height:100%;border-radius:1px}
+.sig-fill.buy{background:#22c55e}.sig-fill.hold{background:#f0b429}.sig-fill.reduce{background:#ef4444}
 
-  .stat-value.positive { color: #22c55e; }
-  .stat-value.accent   { color: var(--accent); }
+/* ── Stack tags ── */
+.stack-list{display:flex;flex-wrap:wrap;gap:.45rem}
+.stack-tag{font-family:var(--font-m);font-size:.68rem;padding:.25rem .65rem;border:1px solid var(--border);border-radius:3px;color:var(--muted);cursor:default;transition:color .2s,border-color .2s,transform .25s cubic-bezier(.34,1.56,.64,1)}
+.stack-tag:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-3px)}
+.stack-tag.hi{border-color:rgba(110,143,255,.4);color:var(--accent)}
 
-  .stat-sub {
-    font-size: 0.78rem;
-    color: var(--soft);
-    margin-top: 0.25rem;
-  }
+/* ── Journal ── */
+.j-entry{padding:.9rem 0;border-bottom:1px solid var(--border);transition:padding-left .28s ease,background .2s;cursor:default;border-radius:4px}
+.j-entry:last-child{border-bottom:none}
+.j-entry:hover{padding-left:.6rem;background:rgba(110,143,255,.04)}
+.j-title{font-size:.95rem;color:var(--text);margin-bottom:.3rem}
+.j-meta{font-family:var(--font-m);font-size:.71rem;color:var(--muted);line-height:1.55;font-weight:300}
 
-  /* ── Theme returns ── */
-  .thesis-section {
-    margin-bottom: 3.5rem;
-  }
+/* ── Footer ── */
+.t-footer{font-family:var(--font-m);font-size:.6rem;color:rgba(200,205,235,.22);letter-spacing:.08em;display:flex;gap:40px;margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border)}
+.t-footer a{color:var(--muted);text-decoration:none;transition:color .18s}.t-footer a:hover{color:var(--accent)}
 
-  .thesis-section h2 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--soft);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 1px solid var(--line);
-  }
+/* ── Reveal ── */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.reveal.vis{opacity:1;transform:translateY(0)}
 
-  .theme-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .theme-bar-row {
-    display: grid;
-    grid-template-columns: 140px 1fr 80px;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .theme-bar-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-
-  .theme-bar-label span {
-    display: block;
-    font-size: 0.65rem;
-    color: var(--soft);
-    margin-top: 2px;
-  }
-
-  .theme-bar-track {
-    height: 6px;
-    background: var(--line);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .theme-bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .theme-bar-pct {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--ink);
-    text-align: right;
-  }
-
-  .theme-bar-pct.positive { color: #22c55e; }
-
-  /* ── How it works ── */
-  .how-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .how-cell {
-    background: var(--card);
-    padding: 1.5rem;
-  }
-
-  .how-cell-icon {
-    font-size: 1.1rem;
-    margin-bottom: 0.75rem;
-    color: var(--accent);
-  }
-
-  .how-cell h3 {
-    font-family: 'Fraunces', 'Georgia', serif;
-    font-size: 1.05rem;
-    font-weight: 400;
-    color: var(--ink);
-    margin-bottom: 0.5rem;
-  }
-
-  .how-cell p {
-    font-size: 0.88rem;
-    color: var(--muted);
-    line-height: 1.65;
-  }
-
-  /* ── Stack ── */
-  .stack-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .stack-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
-    padding: 0.3rem 0.7rem;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 3px;
-    color: var(--muted);
-    letter-spacing: 0.03em;
-  }
-
-  .stack-tag.highlight {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: transparent;
-  }
-
-  /* ── Signal preview ── */
-  .signal-preview {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    margin-top: 1rem;
-  }
-
-  .signal-card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 5px;
-    padding: 0.9rem 1rem;
-    border-top: 2px solid var(--line);
-  }
-
-  .signal-card.buy   { border-top-color: #22c55e; }
-  .signal-card.hold  { border-top-color: #f0b429; }
-  .signal-card.reduce{ border-top-color: #ef4444; }
-
-  .signal-theme {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
-    color: var(--soft);
-    margin-bottom: 0.5rem;
-  }
-
-  .signal-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1rem;
-    font-weight: 400;
-    margin-bottom: 0.3rem;
-  }
-
-  .signal-label.buy    { color: #22c55e; }
-  .signal-label.hold   { color: #f0b429; }
-  .signal-label.reduce { color: #ef4444; }
-
-  .signal-bar-track {
-    height: 3px;
-    background: var(--line);
-    border-radius: 1px;
-    overflow: hidden;
-    margin-top: 0.4rem;
-  }
-
-  .signal-bar-fill {
-    height: 100%;
-    border-radius: 1px;
-  }
-
-  .signal-bar-fill.buy    { background: #22c55e; }
-  .signal-bar-fill.hold   { background: #f0b429; }
-  .signal-bar-fill.reduce { background: #ef4444; }
-
-  /* ── Back link ── */
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    color: var(--soft);
-    text-decoration: none;
-    margin-bottom: 2.5rem;
-    transition: color 0.15s;
-  }
-
-  .back-link:hover { color: var(--accent); }
-
-  /* ── Responsive ── */
-  /* Skip intro fade-in delay on sub-pages */
-  .intro-done main, main {
-    opacity: 1 !important;
-    animation: none !important;
-    transform: none !important;
-  }
-
-  /* Theme toggle SVG fix */
-  .theme-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    padding: 0;
-  }
-  .theme-toggle svg {
-    width: 18px;
-    height: 18px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  :root:not(.light) .sun { display: none; }
-  :root.light .moon { display: none; }
-
-  @media (max-width: 640px) {
-    .stats-row { grid-template-columns: 1fr 1fr; }
-    .stat-cell:nth-child(2) { border-right: none; }
-    .stat-cell:nth-child(3) { border-top: 1px solid var(--line); }
-    .how-grid { grid-template-columns: 1fr; }
-    .signal-preview { grid-template-columns: repeat(3, 1fr); }
-    .theme-bar-row { grid-template-columns: 100px 1fr 60px; }
-  }
+/* ── Mobile ── */
+@media(max-width:640px){
+  nav{padding:16px 20px}
+  main{padding:100px 20px 60px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .how-grid{grid-template-columns:1fr}
+  .signal-grid{grid-template-columns:repeat(3,1fr)}
+  .bar-row{grid-template-columns:100px 1fr 60px}
+}
 </style>
 </head>
 <body>
 
-<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+<div id="progress"></div>
 
-<div class="container">
+<div class="gblob gb1"></div>
+<div class="gblob gb2"></div>
+<div class="gblob gb3"></div>
+
+<canvas id="starfield"></canvas>
+<div id="sky"></div>
+
+<nav>
+  <a class="logo" href="/"><span class="inf">∞</span>jeremy xiang</a>
+  <ul class="nav-links">
+    <li><a href="/#now">now</a></li>
+    <li><a href="/#experience">experience</a></li>
+    <li><a href="/#contact">contact</a></li>
+    <li><a href="Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener">resume ↗</a></li>
+    <li><button class="theme-btn" id="themeBtn" aria-label="toggle theme"><span id="themeIcon">☀</span></button></li>
+  </ul>
+</nav>
+
 <main>
-
-  <nav>
-    <div class="logo"><a href="/" style="text-decoration:none;color:inherit"><span class="infinity">∞</span>jeremy xiang<span class="dot">.</span></a></div>
-    <ul class="nav-links">
-      <li><a href="/#now">now</a></li>
-      <li><a href="/#experience">experience</a></li>
-      <li><a href="/#contact">contact</a></li>
-      <li><a href="Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener">resume</a></li>
-      <li>
-        <button class="theme-toggle" id="themeToggle" aria-label="toggle theme">
-          <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        </button>
-      </li>
-    </ul>
-  </nav>
-
-  <!-- Back -->
-  <a href="/" class="back-link">← back to home</a>
+  <a href="/" class="back-link">← back</a>
 
   <!-- Hero -->
-  <div class="thesis-hero">
-    <div class="thesis-eyebrow">project · 2025–2026</div>
+  <div class="hero" style="margin-bottom:3.5rem">
+    <div class="hero-eyebrow">project · 2025–2026</div>
     <h1>THESIS — <em>thematic<br>investment dashboard.</em></h1>
-    <p>A live dashboard that tracks a portfolio organized by investment thesis — AI infrastructure, defense, biodefense — rather than individual tickers. Pulls real prices, scores financial headlines with NLP, and runs a Random Forest model to predict 30-day outperformance vs SPY.</p>
-    <div class="thesis-cta">
-      <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener" class="btn-primary">
-        live dashboard ↗
-      </a>
-      <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-api" target="_blank" rel="noopener" class="btn-secondary">
-        backend repo ↗
-      </a>
-      <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-frontend" target="_blank" rel="noopener" class="btn-secondary">
-        frontend repo ↗
-      </a>
+    <p>A live dashboard tracking a portfolio organized by investment thesis — AI infrastructure, defense, biodefense — not individual tickers. Pulls real prices, scores financial headlines with NLP, and runs a Random Forest model to predict 30-day outperformance vs SPY.</p>
+    <div class="cta-row">
+      <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener" class="btn-primary">live dashboard ↗</a>
+      <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-api" target="_blank" rel="noopener" class="btn-secondary">backend ↗</a>
+      <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-frontend" target="_blank" rel="noopener" class="btn-secondary">frontend ↗</a>
     </div>
   </div>
 
   <!-- Stats -->
-  <div class="stats-row">
-    <div class="stat-cell">
-      <div class="stat-label">Starting capital</div>
-      <div class="stat-value accent">$15k</div>
-      <div class="stat-sub">Jan 2023</div>
+  <section id="s-stats">
+    <div class="section-label">at a glance</div>
+    <div class="stats-grid">
+      <div class="stat-cell"><div class="stat-label">Starting capital</div><div class="stat-value acc" data-count="15" data-pre="$" data-suf="k">$15k</div><div class="stat-sub">Jan 2023</div></div>
+      <div class="stat-cell"><div class="stat-label">Peak value</div><div class="stat-value pos" data-count="400" data-pre="$" data-suf="k+">$400k+</div><div class="stat-sub">3-year thesis return</div></div>
+      <div class="stat-cell"><div class="stat-label">Tickers tracked</div><div class="stat-value" data-count="53" data-pre="" data-suf="">53</div><div class="stat-sub">across 5 themes</div></div>
+      <div class="stat-cell"><div class="stat-label">News scored daily</div><div class="stat-value" data-count="300" data-pre="" data-suf="+">300+</div><div class="stat-sub">scored per refresh</div></div>
     </div>
-    <div class="stat-cell">
-      <div class="stat-label">Peak value</div>
-      <div class="stat-value positive">$400k+</div>
-      <div class="stat-sub">3-year thesis return</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-label">Tickers tracked</div>
-      <div class="stat-value">53</div>
-      <div class="stat-sub">across 5 themes</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-label">News scored daily</div>
-      <div class="stat-value">300+</div>
-      <div class="stat-sub">scored per refresh</div>
-    </div>
-  </div>
+  </section>
 
   <!-- Theme returns -->
-  <div class="thesis-section">
-    <h2>theme returns</h2>
-    <div class="theme-bars" id="themeBars">
-      <div class="theme-bar-row">
-        <div class="theme-bar-label">AI Infrastructure<span>NVDA, AMD, TSM, MSFT…</span></div>
-        <div class="theme-bar-track"><div class="theme-bar-fill" style="width:0%;background:#60a5fa" data-width="85%"></div></div>
-        <div class="theme-bar-pct positive">+274.6%</div>
-      </div>
-      <div class="theme-bar-row">
-        <div class="theme-bar-label">Energy Transition<span>CEG, VST, NEE, FSLR…</span></div>
-        <div class="theme-bar-track"><div class="theme-bar-fill" style="width:0%;background:#4ade80" data-width="100%"></div></div>
-        <div class="theme-bar-pct positive">+362.2%</div>
-      </div>
-      <div class="theme-bar-row">
-        <div class="theme-bar-label">Defense<span>LMT, RTX, PLTR, KTOS…</span></div>
-        <div class="theme-bar-track"><div class="theme-bar-fill" style="width:0%;background:#f97316" data-width="64%"></div></div>
-        <div class="theme-bar-pct positive">+202.9%</div>
-      </div>
-      <div class="theme-bar-row">
-        <div class="theme-bar-label">Healthcare<span>UNH, TMO, ISRG, DHR…</span></div>
-        <div class="theme-bar-track"><div class="theme-bar-fill" style="width:0%;background:#f472b6" data-width="12%"></div></div>
-        <div class="theme-bar-pct positive">+0.1%</div>
-      </div>
-      <div class="theme-bar-row">
-        <div class="theme-bar-label">Biodefense<span>MRNA, SIGA, ILMN, GILD…</span></div>
-        <div class="theme-bar-track"><div class="theme-bar-fill" style="width:0%;background:#c084fc" data-width="20%"></div></div>
-        <div class="theme-bar-pct" style="color:#ef4444">−16.8%</div>
-      </div>
+  <section id="s-returns">
+    <div class="section-label">theme returns</div>
+    <div class="theme-bars">
+      <div class="bar-row"><div class="bar-label">AI Infrastructure<span>NVDA, AMD, TSM, MSFT…</span></div><div class="bar-track"><div class="bar-fill" style="background:#60a5fa" data-w="85%"></div></div><div class="bar-pct pos">+274.6%</div></div>
+      <div class="bar-row"><div class="bar-label">Energy Transition<span>CEG, VST, NEE, FSLR…</span></div><div class="bar-track"><div class="bar-fill" style="background:#4ade80" data-w="100%"></div></div><div class="bar-pct pos">+362.2%</div></div>
+      <div class="bar-row"><div class="bar-label">Defense<span>LMT, RTX, PLTR, KTOS…</span></div><div class="bar-track"><div class="bar-fill" style="background:#f97316" data-w="64%"></div></div><div class="bar-pct pos">+202.9%</div></div>
+      <div class="bar-row"><div class="bar-label">Healthcare<span>UNH, TMO, ISRG, DHR…</span></div><div class="bar-track"><div class="bar-fill" style="background:#f472b6" data-w="12%"></div></div><div class="bar-pct pos">+0.1%</div></div>
+      <div class="bar-row"><div class="bar-label">Biodefense<span>MRNA, SIGA, ILMN, GILD…</span></div><div class="bar-track"><div class="bar-fill" style="background:#c084fc" data-w="20%"></div></div><div class="bar-pct" style="color:#ef4444">−16.8%</div></div>
     </div>
-    <p style="font-size:0.78rem;color:var(--soft);margin-top:1rem;font-family:'JetBrains Mono',monospace;">
-      Biodefense initiated Jan 2025 at beaten-down mRNA valuations — thesis is pre-event positioning ahead of next outbreak cycle.
-    </p>
-  </div>
+    <p style="font-size:.73rem;color:var(--muted);margin-top:.9rem;font-family:var(--font-m);opacity:.6">Biodefense initiated Jan 2025 — pre-event positioning ahead of next outbreak cycle.</p>
+  </section>
 
-  <!-- Prediction signals preview -->
-  <div class="thesis-section">
-    <h2>prediction signals — live</h2>
-    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;line-height:1.65;">
-      A Random Forest classifier trained on 3 years of daily price history predicts the probability each theme outperforms SPY over the next 30 days. One model per theme, one per ticker. Updated weekly.
-    </p>
-    <div class="signal-preview">
-      <div class="signal-card buy">
-        <div class="signal-theme">AI</div>
-        <div class="signal-label buy">BUY</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--soft)">72% prob</div>
-        <div class="signal-bar-track"><div class="signal-bar-fill buy" style="width:72%"></div></div>
-      </div>
-      <div class="signal-card hold">
-        <div class="signal-theme">DEF</div>
-        <div class="signal-label hold">HOLD</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--soft)">54% prob</div>
-        <div class="signal-bar-track"><div class="signal-bar-fill hold" style="width:54%"></div></div>
-      </div>
-      <div class="signal-card buy">
-        <div class="signal-theme">NRG</div>
-        <div class="signal-label buy">BUY</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--soft)">68% prob</div>
-        <div class="signal-bar-track"><div class="signal-bar-fill buy" style="width:68%"></div></div>
-      </div>
-      <div class="signal-card hold">
-        <div class="signal-theme">BIO</div>
-        <div class="signal-label hold">HOLD</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--soft)">51% prob</div>
-        <div class="signal-bar-track"><div class="signal-bar-fill hold" style="width:51%"></div></div>
-      </div>
-      <div class="signal-card hold">
-        <div class="signal-theme">MED</div>
-        <div class="signal-label hold">HOLD</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--soft)">48% prob</div>
-        <div class="signal-bar-track"><div class="signal-bar-fill hold" style="width:48%"></div></div>
-      </div>
+  <!-- Signals -->
+  <section id="s-signals">
+    <div class="section-label">prediction signals — live</div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:1rem;line-height:1.65;font-weight:300">Random Forest classifier trained on 3 years of daily price history. Predicts probability each theme outperforms SPY over next 30 days. Updated weekly.</p>
+    <div class="signal-grid">
+      <div class="sig-card buy"><div class="sig-theme">AI</div><div class="sig-label buy">BUY</div><div class="sig-prob">72% prob</div><div class="sig-bar"><div class="sig-fill buy" style="width:72%"></div></div></div>
+      <div class="sig-card hold"><div class="sig-theme">DEF</div><div class="sig-label hold">HOLD</div><div class="sig-prob">54% prob</div><div class="sig-bar"><div class="sig-fill hold" style="width:54%"></div></div></div>
+      <div class="sig-card buy"><div class="sig-theme">NRG</div><div class="sig-label buy">BUY</div><div class="sig-prob">68% prob</div><div class="sig-bar"><div class="sig-fill buy" style="width:68%"></div></div></div>
+      <div class="sig-card hold"><div class="sig-theme">BIO</div><div class="sig-label hold">HOLD</div><div class="sig-prob">51% prob</div><div class="sig-bar"><div class="sig-fill hold" style="width:51%"></div></div></div>
+      <div class="sig-card hold"><div class="sig-theme">MED</div><div class="sig-label hold">HOLD</div><div class="sig-prob">48% prob</div><div class="sig-bar"><div class="sig-fill hold" style="width:48%"></div></div></div>
     </div>
-    <p style="font-size:0.72rem;color:var(--soft);margin-top:0.75rem;font-family:'JetBrains Mono',monospace;">
-      Signal cards are illustrative — see live values on the dashboard.
-    </p>
-  </div>
+    <p style="font-size:.7rem;color:var(--muted);margin-top:.65rem;font-family:var(--font-m);opacity:.5">Signal cards are illustrative — see live values on the dashboard.</p>
+  </section>
 
   <!-- How it works -->
-  <div class="thesis-section">
-    <h2>how it works</h2>
+  <section id="s-how">
+    <div class="section-label">how it works</div>
     <div class="how-grid">
-      <div class="how-cell">
-        <div class="how-cell-icon">◈</div>
-        <h3>Theme buckets, not tickers</h3>
-        <p>The portfolio is organized around investment theses — "AI infrastructure is undersupplied" — not individual stocks. NVDA, AMD, TSM, and MSFT are all expressions of the same thesis. The dashboard tracks each bucket's aggregate performance.</p>
-      </div>
-      <div class="how-cell">
-        <div class="how-cell-icon">λ</div>
-        <h3>NLP sentiment on 2,000+ headlines</h3>
-        <p>Every headline from Yahoo Finance RSS, CNBC, WSJ, ProMED, CDC alerts, STAT News, and Breaking Defense is scored daily. FinBERT (fine-tuned on financial text) scores positive/neutral/negative — not VADER. Sentiment feeds directly into the prediction model.</p>
-      </div>
-      <div class="how-cell">
-        <div class="how-cell-icon">∑</div>
-        <h3>Random Forest prediction</h3>
-        <p>Trained on 3 years of daily price data. Features: 5/20/60-day momentum, realized volatility, and theme-vs-SPY relative return. Predicts probability that a theme or individual ticker outperforms SPY over the next 30 days. One model per theme, one per ticker.</p>
-      </div>
-      <div class="how-cell">
-        <div class="how-cell-icon">◉</div>
-        <h3>Biodefense early warning</h3>
-        <p>The Biodefense bucket specifically monitors ProMED outbreak reports, WHO news, and CDC health alerts. The thesis: mRNA platforms like MRNA and BNTX can compress vaccine development from years to months. SIGA holds the only FDA-approved smallpox antiviral. Positioning pre-event.</p>
-      </div>
+      <div class="how-cell"><div class="how-icon">◈</div><h3>Theme buckets, not tickers</h3><p>Portfolio organized around investment theses — "AI infrastructure is undersupplied" — not individual stocks. NVDA, AMD, TSM, and MSFT are all expressions of the same thesis.</p></div>
+      <div class="how-cell"><div class="how-icon">λ</div><h3>NLP sentiment on 2,000+ headlines</h3><p>Every headline from Yahoo Finance RSS, CNBC, WSJ, ProMED, CDC alerts, and Breaking Defense scored daily by FinBERT — fine-tuned on financial text, not generic VADER.</p></div>
+      <div class="how-cell"><div class="how-icon">∑</div><h3>Random Forest prediction</h3><p>Trained on 3 years of daily price data. Features: 5/20/60-day momentum, realized volatility, theme-vs-SPY relative return. One model per theme, one per ticker.</p></div>
+      <div class="how-cell"><div class="how-icon">◉</div><h3>Biodefense early warning</h3><p>Monitors ProMED outbreak reports, WHO news, CDC health alerts. Thesis: mRNA platforms compress vaccine development from years to months. SIGA holds the only FDA-approved smallpox antiviral.</p></div>
     </div>
-  </div>
+  </section>
 
   <!-- Stack -->
-  <div class="thesis-section">
-    <h2>stack</h2>
+  <section id="s-stack">
+    <div class="section-label">stack</div>
     <div class="stack-list">
-      <span class="stack-tag highlight">python</span>
-      <span class="stack-tag highlight">fastapi</span>
-      <span class="stack-tag highlight">scikit-learn</span>
-      <span class="stack-tag highlight">react</span>
-      <span class="stack-tag">yfinance</span>
-      <span class="stack-tag">pandas</span>
-      <span class="stack-tag">numpy</span>
-      <span class="stack-tag">transformers</span>
-      <span class="stack-tag">finbert</span>
-      <span class="stack-tag">cohere</span>
-      <span class="stack-tag">recharts</span>
-      <span class="stack-tag">render</span>
-      <span class="stack-tag">vercel</span>
-      <span class="stack-tag">rss feeds</span>
-      <span class="stack-tag">apscheduler</span>
-      <span class="stack-tag">slowapi</span>
+      <span class="stack-tag hi">python</span><span class="stack-tag hi">fastapi</span><span class="stack-tag hi">scikit-learn</span><span class="stack-tag hi">react</span>
+      <span class="stack-tag">yfinance</span><span class="stack-tag">pandas</span><span class="stack-tag">numpy</span><span class="stack-tag">transformers</span>
+      <span class="stack-tag">finbert</span><span class="stack-tag">cohere</span><span class="stack-tag">recharts</span><span class="stack-tag">render</span>
+      <span class="stack-tag">vercel</span><span class="stack-tag">rss feeds</span><span class="stack-tag">apscheduler</span><span class="stack-tag">slowapi</span>
     </div>
-  </div>
+  </section>
 
-  <!-- The thesis -->
-  <div class="thesis-section">
-    <h2>the thesis journal</h2>
-    <div style="display:flex;flex-direction:column;gap:0;">
-      <div class="entry reveal" style="padding:1rem 0;border-bottom:1px solid var(--line)">
-        <div class="entry-title" style="margin-bottom:0.3rem">Jan 2023 — AI Infrastructure</div>
-        <div class="entry-meta">Initiated NVDA. AI training compute will be undersupplied for 3–5 years. GPU shortage = picks-and-shovels. Added MSFT, GOOGL, META as hyperscaler beneficiaries.</div>
-      </div>
-      <div class="entry reveal" style="padding:1rem 0;border-bottom:1px solid var(--line)">
-        <div class="entry-title" style="margin-bottom:0.3rem">Apr 2023 — Defense</div>
-        <div class="entry-meta">Added LMT, RTX. Ukraine conflict exposes Western stockpile depletion — multi-year re-armament cycle. Added PLTR: AI battlefield analytics is structural, not a one-time contract.</div>
-      </div>
-      <div class="entry reveal" style="padding:1rem 0;border-bottom:1px solid var(--line)">
-        <div class="entry-title" style="margin-bottom:0.3rem">Sep 2024 — Energy Transition</div>
-        <div class="entry-meta">Initiated nuclear basket (CEG, VST). AI data center power demand creates sustained need for carbon-free baseload. Thesis: AI → energy scarcity → nuclear.</div>
-      </div>
-      <div class="entry reveal" style="padding:1rem 0;border-bottom:1px solid var(--line)">
-        <div class="entry-title" style="margin-bottom:0.3rem">Jan 2025 — Biodefense & Pandemic</div>
-        <div class="entry-meta">Initiated biodefense basket. CDC tracking elevated hantavirus cases — 38% case fatality rate, no approved antiviral. mRNA platforms compress vaccine timelines from years to months. SIGA holds the only FDA-approved smallpox antiviral (TPOXX), funded by BARDA stockpile contracts.</div>
-      </div>
-      <div class="entry reveal" style="padding:1rem 0;">
-        <div class="entry-title" style="margin-bottom:0.3rem">Mar 2025 — Healthcare Infrastructure</div>
-        <div class="entry-meta">Added TMO, DHR — lab infrastructure is picks-and-shovels for pandemic response and genomics. ABT rapid testing was proven at scale during COVID and positioned for the next outbreak.</div>
-      </div>
+  <!-- Journal -->
+  <section id="s-journal">
+    <div class="section-label">the thesis journal</div>
+    <div>
+      <div class="j-entry reveal"><div class="j-title">Jan 2023 — AI Infrastructure</div><div class="j-meta">Initiated NVDA. AI training compute will be undersupplied for 3–5 years. GPU shortage = picks-and-shovels. Added MSFT, GOOGL, META as hyperscaler beneficiaries.</div></div>
+      <div class="j-entry reveal"><div class="j-title">Apr 2023 — Defense</div><div class="j-meta">Added LMT, RTX. Ukraine conflict exposes Western stockpile depletion — multi-year re-armament cycle. Added PLTR: AI battlefield analytics is structural, not a one-time contract.</div></div>
+      <div class="j-entry reveal"><div class="j-title">Sep 2024 — Energy Transition</div><div class="j-meta">Initiated nuclear basket (CEG, VST). AI data center power demand creates sustained need for carbon-free baseload. Thesis: AI → energy scarcity → nuclear.</div></div>
+      <div class="j-entry reveal"><div class="j-title">Jan 2025 — Biodefense &amp; Pandemic</div><div class="j-meta">Initiated biodefense basket. CDC tracking elevated hantavirus cases — 38% case fatality rate, no approved antiviral. mRNA platforms compress vaccine timelines from years to months. SIGA holds the only FDA-approved smallpox antiviral (TPOXX).</div></div>
+      <div class="j-entry reveal"><div class="j-title">Mar 2025 — Healthcare Infrastructure</div><div class="j-meta">Added TMO, DHR — lab infrastructure is picks-and-shovels for pandemic response and genomics. ABT rapid testing was proven at scale during COVID.</div></div>
     </div>
-  </div>
+  </section>
 
-  <footer>
-    <div>© 2026 jeremy xiang · <a href="/">back to home</a></div>
+  <footer class="t-footer">
+    <span>© 2026 jeremy xiang · built with care</span>
+    <a href="/">← back to home</a>
   </footer>
-
 </main>
-</div>
-
-<script src="script.js?v=16" defer></script>
 
 <script>
-  // ── Theme bar fill animation ──
-  const bars = document.querySelectorAll('.theme-bar-fill');
-  const barObs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.style.width = entry.target.dataset.width;
-        }, 200);
-        barObs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-  bars.forEach(b => barObs.observe(b));
-
-  // ── Scroll reveal for thesis sections + stats row ──
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        revealObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-  document.querySelectorAll('.thesis-section, .stats-row').forEach(el => revealObs.observe(el));
-
-  // ── Animated number counters on stats ──
-  function animateCount(el, target, prefix, suffix, duration) {
-    const isFloat = target % 1 !== 0;
-    const start = performance.now();
-    function tick(now) {
-      const t = Math.min((now - start) / duration, 1);
-      const ease = 1 - Math.pow(1 - t, 3); // cubic ease-out
-      const val = ease * target;
-      el.textContent = prefix + (isFloat ? val.toFixed(1) : Math.floor(val)) + suffix;
-      if (t < 1) requestAnimationFrame(tick);
-      else el.textContent = prefix + target + suffix;
-    }
-    requestAnimationFrame(tick);
+// ── Starfield (same engine as index) ──
+(function(){
+  const canvas=document.getElementById('starfield'),ctx=canvas.getContext('2d');
+  let W,H;
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+  resize();window.addEventListener('resize',resize);
+  const stars=Array.from({length:500},()=>{
+    const th=Math.random()*Math.PI*2,ph=Math.acos(Math.random()*2-1);
+    return{ox:Math.sin(ph)*Math.cos(th)*2.5,oy:Math.sin(ph)*Math.sin(th)*2.5,oz:Math.cos(ph)*2.5,
+      size:.4+Math.random()*1.6,bright:Math.random()>.82,tw:Math.random()*Math.PI*2,
+      twS:.01+Math.random()*.035,a:.65+Math.random()*.35};
+  });
+  let mx=0,my=0,sR=0,tSR=0;
+  window.addEventListener('mousemove',e=>{mx=(e.clientX/W-.5)*2;my=(e.clientY/H-.5)*2},{passive:true});
+  window.addEventListener('scroll',()=>{tSR=window.scrollY/(document.body.scrollHeight-H||1)},{passive:true});
+  function proj(s){
+    let x=s.ox,y=s.oy,z=s.oz;
+    const cx=Math.cos(my*.12),sx2=Math.sin(my*.12),cy=Math.cos(mx*.08),sy=Math.sin(mx*.08);
+    let ny=y*cx-z*sx2,nz=y*sx2+z*cx,nx=x*cy+nz*sy;nz=-x*sy+nz*cy;x=nx;y=ny;z=nz;
+    const ct=Math.cos(sR*.6),st=Math.sin(sR*.6);const ry=y*ct-z*st,rz=y*st+z*ct;y=ry;z=rz;
+    const dz=z-(-1+sR*3.5);if(dz<=.01)return null;
+    const fov=400;return{sx:x/dz*fov+W/2,sy:y/dz*fov+H/2,d:1-Math.min(1,dz/5)};
   }
+  const light=()=>document.documentElement.getAttribute('data-theme')==='light';
+  (function draw(){
+    requestAnimationFrame(draw);
+    sR+=(tSR-sR)*.06;
+    ctx.clearRect(0,0,W,H);
+    for(const s of stars){
+      const p=proj(s);if(!p)continue;
+      if(p.sx<-50||p.sx>W+50||p.sy<-50||p.sy>H+50)continue;
+      s.tw+=s.twS;
+      const tw=.5+.5*Math.sin(s.tw),alpha=s.a*p.d*tw,size=s.size*(.4+p.d*1.2);
+      ctx.fillStyle=light()?`rgba(20,40,120,${alpha*.65})`:s.bright?`rgba(245,248,255,${alpha})`:`rgba(210,225,255,${alpha*.88})`;
+      if(s.bright&&p.d>.6&&!light()){ctx.shadowBlur=size*7;ctx.shadowColor=`rgba(150,175,255,${alpha*.75})`}
+      ctx.beginPath();ctx.arc(p.sx,p.sy,Math.max(.3,size),0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    }
+  })();
+})();
 
-  const counterObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const counters = [
-          { el: e.target.querySelector('.stat-value.accent'), target: 15, prefix: '$', suffix: 'k' },
-          { el: e.target.querySelector('.stat-value.positive'), target: 400, prefix: '$', suffix: 'k+' },
-          { el: e.target.querySelectorAll('.stat-value')[2], target: 53, prefix: '', suffix: '' },
-          { el: e.target.querySelectorAll('.stat-value')[3], target: 300, prefix: '', suffix: '+' },
-        ];
-        counters.forEach(({ el, target, prefix, suffix }) => {
-          if (el) animateCount(el, target, prefix, suffix, 1400);
-        });
-        counterObs.unobserve(e.target);
-      }
+// ── Constellations ──
+(function(){
+  const CONSTELLATIONS=[
+    {name:'orion',x:12,y:7,w:13,h:16,drift:[18,-10,-12,14,10,-6,35],
+      stars:[{x:20,y:15,bright:true},{x:80,y:20,bright:true},{x:35,y:50},{x:50,y:52},{x:65,y:54},{x:25,y:90,bright:true},{x:78,y:88,bright:true},{x:48,y:68,faint:true}],
+      lines:[[0,1],[0,2],[1,4],[2,3],[3,4],[2,5],[4,6],[5,6]]},
+    {name:'cygnus',x:38,y:2,w:14,h:9,drift:[12,8,-10,-10,6,-6,48],
+      stars:[{x:50,y:10,bright:true},{x:50,y:40},{x:50,y:70,bright:true},{x:50,y:95},{x:15,y:62,bright:true},{x:85,y:62,bright:true}],
+      lines:[[0,1],[1,2],[2,3],[4,2],[2,5]]},
+    {name:'cassiopeia',x:14,y:72,w:14,h:7,drift:[10,-8,-14,10,6,-12,38],
+      stars:[{x:5,y:70,bright:true},{x:25,y:30,bright:true},{x:50,y:65},{x:75,y:25,bright:true},{x:95,y:60,bright:true}],
+      lines:[[0,1],[1,2],[2,3],[3,4]]},
+    {name:'southern-cross',x:70,y:78,w:10,h:10,drift:[-8,10,12,-14,-6,8,50],
+      stars:[{x:50,y:10,bright:true},{x:50,y:90,bright:true},{x:12,y:55,bright:true},{x:88,y:50,bright:true}],
+      lines:[[0,1],[2,3]]}
+  ];
+  const sky=document.getElementById('sky');
+  const svgNS='http://www.w3.org/2000/svg';
+  CONSTELLATIONS.forEach((c,ci)=>{
+    const w=document.createElement('div');w.className='constellation';
+    w.style.left=c.x+'%';w.style.top=c.y+'%';w.style.width=c.w+'%';w.style.height=c.h+'vh';
+    w.style.animationDelay=(.3+ci*.3)+'s, '+(ci*2)+'s';
+    w.style.setProperty('--dx1',c.drift[0]+'px');w.style.setProperty('--dy1',c.drift[1]+'px');
+    w.style.setProperty('--dx2',c.drift[2]+'px');w.style.setProperty('--dy2',c.drift[3]+'px');
+    w.style.setProperty('--dx3',c.drift[4]+'px');w.style.setProperty('--dy3',c.drift[5]+'px');
+    w.style.setProperty('--drift-dur',c.drift[6]+'s');
+    const svg=document.createElementNS(svgNS,'svg');svg.setAttribute('class','const-svg');
+    svg.setAttribute('viewBox','0 0 100 100');svg.setAttribute('preserveAspectRatio','none');
+    c.lines.forEach(([a,b],li)=>{
+      const l=document.createElementNS(svgNS,'line');
+      l.setAttribute('x1',c.stars[a].x);l.setAttribute('y1',c.stars[a].y);
+      l.setAttribute('x2',c.stars[b].x);l.setAttribute('y2',c.stars[b].y);
+      l.setAttribute('class','const-line');
+      l.style.animationDelay=(1+ci*.3+li*.08)+'s, '+(3.5+ci*.3+li*.08)+'s';
+      svg.appendChild(l);
     });
-  }, { threshold: 0.3 });
+    w.appendChild(svg);
+    c.stars.forEach(s=>{
+      const el=document.createElement('div');
+      el.className='const-star'+(s.bright?' bright':s.faint?' faint':'');
+      el.style.left=s.x+'%';el.style.top=s.y+'%';el.style.transform='translate(-50%,-50%)';
+      el.style.setProperty('--tw',s.bright?'0.85':s.faint?'0.32':'0.55');
+      el.style.animationDelay=(Math.random()*3)+'s';
+      w.appendChild(el);
+    });
+    sky.appendChild(w);
+  });
+})();
 
-  const statsRow = document.querySelector('.stats-row');
-  if (statsRow) counterObs.observe(statsRow);
+// ── Cursor ──
+(function(){
+  const dot=document.getElementById('cur-dot'),ring=document.getElementById('cur-ring');
+  let mx=-100,my=-100,rx=-100,ry=-100;
+  window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  (function tick(){requestAnimationFrame(tick);rx+=(mx-rx)*.11;ry+=(my-ry)*.11;
+    dot.style.left=mx+'px';dot.style.top=my+'px';
+    ring.style.left=rx+'px';ring.style.top=ry+'px';})();
+  document.querySelectorAll('a,button,.how-cell,.sig-card,.stack-tag,.bar-row,.j-entry,.stat-cell').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+  });
+})();
+
+// ── Scroll progress ──
+window.addEventListener('scroll',()=>{
+  const max=document.body.scrollHeight-window.innerHeight;
+  document.getElementById('progress').style.width=(max>0?window.scrollY/max*100:0)+'%';
+},{passive:true});
+
+// ── 3D tilt on cards ──
+function addTilt(sel,s){
+  document.querySelectorAll(sel).forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform=`perspective(600px) rotateX(${-y*s}deg) rotateY(${x*s}deg) translateZ(8px)`;
+    });
+    card.addEventListener('mouseleave',()=>{card.style.transform=''});
+  });
+}
+addTilt('.how-cell',10);
+addTilt('.sig-card',14);
+addTilt('.stat-cell',7);
+
+// ── Paper flip sound on 3D cards ──
+(function(){
+  let actx=null;
+  function flip(){
+    try{
+      if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();
+      if(actx.state==='suspended')actx.resume();
+      const sr=actx.sampleRate,dur=1.0;
+      const buf=actx.createBuffer(1,sr*dur,sr);
+      const data=buf.getChannelData(0);
+      for(let i=0;i<data.length;i++){
+        const t=i/sr,noise=Math.random()*2-1;
+        const env=Math.exp(-t*5.5)*(1-Math.exp(-t*60));
+        data[i]=noise*env;
+      }
+      const src=actx.createBufferSource();src.buffer=buf;
+      const hp=actx.createBiquadFilter();hp.type='highpass';hp.frequency.value=800;
+      const bp=actx.createBiquadFilter();bp.type='peaking';bp.frequency.value=3200;bp.gain.value=9;bp.Q.value=1.2;
+      const g=actx.createGain();g.gain.setValueAtTime(0.16,actx.currentTime);
+      src.connect(hp);hp.connect(bp);bp.connect(g);g.connect(actx.destination);
+      src.start();src.stop(actx.currentTime+dur);
+    }catch(e){}
+  }
+  document.querySelectorAll('.how-cell,.sig-card,.stat-cell').forEach(el=>el.addEventListener('mouseenter',flip));
+})();
+
+// ── Scroll reveal ──
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('section').forEach(el=>obs.observe(el));
+
+const obs2=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs2.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs2.observe(el));
+
+// ── Animated counters ──
+function countUp(el,target,pre,suf,dur){
+  const start=performance.now();
+  (function tick(now){
+    const t=Math.min((now-start)/dur,1),ease=1-Math.pow(1-t,3);
+    el.textContent=pre+Math.floor(ease*target)+suf;
+    if(t<1)requestAnimationFrame(tick);else el.textContent=pre+target+suf;
+  })(performance.now());
+}
+const cObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('[data-count]').forEach(el=>{
+        countUp(el,+el.dataset.count,el.dataset.pre||'',el.dataset.suf||'',1400);
+      });
+      cObs.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('#s-stats').forEach(el=>cObs.observe(el));
+
+// ── Bar fill animation ──
+const bObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){setTimeout(()=>{e.target.style.width=e.target.dataset.w;},150);bObs.unobserve(e.target);}
+  });
+},{threshold:.3});
+document.querySelectorAll('.bar-fill').forEach(b=>bObs.observe(b));
+
+// ── Theme toggle ──
+const themeBtn=document.getElementById('themeBtn'),themeIcon=document.getElementById('themeIcon');
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  themeIcon.textContent=t==='dark'?'☀':'☾';
+  try{localStorage.setItem('theme',t);}catch(e){}
+}
+try{applyTheme(localStorage.getItem('theme')||'dark');}catch(e){applyTheme('dark');}
+themeBtn.addEventListener('click',()=>applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'));
 </script>
-
 </body>
 </html>
