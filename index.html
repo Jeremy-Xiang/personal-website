@@ -73,7 +73,7 @@ body.hov #cur-ring{width:46px;height:46px;border-color:rgba(184,168,255,0.6)}
 /* Constellation CSS unchanged from working version */
 .constellation{
   position:absolute;pointer-events:auto;
-  animation:cDrift var(--drift-dur,44s) ease-in-out infinite alternate,cFadeIn 1.4s ease both;
+  animation:cDrift var(--drift-dur,44s) ease-in-out infinite alternate,cFadeIn 0.6s ease both;
 }
 @keyframes cDrift{
   0%{transform:translate(0,0)}33%{transform:translate(var(--dx1,0),var(--dy1,0))}
@@ -674,10 +674,10 @@ window.addEventListener('scroll', () => {
 // 2. CONSTELLATIONS (exact original data)
 // ══════════════════════════════════════
 const CONSTELLATIONS = [
-  { name:'orion', x:3,y:6,w:13,h:16, drift:[18,-10,-12,14,10,-6,35],
+  { name:'orion', x:3,y:14,w:13,h:16, drift:[18,-10,-12,14,10,-6,35],
     stars:[{x:20,y:15,bright:true},{x:80,y:20,bright:true},{x:35,y:50},{x:50,y:52},{x:65,y:54},{x:25,y:90,bright:true},{x:78,y:88,bright:true},{x:48,y:68,faint:true}],
     lines:[[0,1],[0,2],[1,4],[2,3],[3,4],[2,5],[4,6],[5,6]] },
-  { name:'scorpius', x:83,y:4,w:14,h:13, drift:[-10,-12,14,10,-8,14,40],
+  { name:'scorpius', x:83,y:16,w:14,h:13, drift:[-10,-12,14,10,-8,14,40],
     stars:[{x:10,y:20},{x:25,y:10,bright:true},{x:42,y:22},{x:55,y:45,bright:true},{x:68,y:65},{x:78,y:82},{x:90,y:72,bright:true},{x:86,y:58,faint:true}],
     lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]] },
   { name:'cygnus', x:35,y:2,w:14,h:9, drift:[12,8,-10,-10,6,-6,48],
@@ -708,7 +708,7 @@ function buildSky() {
     wrap.dataset.name = c.name;
     wrap.style.left = c.x + '%'; wrap.style.top = c.y + '%';
     wrap.style.width = c.w + '%'; wrap.style.height = c.h + 'vh';
-    wrap.style.animationDelay = (0.3 + ci * 0.3) + 's, ' + (ci * 2) + 's';
+    wrap.style.animationDelay = (0.1 + ci * 0.15) + 's, ' + (ci * 1) + 's';
     wrap.style.setProperty('--dx1', c.drift[0] + 'px'); wrap.style.setProperty('--dy1', c.drift[1] + 'px');
     wrap.style.setProperty('--dx2', c.drift[2] + 'px'); wrap.style.setProperty('--dy2', c.drift[3] + 'px');
     wrap.style.setProperty('--dx3', c.drift[4] + 'px'); wrap.style.setProperty('--dy3', c.drift[5] + 'px');
@@ -722,7 +722,7 @@ function buildSky() {
       line.setAttribute('x1', c.stars[a].x); line.setAttribute('y1', c.stars[a].y);
       line.setAttribute('x2', c.stars[b].x); line.setAttribute('y2', c.stars[b].y);
       line.setAttribute('class', 'const-line');
-      line.style.animationDelay = (1 + ci * 0.3 + li * 0.08) + 's, ' + (3.5 + ci * 0.3 + li * 0.08) + 's';
+      line.style.animationDelay = (0.4 + ci * 0.15 + li * 0.05) + 's, ' + (2 + ci * 0.15 + li * 0.05) + 's';
       svg.appendChild(line);
     });
     wrap.appendChild(svg);
