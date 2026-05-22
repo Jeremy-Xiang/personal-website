@@ -1020,44 +1020,37 @@ setTimeout(() => { const d = document.getElementById('domain'); if(d) d.style.di
     'orion':'orion','scorpius':'scorpius','cygnus':'cygnus','lyra':'lyra',
     'aquila':'aquila','big-dipper':'ursa major','cassiopeia':'cassiopeia','southern-cross':'crux'
   };
-  // Each constellation drifts at a different depth so they layer
   const depths = [0.012, 0.007, 0.015, 0.009, 0.011, 0.006, 0.010, 0.007];
+  const PROXIMITY = 80; // px — how close cursor needs to be
 
-  // Single shared fixed tooltip — avoids overflow:hidden clipping
-  const sharedTip = document.createElement('div');
-  sharedTip.style.cssText = 'position:fixed;z-index:200;font-family:var(--font-m);font-size:.58rem;letter-spacing:.12em;text-transform:lowercase;color:var(--accent);background:rgba(7,8,15,0.92);border:1px solid rgba(110,143,255,.32);padding:3px 10px;border-radius:3px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .22s ease;transform:translateX(-50%)';
-  document.body.appendChild(sharedTip);
+  // Fixed tooltip on body — immune to pointer-events and overflow clipping
+  const tip = document.createElement('div');
+  tip.style.cssText = 'position:fixed;z-index:9990;font-family:var(--font-m);font-size:.6rem;letter-spacing:.12em;text-transform:lowercase;color:var(--accent);background:rgba(7,8,15,0.92);border:1px solid rgba(110,143,255,.35);padding:4px 10px;border-radius:3px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s ease;transform:translateX(-50%)';
+  document.body.appendChild(tip);
 
+  let mouseClientX = -999, mouseClientY = -999;
   let tgtX = 0, tgtY = 0, curX = 0, curY = 0;
+  const consts = [];
+
   window.addEventListener('mousemove', e => {
+    mouseClientX = e.clientX; mouseClientY = e.clientY;
     tgtX = (e.clientX / window.innerWidth  - 0.5) * 2;
     tgtY = (e.clientY / window.innerHeight - 0.5) * 2;
   }, { passive: true });
 
-  const consts = [];
-
-  function setup(){
+  function setup() {
     document.querySelectorAll('.constellation').forEach((el, i) => {
-      const name = el.dataset.name;
-      if (name) {
-        el.addEventListener('mouseenter', e => {
-          const r = el.getBoundingClientRect();
-          sharedTip.textContent = names[name] || name;
-          sharedTip.style.left  = (r.left + r.width / 2) + 'px';
-          sharedTip.style.top   = (r.top - 14) + 'px';
-          sharedTip.style.opacity = '1';
-        });
-        el.addEventListener('mouseleave', () => { sharedTip.style.opacity = '0'; });
-      }
-      consts.push({ el, depth: depths[i % depths.length] });
+      consts.push({ el, name: el.dataset.name || '', depth: depths[i % depths.length] });
     });
   }
   setTimeout(setup, 700);
 
-  // Parallax loop: CSS `translate` property composes with animation's `transform`
-  // so both the drift animation and the mouse offset work simultaneously
+  let visibleFor = null;
+
   (function loop(){
     requestAnimationFrame(loop);
+
+    // Parallax — CSS translate composes with animation's transform
     curX += (tgtX - curX) * 0.035;
     curY += (tgtY - curY) * 0.035;
     consts.forEach(({ el, depth }) => {
@@ -1065,6 +1058,27 @@ setTimeout(() => { const d = document.getElementById('domain'); if(d) d.style.di
       const dy = (curY * depth * window.innerHeight * 0.45).toFixed(2);
       el.style.translate = dx + 'px ' + dy + 'px';
     });
+
+    // Proximity tooltip — no pointer events on constellation needed
+    let closest = null, closestDist = PROXIMITY;
+    consts.forEach(({ el, name }) => {
+      if (!name) return;
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const d = Math.hypot(mouseClientX - cx, mouseClientY - cy);
+      if (d < closestDist) { closestDist = d; closest = { name, r }; }
+    });
+
+    if (closest && closest.name !== visibleFor) {
+      tip.textContent = names[closest.name] || closest.name;
+      tip.style.left  = (closest.r.left + closest.r.width / 2) + 'px';
+      tip.style.top   = (closest.r.top - 8) + 'px';
+      tip.style.opacity = '1';
+      visibleFor = closest.name;
+    } else if (!closest && visibleFor !== null) {
+      tip.style.opacity = '0';
+      visibleFor = null;
+    }
   })();
 })();
 </script>
