@@ -516,7 +516,7 @@ const ctx = canvas.getContext('2d');
 let W, H;
 
 // 3D star: x,y,z in [-1,1] space, z controls depth
-const NUM_STARS = 600;
+const NUM_STARS = 1000;
 const stars3d = [];
 
 function initCanvas() {
@@ -535,15 +535,15 @@ for (let i = 0; i < NUM_STARS; i++) {
   const phi   = Math.acos(rand(-1, 1));
   const r     = Math.cbrt(Math.random()); // cube root = uniform sphere
   stars3d.push({
-    ox: Math.sin(phi) * Math.cos(theta) * 2.5,
-    oy: Math.sin(phi) * Math.sin(theta) * 2.5,
-    oz: Math.cos(phi) * 2.5,
+    ox: Math.sin(phi) * Math.cos(theta) * 3.5,
+    oy: Math.sin(phi) * Math.sin(theta) * 3.5,
+    oz: Math.cos(phi) * 3.5,
     x: 0, y: 0, // projected screen coords
     size: rand(0.4, 1.8),
     bright: Math.random() > 0.8,
     twinkle: rand(0, Math.PI * 2),
     twinkleSpeed: rand(0.01, 0.04),
-    baseAlpha: rand(0.3, 0.95),
+    baseAlpha: rand(0.55, 1.0),
   });
 }
 
@@ -576,8 +576,8 @@ function projectStar(s, camZ, tiltX, tiltY) {
   x = nx; y = ny; z = nz;
 
   // Camera position shifts with scroll (fly forward) and tilts plane
-  const scrollTiltX = scrollRatio * 0.6;  // tilt on x axis as we scroll
-  const camOffsetZ = scrollRatio * 3.5;    // fly forward
+  const scrollTiltX = scrollRatio * 0.25; // gentle tilt as we scroll
+  const camOffsetZ = scrollRatio * 0.8;    // very slight forward drift
 
   // Rotate entire field to tilt the plane like HELIOS
   const ct = Math.cos(scrollTiltX), st = Math.sin(scrollTiltX);
@@ -585,10 +585,15 @@ function projectStar(s, camZ, tiltX, tiltY) {
   const rz = y * st + z * ct;
   y = ry; z = rz;
 
-  const dz = z - (-1 + camOffsetZ);
-  if (dz <= 0.01) return null;
+  const camZ = -1 + camOffsetZ;
+  let dz = z - camZ;
+  // Recycle: wrap stars that pass behind camera back to front
+  if (dz <= 0.01) {
+    s.oz = camZ + 3.5 + Math.random() * 2.5;
+    dz = s.oz - camZ;
+  }
 
-  const fov = 400;
+  const fov = 480;
   const sx = (x / dz) * fov + W / 2;
   const sy = (y / dz) * fov + H / 2;
   const depth = 1 - Math.min(1, dz / 5);  // 0=far,1=close
