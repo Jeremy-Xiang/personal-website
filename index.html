@@ -6,14 +6,11 @@
 <title>Jeremy Xiang — CS + Econ @ UW–Madison</title>
 <meta name="description" content="Jeremy Xiang — CS + Econ student at UW–Madison, class of 2028."/>
 <meta property="og:title" content="Jeremy Xiang — CS + Econ @ UW–Madison"/>
-<meta property="og:description" content="CS + Economics student at UW–Madison. Building at the intersection of machine learning, clean systems, and software that actually solves problems."/>
+<meta property="og:description" content="CS + Economics at UW–Madison. Building at the intersection of ML, clean systems, and software that solves problems."/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://jeremyxiang.com"/>
 <meta property="og:image" content="https://jeremyxiang.com/og-image.svg"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Jeremy Xiang — CS + Econ @ UW–Madison"/>
-<meta name="twitter:description" content="CS + Economics at UW–Madison. Building at the intersection of ML, clean systems, and software that solves problems."/>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -231,45 +228,22 @@ main{
    SCROLL SECTIONS — appear over starfield
 ══════════════════════════════════════ */
 .scroll-section{
-  min-height:100vh;display:flex;align-items:center;
-  padding:100px 40px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  padding:60px 40px;position:relative;
 }
-.scroll-section:nth-child(odd){justify-content:flex-start}
-.scroll-section:nth-child(even){justify-content:flex-end}
 
 .section-panel{
-  max-width:560px;width:100%;
-  background:rgba(7,8,15,0.72);
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  border:1px solid var(--border);border-radius:8px;
-  padding:40px 44px;
-  /* scroll reveal: start invisible+offset */
-  opacity:0;transform:translateY(40px) scale(.98);
-  transition:opacity .7s cubic-bezier(.22,1,.36,1),
-             transform .7s cubic-bezier(.22,1,.36,1),
+  max-width:720px;width:100%;
+  border-radius:12px;
+  padding:36px 48px;
+  opacity:0;transform:translateY(48px) scale(.97);
+  transition:opacity .75s cubic-bezier(.22,1,.36,1),
+             transform .75s cubic-bezier(.22,1,.36,1),
              box-shadow .3s;
 }
 .section-panel.visible{opacity:1;transform:translateY(0) scale(1)}
 .section-panel:hover{box-shadow:var(--shadow)}
-[data-theme="light"] .section-panel{background:rgba(240,241,248,0.82)}
 
-/* slide in from left or right */
-.scroll-section:nth-child(odd) .section-panel{
-  transform:translateX(-32px) translateY(20px) scale(.98);
-}
-.scroll-section:nth-child(even) .section-panel{
-  transform:translateX(32px) translateY(20px) scale(.98);
-}
-.scroll-section:nth-child(odd) .section-panel.visible,
-.scroll-section:nth-child(even) .section-panel.visible{
-  transform:translateX(0) translateY(0) scale(1);
-}
-
-.section-label{
-  font-family:var(--font-m);font-size:.64rem;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--accent);margin-bottom:28px;
-  display:flex;align-items:center;gap:14px;
-}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
 /* ── Now entries ── */
@@ -355,7 +329,7 @@ footer{
   nav{padding:16px 20px}
   .nav-links{gap:14px;flex-wrap:wrap}
   .hero{padding:0 20px}
-  .scroll-section{padding:80px 20px;justify-content:center!important}
+  .scroll-section{padding:60px 20px}
   .section-panel{padding:28px 24px}
   .now-item{grid-template-columns:1fr;gap:3px}
   .traits-grid{grid-template-columns:repeat(2,1fr)}
@@ -364,24 +338,24 @@ footer{
 
 /* ── Active nav link ── */
 .nav-links a.nav-active{color:var(--text)}
-.nav-links a.nav-active::after{content:'';display:block;height:1px;background:var(--accent);margin-top:2px;animation:navLine .3s ease forwards}
-@keyframes navLine{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.nav-links a.nav-active::after{content:'';display:block;height:1px;background:var(--accent);margin-top:2px;transform:scaleX(0);animation:navLine .3s ease forwards;transform-origin:left}
+@keyframes navLine{to{transform:scaleX(1)}}
 
 /* ── Status dot ── */
 .status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;margin-right:8px;vertical-align:middle;box-shadow:0 0 6px #22c55e;animation:sdPulse 2.2s ease-in-out infinite}
-@keyframes sdPulse{0%,100%{opacity:1;box-shadow:0 0 6px #22c55e}50%{opacity:.55;box-shadow:0 0 14px #22c55e,0 0 28px rgba(34,197,94,.3)}}
+@keyframes sdPulse{0%,100%{opacity:1;box-shadow:0 0 6px #22c55e}50%{opacity:.55;box-shadow:0 0 14px #22c55e,0 0 28px rgba(34,197,94,.25)}}
 
 /* ── Typing cursor ── */
-.type-cursor{display:inline-block;width:3px;background:var(--accent2);margin-left:3px;vertical-align:-.08em;animation:typeBlink 1s steps(1) infinite}
+.type-cursor{display:inline-block;width:3px;height:.85em;background:var(--accent2);margin-left:3px;vertical-align:-.1em;animation:typeBlink 1s steps(1) infinite}
 @keyframes typeBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
-/* ── Entry expand on hover ── */
-.entry-detail{font-size:.82rem;color:var(--muted);line-height:1.65;font-weight:300;max-height:0;overflow:hidden;opacity:0;transition:max-height .4s cubic-bezier(.22,1,.36,1),opacity .35s ease,margin .3s}
-.entry:hover .entry-detail{max-height:80px;opacity:1;margin-top:7px}
+/* ── Entry hover-expand ── */
+.entry-detail{font-size:.82rem;color:var(--muted);line-height:1.65;font-weight:300;max-height:0;overflow:hidden;opacity:0;transition:max-height .45s cubic-bezier(.22,1,.36,1),opacity .35s ease,margin-top .3s}
+.entry:hover .entry-detail{max-height:80px;opacity:1;margin-top:8px}
 
 /* ── Grain overlay ── */
-body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px 180px;opacity:.028;mix-blend-mode:overlay}
-[data-theme="light"] body::after{opacity:.018}
+body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:160px 160px;opacity:.026;mix-blend-mode:overlay}
+[data-theme="light"] body::after{opacity:.016}
 </style>
 </head>
 <body>
@@ -430,7 +404,7 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;back
     <div class="hero-inner">
       <div class="hero-eyebrow">cs + econ · uw–madison · class of 2028</div>
       <div class="hero-tilt" id="heroTilt">
-        <h1>quietly curious,<br><em>relentlessly</em> building.</h1>
+        <h1 id="heroH1"><span id="typeTarget"></span><span class="type-cursor" id="typeCursor"></span></h1>
         <p class="hero-sub">
           studying computer science and economics at the
           <a href="https://www.wisc.edu/" target="_blank" rel="noopener">university of wisconsin–madison</a>.
@@ -450,7 +424,7 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;back
       <div class="now-item"><span class="now-key">reading</span><span class="now-val"><em>thinking, fast and slow</em> — daniel kahneman</span></div>
       <div class="now-item"><span class="now-key">exploring</span><span class="now-val">what content creation might look like over the summer</span></div>
       <div class="now-item"><span class="now-key">on the side</span><span class="now-val">staying sharp in valorant (top 1%) — aim and economics have more in common than you'd think</span></div>
-      <div class="now-meta" id="nowMeta">last updated · may 2026</div>
+      <div class="now-meta">last updated · may 2026</div>
     </div>
   </section>
 
@@ -458,12 +432,12 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;back
   <section class="scroll-section" id="experience">
     <div class="section-panel">
       <h2 class="section-label">experience</h2>
-      <div class="entry"><div class="entry-title">built <a href="/thesis">THESIS</a> — live thematic investment dashboard with NLP sentiment analysis and ML price prediction</div><div class="entry-meta">2025–2026 · python, fastapi, scikit-learn, react, finbert · <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener">live ↗</a></div></div>
-      <div class="entry"><div class="entry-title">designed and built this personal website from scratch</div><div class="entry-meta">2026 · html, css, javascript, vercel</div></div>
-      <div class="entry"><div class="entry-title">presented a <a href="https://coda-five.vercel.app/" target="_blank" rel="noopener">product strategy</a> for <a href="https://codaworx.com/" target="_blank" rel="noopener">codaworx</a> at the PMC case competition</div><div class="entry-meta">2026 · RICE scoring, vercel</div></div>
-      <div class="entry"><div class="entry-title">co-authored an NLP paper on word-reading time prediction at <a href="https://www.inspiritai.com/" target="_blank" rel="noopener">inspirit ai</a></div><div class="entry-meta">aug 2023 – jan 2024 · <a href="Xiang_WordReadingTime_Paper.pdf" target="_blank" rel="noopener">read paper ↗</a></div></div>
-      <div class="entry"><div class="entry-title">built <a href="https://jeremy-xiang.github.io" target="_blank" rel="noopener">ML models for stroke risk prediction</a> with interactive web tool</div><div class="entry-meta">2023 · python, pandas, classification</div></div>
-      <div class="entry"><div class="entry-title">shadowed chip design engineers on PPA research at <a href="https://www.intel.com/" target="_blank" rel="noopener">intel</a></div><div class="entry-meta">may 2022 – aug 2022 · engineering shadow</div></div>
+      <div class="entry"><div class="entry-title">built <a href="/thesis">THESIS</a> — live thematic investment dashboard with NLP sentiment analysis and ML price prediction</div><div class="entry-meta">2025–2026 · python, fastapi, scikit-learn, react, finbert · <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener">live ↗</a></div><div class="entry-detail">Tracks 53 tickers across 5 themes. FinBERT scores 300+ headlines daily; Random Forest predicts 30-day SPY outperformance. Portfolio grew $15k → $400k+ over 3 years.</div></div>
+      <div class="entry"><div class="entry-title">designed and built this personal website from scratch</div><div class="entry-meta">2026 · html, css, javascript, vercel</div><div class="entry-detail">3D starfield with mouse parallax, constellation overlay, custom cursor, and scroll-driven animations — all in one self-contained file.</div></div>
+      <div class="entry"><div class="entry-title">presented a <a href="https://coda-five.vercel.app/" target="_blank" rel="noopener">product strategy</a> for <a href="https://codaworx.com/" target="_blank" rel="noopener">codaworx</a> at the PMC case competition</div><div class="entry-meta">2026 · RICE scoring, vercel</div><div class="entry-detail">Prioritized a feature roadmap using RICE scoring and presented a go-to-market strategy at UW–Madison's Product Management Club case competition.</div></div>
+      <div class="entry"><div class="entry-title">co-authored an NLP paper on word-reading time prediction at <a href="https://www.inspiritai.com/" target="_blank" rel="noopener">inspirit ai</a></div><div class="entry-meta">aug 2023 – jan 2024 · <a href="Xiang_WordReadingTime_Paper.pdf" target="_blank" rel="noopener">read paper ↗</a></div><div class="entry-detail">Regression models predicting per-word reading time from syntactic and frequency features; compared logistic regression, random forest, and gradient boosting.</div></div>
+      <div class="entry"><div class="entry-title">built <a href="https://jeremy-xiang.github.io" target="_blank" rel="noopener">ML models for stroke risk prediction</a> with interactive web tool</div><div class="entry-meta">2023 · python, pandas, classification</div><div class="entry-detail">Trained logistic regression, decision tree, and random forest classifiers on the Kaggle stroke dataset. Interactive prediction tool on GitHub Pages.</div></div>
+      <div class="entry"><div class="entry-title">shadowed chip design engineers on PPA research at <a href="https://www.intel.com/" target="_blank" rel="noopener">intel</a></div><div class="entry-meta">may 2022 – aug 2022 · engineering shadow</div><div class="entry-detail">Observed PPA optimization workflows on next-gen silicon at Intel. Early exposure to the engineering tradeoffs behind modern CPU design.</div></div>
     </div>
   </section>
 
@@ -507,7 +481,7 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;back
   <section class="scroll-section" id="contact">
     <div class="section-panel">
       <h2 class="section-label">contact</h2>
-      <p class="contact-intro">open to internships and conversations with anyone working on interesting problems. fastest way to reach me is email.</p>
+      <p class="contact-intro"><span class="status-dot"></span>open to internships and conversations with anyone working on interesting problems. fastest way to reach me is email.</p>
       <div class="contact-list">
         <a href="mailto:jeremy@jeremyxiang.com" class="contact-item"><span class="c-lbl">email</span><span class="c-val">jeremy@jeremyxiang.com</span><span class="c-arr">→</span></a>
         <a href="https://www.linkedin.com/in/jeremy-xiang/" target="_blank" rel="noopener" class="contact-item"><span class="c-lbl">linkedin</span><span class="c-val">jeremy-xiang</span><span class="c-arr">→</span></a>
@@ -870,37 +844,46 @@ setTimeout(() => { const d = document.getElementById('domain'); if(d) d.style.di
 (function(){
   const target = document.getElementById('typeTarget');
   const cursor = document.getElementById('typeCursor');
-  if (!target) return;
-  // Segments: [text, isEm]
-  const segments = [
-    ['quietly curious,\n', false],
-    ['relentlessly', true],
-    [' building.', false],
+  if (!target || !cursor) return;
+
+  const parts = [
+    { text: 'quietly curious,', em: false },
+    { text: '\n', em: false },
+    { text: 'relentlessly', em: true },
+    { text: ' building.', em: false },
   ];
-  let si = 0, ci = 0;
-  const SPEED = 38; // ms per char
+
+  let pi = 0, ci = 0;
+  let currentNode = null;
+
   function typeNext() {
-    if (si >= segments.length) { cursor.style.display = 'none'; return; }
-    const [text, isEm] = segments[si];
+    if (pi >= parts.length) {
+      // done — hide cursor after 2s
+      setTimeout(() => { cursor.style.display = 'none'; }, 2000);
+      return;
+    }
+    const part = parts[pi];
+
     if (ci === 0) {
-      const node = isEm ? document.createElement('em') : document.createElement('span');
-      node.id = 'tseg' + si;
-      if (text.includes('\n')) { node.style.display = 'block'; }
-      target.appendChild(node);
+      if (part.text === '\n') {
+        target.appendChild(document.createElement('br'));
+        pi++; ci = 0;
+        setTimeout(typeNext, 60);
+        return;
+      }
+      currentNode = part.em ? document.createElement('em') : document.createElement('span');
+      target.appendChild(currentNode);
     }
-    const node = document.getElementById('tseg' + si);
-    const char = text[ci];
-    if (char === '\n') {
-      node.appendChild(document.createElement('br'));
-    } else {
-      node.appendChild(document.createTextNode(char));
-    }
+
+    currentNode.textContent += part.text[ci];
     ci++;
-    if (ci >= text.length) { si++; ci = 0; }
-    setTimeout(typeNext, SPEED + Math.random() * 18);
+
+    if (ci >= part.text.length) { pi++; ci = 0; currentNode = null; }
+    setTimeout(typeNext, 42 + Math.random() * 20);
   }
-  // Start after domain intro fades
-  setTimeout(typeNext, 1400);
+
+  // start after domain intro disappears (~1.4s)
+  setTimeout(typeNext, 1500);
 })();
 
 // ══════════════════════════════════════
@@ -910,43 +893,40 @@ setTimeout(() => { const d = document.getElementById('domain'); if(d) d.style.di
   const el = document.getElementById('nowMeta');
   if (!el) return;
   const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
-  const now = new Date();
-  el.textContent = `last updated · ${months[now.getMonth()]} ${now.getFullYear()}`;
+  const d = new Date();
+  el.textContent = 'last updated · ' + months[d.getMonth()] + ' ' + d.getFullYear();
 })();
 
 // ══════════════════════════════════════
 // 12. ACTIVE NAV ON SCROLL
 // ══════════════════════════════════════
 (function(){
-  const sections = ['now','experience','leadership','tools','contact'];
-  const links = {};
-  sections.forEach(id => {
-    const a = document.querySelector(`.nav-links a[href="#${id}"]`);
-    if (a) links[id] = a;
+  const ids = ['now','experience','leadership','tools','contact'];
+  const linkMap = {};
+  ids.forEach(id => {
+    const a = document.querySelector('.nav-links a[href="#' + id + '"]');
+    if (a) linkMap[id] = a;
   });
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
-      const id = e.target.id;
-      if (links[id]) links[id].classList.toggle('nav-active', e.isIntersecting);
+      const a = linkMap[e.target.id];
+      if (a) a.classList.toggle('nav-active', e.isIntersecting);
     });
-  }, { threshold: 0.3 });
-  sections.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) obs.observe(el);
-  });
+  }, { threshold: 0.25 });
+  ids.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
 })();
 
 // ══════════════════════════════════════
-// 13. KEYBOARD NAV (1-5 = sections)
+// 13. KEYBOARD NAV  (1–5 = sections)
 // ══════════════════════════════════════
 (function(){
-  const map = {'1':'#now','2':'#experience','3':'#traits','4':'#tools','5':'#contact'};
+  const map = { '1':'now', '2':'experience', '3':'leadership', '4':'tools', '5':'contact' };
   document.addEventListener('keydown', e => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    const href = map[e.key];
-    if (href) {
-      const el = document.querySelector(href);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.metaKey || e.ctrlKey) return;
+    const id = map[e.key];
+    if (id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
 })();
