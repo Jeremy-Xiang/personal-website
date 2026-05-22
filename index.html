@@ -72,12 +72,12 @@ body.hov #cur-ring{width:46px;height:46px;border-color:rgba(184,168,255,0.6)}
 
 /* Constellation CSS unchanged from working version */
 .constellation{
-  position:absolute;
+  position:absolute;pointer-events:auto;
   animation:cDrift var(--drift-dur,44s) ease-in-out infinite alternate,cFadeIn 1.4s ease both;
 }
 @keyframes cDrift{
-  0%{transform:translate(0,0)}33%{transform:translate(var(--dx1,0),var(--dy1,0))}
-  66%{transform:translate(var(--dx2,0),var(--dy2,0))}100%{transform:translate(var(--dx3,0),var(--dy3,0))}
+  0%{transform:translate(calc(var(--px,0px) + 0px),calc(var(--py,0px) + 0px))}33%{transform:translate(calc(var(--px,0px) + var(--dx1,0px)),calc(var(--py,0px) + var(--dy1,0px)))}
+  66%{transform:translate(calc(var(--px,0px) + var(--dx2,0px)),calc(var(--py,0px) + var(--dy2,0px)))}100%{transform:translate(calc(var(--px,0px) + var(--dx3,0px)),calc(var(--py,0px) + var(--dy3,0px)))}
 }
 @keyframes cFadeIn{from{opacity:0}to{opacity:1}}
 .const-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
@@ -1013,22 +1013,57 @@ setTimeout(() => { const d = document.getElementById('domain'); if(d) d.style.di
 })();
 
 // ══════════════════════════════════════
-// 17. CONSTELLATION TOOLTIPS
+// 17. CONSTELLATION TOOLTIPS + PARALLAX
 // ══════════════════════════════════════
 (function(){
-  const names={'orion':'orion','scorpius':'scorpius','cygnus':'cygnus','lyra':'lyra',
-    'aquila':'aquila','big-dipper':'ursa major','cassiopeia':'cassiopeia','southern-cross':'crux'};
+  const names={
+    'orion':'orion','scorpius':'scorpius','cygnus':'cygnus','lyra':'lyra',
+    'aquila':'aquila','big-dipper':'ursa major','cassiopeia':'cassiopeia','southern-cross':'crux'
+  };
+
+  // Each constellation gets a slightly different parallax depth (0.006–0.018)
+  // so they move at different rates — layered depth effect
+  const depths = [0.014, 0.009, 0.016, 0.011, 0.013, 0.007, 0.012, 0.008];
+
+  let mouseX = 0, mouseY = 0;
+  let targetX = 0, targetY = 0;
+  window.addEventListener('mousemove', e => {
+    // Normalise to -1..1 from centre
+    targetX = (e.clientX / window.innerWidth  - 0.5) * 2;
+    targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  const consts = [];
+
   function addTips(){
-    document.querySelectorAll('.constellation').forEach(el=>{
-      const name=el.dataset.name;
-      if(!name||el.querySelector('.const-tooltip'))return;
-      const tip=document.createElement('div');
-      tip.className='const-tooltip';
-      tip.textContent=names[name]||name;
-      el.appendChild(tip);
+    document.querySelectorAll('.constellation').forEach((el, i) => {
+      // Tooltip
+      const name = el.dataset.name;
+      if (name && !el.querySelector('.const-tooltip')) {
+        const tip = document.createElement('div');
+        tip.className = 'const-tooltip';
+        tip.textContent = names[name] || name;
+        el.appendChild(tip);
+      }
+      // Store parallax info
+      consts.push({ el, depth: depths[i % depths.length], cx: 0, cy: 0 });
     });
   }
-  setTimeout(addTips,700);
+  setTimeout(addTips, 700);
+
+  // Smooth parallax loop — slow lerp so motion is gentle and independent of cursor speed
+  (function loop(){
+    requestAnimationFrame(loop);
+    mouseX += (targetX - mouseX) * 0.04;
+    mouseY += (targetY - mouseY) * 0.04;
+    consts.forEach(({ el, depth }) => {
+      const dx = mouseX * depth * window.innerWidth  * 0.5;
+      const dy = mouseY * depth * window.innerHeight * 0.5;
+      // Combine with existing CSS drift animation via additional transform
+      el.style.setProperty('--px', dx.toFixed(2) + 'px');
+      el.style.setProperty('--py', dy.toFixed(2) + 'px');
+    });
+  })();
 })();
 </script>
 </body>
