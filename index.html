@@ -336,6 +336,14 @@ footer{
   .tools-grid{grid-template-columns:1fr}
 }
 
+/* ── Reading progress bar ── */
+.read-bar{display:inline-block;width:64px;height:3px;background:rgba(110,143,255,.18);border-radius:2px;margin-left:10px;vertical-align:middle;overflow:hidden}
+.read-fill{display:block;height:100%;background:var(--accent);border-radius:2px;opacity:.7}
+
+/* ── Constellation tooltip ── */
+.const-tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);font-family:var(--font-m);font-size:.58rem;letter-spacing:.12em;text-transform:lowercase;color:var(--accent);background:rgba(7,8,15,0.9);border:1px solid rgba(110,143,255,.28);padding:3px 9px;border-radius:3px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .25s ease;z-index:10}
+.constellation:hover .const-tooltip{opacity:1}
+
 /* ── Active nav link ── */
 .nav-links a.nav-active{color:var(--text)}
 .nav-links a.nav-active::after{content:'';display:block;height:1px;background:var(--accent);margin-top:2px;transform:scaleX(0);animation:navLine .3s ease forwards;transform-origin:left}
@@ -421,7 +429,7 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;back
       <h2 class="section-label">now</h2>
       <div class="now-item"><span class="now-key">learning</span><span class="now-val">machine learning fundamentals — the math underneath the models</span></div>
       <div class="now-item"><span class="now-key">building</span><span class="now-val"><a href="/thesis">thesis</a> — a live investment dashboard with NLP sentiment and ML prediction</span></div>
-      <div class="now-item"><span class="now-key">reading</span><span class="now-val"><em>thinking, fast and slow</em> — daniel kahneman</span></div>
+      <div class="now-item"><span class="now-key">reading</span><span class="now-val"><em>thinking, fast and slow</em> — daniel kahneman<span class="read-bar" title="~45% through"><span class="read-fill" style="width:45%"></span></span></span></div>
       <div class="now-item"><span class="now-key">exploring</span><span class="now-val">what content creation might look like over the summer</span></div>
       <div class="now-item"><span class="now-key">on the side</span><span class="now-val">staying sharp in valorant (top 1%) — aim and economics have more in common than you'd think</span></div>
       <div class="now-meta">last updated · may 2026</div>
@@ -483,7 +491,7 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;back
       <h2 class="section-label">contact</h2>
       <p class="contact-intro"><span class="status-dot"></span>open to internships and conversations with anyone working on interesting problems. fastest way to reach me is email.</p>
       <div class="contact-list">
-        <a href="mailto:jeremy@jeremyxiang.com" class="contact-item"><span class="c-lbl">email</span><span class="c-val">jeremy@jeremyxiang.com</span><span class="c-arr">→</span></a>
+        <a href="mailto:jeremy@jeremyxiang.com" class="contact-item" id="emailCopy" data-email="jeremy@jeremyxiang.com"><span class="c-lbl">email</span><span class="c-val" id="emailVal">jeremy@jeremyxiang.com</span><span class="c-arr" id="emailArr">→</span></a>
         <a href="https://www.linkedin.com/in/jeremy-xiang/" target="_blank" rel="noopener" class="contact-item"><span class="c-lbl">linkedin</span><span class="c-val">jeremy-xiang</span><span class="c-arr">→</span></a>
         <a href="Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener" class="contact-item"><span class="c-lbl">resume</span><span class="c-val">download pdf</span><span class="c-arr">→</span></a>
       </div>
@@ -697,6 +705,7 @@ function buildSky() {
   CONSTELLATIONS.forEach((c, ci) => {
     const wrap = document.createElement('div');
     wrap.className = 'constellation';
+    wrap.dataset.name = c.name;
     wrap.style.left = c.x + '%'; wrap.style.top = c.y + '%';
     wrap.style.width = c.w + '%'; wrap.style.height = c.h + 'vh';
     wrap.style.animationDelay = (0.3 + ci * 0.3) + 's, ' + (ci * 2) + 's';
@@ -929,6 +938,97 @@ setTimeout(() => { const d = document.getElementById('domain'); if(d) d.style.di
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
+})();
+
+// ══════════════════════════════════════
+// 14. PERIODIC SHOOTING STAR
+// ══════════════════════════════════════
+(function(){
+  let sx=0,sy=0,sang=0,sprog=1,slen=0;
+  function launch(){
+    if(Math.random()<0.6){sx=Math.random()*W;sy=0;}
+    else{sx=0;sy=Math.random()*H*0.5;}
+    sang=Math.PI/5+Math.random()*Math.PI/8;
+    slen=180+Math.random()*140;sprog=0;
+    setTimeout(launch,20000+Math.random()*25000);
+  }
+  setTimeout(launch,8000+Math.random()*12000);
+  (function loop(){
+    requestAnimationFrame(loop);
+    if(sprog>=1)return;
+    sprog=Math.min(1,sprog+0.018);
+    const t=sprog<0.5?2*sprog*sprog:1-Math.pow(-2*sprog+2,2)/2;
+    const cx=sx+Math.cos(sang)*t*(slen+80),cy=sy+Math.sin(sang)*t*(slen+80);
+    const tx=cx-Math.cos(sang)*slen*Math.min(1,sprog*3),ty=cy-Math.sin(sang)*slen*Math.min(1,sprog*3);
+    const a=sprog<0.7?1:1-(sprog-0.7)/0.3;
+    const g=ctx.createLinearGradient(tx,ty,cx,cy);
+    g.addColorStop(0,`rgba(255,255,255,0)`);
+    g.addColorStop(0.6,`rgba(200,220,255,${a*0.55})`);
+    g.addColorStop(1,`rgba(255,255,255,${a})`);
+    ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(cx,cy);
+    ctx.strokeStyle=g;ctx.lineWidth=1.5;
+    ctx.shadowBlur=8;ctx.shadowColor=`rgba(180,210,255,${a*0.8})`;
+    ctx.stroke();ctx.shadowBlur=0;
+    ctx.beginPath();ctx.arc(cx,cy,2.2,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.fill();
+  })();
+})();
+
+// ══════════════════════════════════════
+// 15. HERO SCROLL PARALLAX
+// ══════════════════════════════════════
+(function(){
+  const inner=document.querySelector('.hero-inner');
+  if(!inner)return;
+  let tick=false;
+  window.addEventListener('scroll',()=>{
+    if(!tick){
+      requestAnimationFrame(()=>{
+        const y=window.scrollY;
+        inner.style.transform=`translateY(${y*0.3}px)`;
+        inner.style.opacity=Math.max(0,1-y/(window.innerHeight*0.65));
+        tick=false;
+      });
+      tick=true;
+    }
+  },{passive:true});
+})();
+
+// ══════════════════════════════════════
+// 16. CLICK-TO-COPY EMAIL
+// ══════════════════════════════════════
+(function(){
+  const item=document.getElementById('emailCopy');
+  const val=document.getElementById('emailVal');
+  const arr=document.getElementById('emailArr');
+  if(!item||!val)return;
+  item.addEventListener('click',e=>{
+    e.preventDefault();
+    navigator.clipboard.writeText(item.dataset.email).then(()=>{
+      const orig=val.textContent;
+      val.textContent='copied ✓';val.style.color='#22c55e';arr.textContent='';
+      setTimeout(()=>{val.textContent=orig;val.style.color='';arr.textContent='→';},1800);
+    }).catch(()=>{window.location.href='mailto:'+item.dataset.email;});
+  });
+})();
+
+// ══════════════════════════════════════
+// 17. CONSTELLATION TOOLTIPS
+// ══════════════════════════════════════
+(function(){
+  const names={'orion':'orion','scorpius':'scorpius','cygnus':'cygnus','lyra':'lyra',
+    'aquila':'aquila','big-dipper':'ursa major','cassiopeia':'cassiopeia','southern-cross':'crux'};
+  function addTips(){
+    document.querySelectorAll('.constellation').forEach(el=>{
+      const name=el.dataset.name;
+      if(!name||el.querySelector('.const-tooltip'))return;
+      const tip=document.createElement('div');
+      tip.className='const-tooltip';
+      tip.textContent=names[name]||name;
+      el.appendChild(tip);
+    });
+  }
+  setTimeout(addTips,700);
 })();
 </script>
 </body>
