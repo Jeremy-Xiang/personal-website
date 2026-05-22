@@ -272,12 +272,12 @@ main{
 /* ── Traits ── */
 .traits-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
 .trait{
-  background:rgba(17,20,34,0.8);border:1px solid var(--border);border-radius:6px;
+  border-radius:6px;
   padding:20px 16px;cursor:default;
   transform-style:preserve-3d;
   transition:background .25s,box-shadow .25s,transform .08s ease-out;will-change:transform;
 }
-[data-theme="light"] .trait{background:rgba(232,234,245,0.8)}
+
 .trait:hover{background:var(--card-hover);box-shadow:var(--shadow)}
 .trait-glyph{font-size:.9rem;color:var(--accent);margin-bottom:9px;opacity:.7}
 .trait-name{font-family:var(--font-d);font-size:1.1rem;font-style:italic;font-weight:400;color:var(--text);margin-bottom:4px}
@@ -286,12 +286,12 @@ main{
 /* ── Tools ── */
 .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
 .tool-card{
-  background:rgba(17,20,34,0.8);border:1px solid var(--border);border-radius:6px;
+  border-radius:6px;
   padding:22px 18px;cursor:default;
   transform-style:preserve-3d;
   transition:background .25s,box-shadow .25s,transform .08s ease-out;will-change:transform;
 }
-[data-theme="light"] .tool-card{background:rgba(232,234,245,0.8)}
+
 .tool-card:hover{background:var(--card-hover);box-shadow:var(--shadow)}
 .tool-icon{font-family:var(--font-m);font-size:1.05rem;color:var(--accent);margin-bottom:12px;opacity:.6}
 .tool-card h3{font-family:var(--font-d);font-weight:500;font-size:1rem;color:var(--text);margin-bottom:6px}
