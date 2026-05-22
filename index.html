@@ -68,7 +68,7 @@ body.hov #cur-ring{width:46px;height:46px;border-color:rgba(184,168,255,0.6)}
 }
 
 /* ── Constellation overlay layer ── */
-#sky{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+#sky{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:visible}
 
 /* Constellation CSS unchanged from working version */
 .constellation{
@@ -76,8 +76,8 @@ body.hov #cur-ring{width:46px;height:46px;border-color:rgba(184,168,255,0.6)}
   animation:cDrift var(--drift-dur,44s) ease-in-out infinite alternate,cFadeIn 1.4s ease both;
 }
 @keyframes cDrift{
-  0%{transform:translate(calc(var(--px,0px) + 0px),calc(var(--py,0px) + 0px))}33%{transform:translate(calc(var(--px,0px) + var(--dx1,0px)),calc(var(--py,0px) + var(--dy1,0px)))}
-  66%{transform:translate(calc(var(--px,0px) + var(--dx2,0px)),calc(var(--py,0px) + var(--dy2,0px)))}100%{transform:translate(calc(var(--px,0px) + var(--dx3,0px)),calc(var(--py,0px) + var(--dy3,0px)))}
+  0%{transform:translate(0,0)}33%{transform:translate(var(--dx1,0),var(--dy1,0))}
+  66%{transform:translate(var(--dx2,0),var(--dy2,0))}100%{transform:translate(var(--dx3,0),var(--dy3,0))}
 }
 @keyframes cFadeIn{from{opacity:0}to{opacity:1}}
 .const-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
@@ -1020,48 +1020,50 @@ setTimeout(() => { const d = document.getElementById('domain'); if(d) d.style.di
     'orion':'orion','scorpius':'scorpius','cygnus':'cygnus','lyra':'lyra',
     'aquila':'aquila','big-dipper':'ursa major','cassiopeia':'cassiopeia','southern-cross':'crux'
   };
+  // Each constellation drifts at a different depth so they layer
+  const depths = [0.012, 0.007, 0.015, 0.009, 0.011, 0.006, 0.010, 0.007];
 
-  // Each constellation gets a slightly different parallax depth (0.006–0.018)
-  // so they move at different rates — layered depth effect
-  const depths = [0.014, 0.009, 0.016, 0.011, 0.013, 0.007, 0.012, 0.008];
+  // Single shared fixed tooltip — avoids overflow:hidden clipping
+  const sharedTip = document.createElement('div');
+  sharedTip.style.cssText = 'position:fixed;z-index:200;font-family:var(--font-m);font-size:.58rem;letter-spacing:.12em;text-transform:lowercase;color:var(--accent);background:rgba(7,8,15,0.92);border:1px solid rgba(110,143,255,.32);padding:3px 10px;border-radius:3px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .22s ease;transform:translateX(-50%)';
+  document.body.appendChild(sharedTip);
 
-  let mouseX = 0, mouseY = 0;
-  let targetX = 0, targetY = 0;
+  let tgtX = 0, tgtY = 0, curX = 0, curY = 0;
   window.addEventListener('mousemove', e => {
-    // Normalise to -1..1 from centre
-    targetX = (e.clientX / window.innerWidth  - 0.5) * 2;
-    targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+    tgtX = (e.clientX / window.innerWidth  - 0.5) * 2;
+    tgtY = (e.clientY / window.innerHeight - 0.5) * 2;
   }, { passive: true });
 
   const consts = [];
 
-  function addTips(){
+  function setup(){
     document.querySelectorAll('.constellation').forEach((el, i) => {
-      // Tooltip
       const name = el.dataset.name;
-      if (name && !el.querySelector('.const-tooltip')) {
-        const tip = document.createElement('div');
-        tip.className = 'const-tooltip';
-        tip.textContent = names[name] || name;
-        el.appendChild(tip);
+      if (name) {
+        el.addEventListener('mouseenter', e => {
+          const r = el.getBoundingClientRect();
+          sharedTip.textContent = names[name] || name;
+          sharedTip.style.left  = (r.left + r.width / 2) + 'px';
+          sharedTip.style.top   = (r.top - 14) + 'px';
+          sharedTip.style.opacity = '1';
+        });
+        el.addEventListener('mouseleave', () => { sharedTip.style.opacity = '0'; });
       }
-      // Store parallax info
-      consts.push({ el, depth: depths[i % depths.length], cx: 0, cy: 0 });
+      consts.push({ el, depth: depths[i % depths.length] });
     });
   }
-  setTimeout(addTips, 700);
+  setTimeout(setup, 700);
 
-  // Smooth parallax loop — slow lerp so motion is gentle and independent of cursor speed
+  // Parallax loop: CSS `translate` property composes with animation's `transform`
+  // so both the drift animation and the mouse offset work simultaneously
   (function loop(){
     requestAnimationFrame(loop);
-    mouseX += (targetX - mouseX) * 0.04;
-    mouseY += (targetY - mouseY) * 0.04;
+    curX += (tgtX - curX) * 0.035;
+    curY += (tgtY - curY) * 0.035;
     consts.forEach(({ el, depth }) => {
-      const dx = mouseX * depth * window.innerWidth  * 0.5;
-      const dy = mouseY * depth * window.innerHeight * 0.5;
-      // Combine with existing CSS drift animation via additional transform
-      el.style.setProperty('--px', dx.toFixed(2) + 'px');
-      el.style.setProperty('--py', dy.toFixed(2) + 'px');
+      const dx = (curX * depth * window.innerWidth  * 0.45).toFixed(2);
+      const dy = (curY * depth * window.innerHeight * 0.45).toFixed(2);
+      el.style.translate = dx + 'px ' + dy + 'px';
     });
   })();
 })();
