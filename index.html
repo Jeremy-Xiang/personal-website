@@ -585,12 +585,12 @@ function projectStar(s, camZ, tiltX, tiltY) {
   const rz = y * st + z * ct;
   y = ry; z = rz;
 
-  const camZ = -1 + camOffsetZ;
-  let dz = z - camZ;
+  const camPos = -1 + camOffsetZ;
+  let dz = z - camPos;
   // Recycle: wrap stars that pass behind camera back to front
   if (dz <= 0.01) {
-    s.oz = camZ + 3.5 + Math.random() * 2.5;
-    dz = s.oz - camZ;
+    s.oz = camPos + 3.5 + Math.random() * 2.5;
+    dz = s.oz - camPos;
   }
 
   const fov = 480;
