@@ -9,8 +9,13 @@
 <meta property="og:description" content="CS + Economics at UW–Madison. Building at the intersection of ML, clean systems, and software that solves problems."/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://jeremyxiang.com"/>
-<meta property="og:image" content="https://jeremyxiang.com/og-image.svg"/>
+<meta property="og:image" content="https://jeremyxiang.com/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
 <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://jeremyxiang.com/og-image.png"/>
+<link rel="canonical" href="https://jeremyxiang.com/"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cstyle%3Etext%7Bfont-family:serif;font-style:italic;font-weight:300;fill:%236b8aff%7D%3C/style%3E%3Ctext x='50' y='78' font-size='100' text-anchor='middle'%3E%E2%88%9E%3C/text%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -36,6 +41,23 @@
 }
 
 html{scroll-behavior:smooth}
+
+/* ── Accessibility: keyboard focus ── */
+a:focus-visible,button:focus-visible{
+  outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;
+}
+
+/* ── Touch devices: native cursor, hide custom one ── */
+@media (hover:none),(pointer:coarse){
+  body{cursor:auto}
+  #cur-dot,#cur-ring{display:none}
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
 body{
   background:var(--bg);color:var(--text);
   font-family:var(--font-b);font-size:15px;line-height:1.72;
@@ -513,6 +535,7 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;back
 // ══════════════════════════════════════
 const canvas = document.getElementById('starfield');
 const ctx = canvas.getContext('2d');
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let W, H;
 
 // 3D star: x,y,z in [-1,1] space, z controls depth
@@ -603,7 +626,7 @@ function projectStar(s, camZ, tiltX, tiltY) {
 
 let frame3d = 0;
 function render3d() {
-  requestAnimationFrame(render3d);
+  if (!REDUCED_MOTION) requestAnimationFrame(render3d);
   frame3d++;
 
   // Smooth scroll interpolation
@@ -749,9 +772,11 @@ else setTimeout(buildSky, 30);
 // 3. CURSOR
 // ══════════════════════════════════════
 const dot = document.getElementById('cur-dot'), ring = document.getElementById('cur-ring');
+const FINE_POINTER = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 let mx = -100, my = -100, rx = -100, ry = -100;
 window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 (function cursorTick() {
+  if (!FINE_POINTER) return;
   requestAnimationFrame(cursorTick);
   rx += (mx - rx) * 0.11; ry += (my - ry) * 0.11;
   dot.style.left = mx + 'px'; dot.style.top = my + 'px';
@@ -957,8 +982,9 @@ setTimeout(() => { const d = document.getElementById('domain'); if(d) d.style.di
     slen=180+Math.random()*140;sprog=0;
     setTimeout(launch,20000+Math.random()*25000);
   }
-  setTimeout(launch,8000+Math.random()*12000);
+  if (!REDUCED_MOTION) setTimeout(launch,8000+Math.random()*12000);
   (function loop(){
+    if (REDUCED_MOTION) return;
     requestAnimationFrame(loop);
     if(sprog>=1)return;
     sprog=Math.min(1,sprog+0.018);
@@ -1053,6 +1079,7 @@ setTimeout(() => { const d = document.getElementById('domain'); if(d) d.style.di
   let visibleFor = null;
 
   (function loop(){
+    if (REDUCED_MOTION) return;
     requestAnimationFrame(loop);
 
     // Parallax — CSS translate composes with animation's transform
