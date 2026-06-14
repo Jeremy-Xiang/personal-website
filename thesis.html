@@ -21,7 +21,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#07080f;--surface:#111422;--border:rgba(255,255,255,0.07);
-  --text:#e4e6f5;--muted:rgba(200,205,235,0.44);
+  --text:#e8eaf8;--muted:rgba(200,205,235,0.58);
   --accent:#6e8fff;--accent2:#b8a8ff;--accent-glow:rgba(110,143,255,0.13);
   --nav-bg:rgba(7,8,15,0.88);--card-hover:#161a2e;
   --shadow:0 20px 60px rgba(0,0,0,0.55),0 2px 8px rgba(0,0,0,0.3);
@@ -37,7 +37,8 @@
   --border:rgba(0,0,0,0.08);
 }
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:15px;line-height:1.72;overflow-x:hidden;cursor:none;transition:background .4s,color .4s}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:16px;line-height:1.78;overflow-x:hidden;cursor:none;transition:background .4s,color .4s;-webkit-font-smoothing:antialiased}
+@media(hover:none){body{cursor:auto}#cur-dot,#cur-ring{display:none}}
 
 /* ── Cursor ── */
 #cur-dot{position:fixed;width:7px;height:7px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;left:0;top:0;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;will-change:left,top}
@@ -86,7 +87,13 @@ nav{display:flex;align-items:center;justify-content:space-between;position:fixed
 @keyframes starTwinkle{from{opacity:var(--tw,.55);transform:translate(-50%,-50%) scale(1)}to{opacity:calc(var(--tw,.55)*.45);transform:translate(-50%,-50%) scale(.82)}}
 
 /* ── Wrap ── */
-main{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:120px 40px 80px}
+main{position:relative;z-index:2;max-width:820px;margin:0 auto;padding:120px 40px 80px}
+
+/* ── Readable panels ── */
+.section-intro{font-size:.95rem;color:var(--muted);max-width:640px;line-height:1.8;font-weight:300;margin-bottom:1.35rem}
+.panel{background:rgba(11,14,28,.52);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--border);border-radius:10px;padding:1.5rem 1.6rem}
+[data-theme="light"] .panel{background:rgba(255,255,255,.72)}
+.section-note{font-size:.74rem;color:var(--muted);margin-top:.85rem;font-family:var(--font-m);opacity:.72;line-height:1.6}
 
 /* ── Back ── */
 .back-link{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-m);font-size:.68rem;letter-spacing:.08em;color:var(--muted);text-decoration:none;margin-bottom:2.5rem;transition:color .18s,transform .2s}
@@ -97,7 +104,8 @@ main{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:120px 40p
 .hero-eyebrow::before{content:'';width:26px;height:1px;background:var(--accent)}
 .hero h1{font-family:var(--font-d);font-size:clamp(2.4rem,6vw,4.2rem);font-weight:500;line-height:1.08;letter-spacing:-.015em;margin-bottom:22px;color:var(--text);opacity:0;animation:fadeUp .85s cubic-bezier(.22,1,.36,1) .25s forwards}
 .hero h1 em{font-style:italic;color:var(--accent2);font-weight:400}
-.hero p{font-size:.97rem;color:var(--muted);max-width:560px;line-height:1.78;font-weight:300;margin-bottom:32px;opacity:0;animation:fadeUp .7s ease .45s forwards}
+.hero p{font-size:1.02rem;color:var(--muted);max-width:620px;line-height:1.82;font-weight:300;margin-bottom:32px;opacity:0;animation:fadeUp .7s ease .45s forwards}
+.hero .hero-tagline{display:block;margin-top:.65rem;font-family:var(--font-m);font-size:.72rem;letter-spacing:.06em;color:rgba(200,205,235,.45)}
 .cta-row{display:flex;gap:.75rem;flex-wrap:wrap;opacity:0;animation:fadeUp .7s ease .6s forwards}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
@@ -222,7 +230,9 @@ section.vis{opacity:1;transform:translateY(0)}
   <div class="hero" style="margin-bottom:3.5rem">
     <div class="hero-eyebrow">project · 2025–2026</div>
     <h1>THESIS — <em>thematic<br>investment dashboard.</em></h1>
-    <p>A live dashboard tracking a portfolio organized by investment thesis — AI infrastructure, defense, biodefense — not individual tickers. Pulls real prices, scores financial headlines with NLP, and runs a Random Forest model to predict 30-day outperformance vs SPY.</p>
+    <p>A live portfolio dashboard built around investment themes — AI infrastructure, defense, energy, biodefense — instead of individual stock picks. It pulls real market data, scores financial headlines with NLP, and surfaces weekly ML signals for 30-day outperformance vs the S&amp;P 500.
+      <span class="hero-tagline">53 tickers · 5 themes · FinBERT sentiment · Random Forest predictions</span>
+    </p>
     <div class="cta-row">
       <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener" class="btn-primary">live dashboard ↗</a>
       <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-api" target="_blank" rel="noopener" class="btn-secondary">backend ↗</a>
@@ -233,7 +243,8 @@ section.vis{opacity:1;transform:translateY(0)}
   <!-- Stats -->
   <section id="s-stats">
     <div class="section-label">at a glance</div>
-    <div class="stats-grid">
+    <p class="section-intro">The numbers behind the dashboard — capital growth, coverage, and how much news gets processed on each refresh.</p>
+    <div class="stats-grid panel" style="padding:0">
       <div class="stat-cell"><div class="stat-label">Starting capital</div><div class="stat-value acc" data-count="15" data-pre="$" data-suf="k">$15k</div><div class="stat-sub">Jan 2023</div></div>
       <div class="stat-cell"><div class="stat-label">Peak value</div><div class="stat-value pos" data-count="400" data-pre="$" data-suf="k+">$400k+</div><div class="stat-sub">3-year thesis return</div></div>
       <div class="stat-cell"><div class="stat-label">Tickers tracked</div><div class="stat-value" data-count="53" data-pre="" data-suf="">53</div><div class="stat-sub">across 5 themes</div></div>
@@ -244,45 +255,48 @@ section.vis{opacity:1;transform:translateY(0)}
   <!-- Theme returns -->
   <section id="s-returns">
     <div class="section-label">theme returns</div>
-    <div class="theme-bars">
+    <p class="section-intro">Performance since inception, grouped by theme. Bar length is scaled relative to the best-performing bucket.</p>
+    <div class="theme-bars panel">
       <div class="bar-row"><div class="bar-label">AI Infrastructure<span>NVDA, AMD, TSM, MSFT…</span></div><div class="bar-track"><div class="bar-fill" style="background:#60a5fa" data-w="85%"></div></div><div class="bar-pct pos">+274.6%</div></div>
       <div class="bar-row"><div class="bar-label">Energy Transition<span>CEG, VST, NEE, FSLR…</span></div><div class="bar-track"><div class="bar-fill" style="background:#4ade80" data-w="100%"></div></div><div class="bar-pct pos">+362.2%</div></div>
       <div class="bar-row"><div class="bar-label">Defense<span>LMT, RTX, PLTR, KTOS…</span></div><div class="bar-track"><div class="bar-fill" style="background:#f97316" data-w="64%"></div></div><div class="bar-pct pos">+202.9%</div></div>
       <div class="bar-row"><div class="bar-label">Healthcare<span>UNH, TMO, ISRG, DHR…</span></div><div class="bar-track"><div class="bar-fill" style="background:#f472b6" data-w="12%"></div></div><div class="bar-pct pos">+0.1%</div></div>
       <div class="bar-row"><div class="bar-label">Biodefense<span>MRNA, SIGA, ILMN, GILD…</span></div><div class="bar-track"><div class="bar-fill" style="background:#c084fc" data-w="20%"></div></div><div class="bar-pct" style="color:#ef4444">−16.8%</div></div>
     </div>
-    <p style="font-size:.73rem;color:var(--muted);margin-top:.9rem;font-family:var(--font-m);opacity:.6">Biodefense initiated Jan 2025 — pre-event positioning ahead of next outbreak cycle.</p>
+    <p class="section-note">Biodefense was initiated in Jan 2025 — early positioning ahead of the next outbreak cycle.</p>
   </section>
 
   <!-- Signals -->
   <section id="s-signals">
-    <div class="section-label">prediction signals — live</div>
-    <p style="font-size:.88rem;color:var(--muted);margin-bottom:1rem;line-height:1.65;font-weight:300">Random Forest classifier trained on 3 years of daily price history. Predicts probability each theme outperforms SPY over next 30 days. Updated weekly.</p>
-    <div class="signal-grid">
+    <div class="section-label">prediction signals</div>
+    <p class="section-intro">Each week, a Random Forest model retrains on three years of daily prices and estimates the probability each theme outperforms SPY over the next 30 days.</p>
+    <div class="signal-grid panel" style="padding:1rem">
       <div class="sig-card buy"><div class="sig-theme">AI</div><div class="sig-label buy">BUY</div><div class="sig-prob">72% prob</div><div class="sig-bar"><div class="sig-fill buy" style="width:72%"></div></div></div>
       <div class="sig-card hold"><div class="sig-theme">DEF</div><div class="sig-label hold">HOLD</div><div class="sig-prob">54% prob</div><div class="sig-bar"><div class="sig-fill hold" style="width:54%"></div></div></div>
       <div class="sig-card buy"><div class="sig-theme">NRG</div><div class="sig-label buy">BUY</div><div class="sig-prob">68% prob</div><div class="sig-bar"><div class="sig-fill buy" style="width:68%"></div></div></div>
       <div class="sig-card hold"><div class="sig-theme">BIO</div><div class="sig-label hold">HOLD</div><div class="sig-prob">51% prob</div><div class="sig-bar"><div class="sig-fill hold" style="width:51%"></div></div></div>
       <div class="sig-card hold"><div class="sig-theme">MED</div><div class="sig-label hold">HOLD</div><div class="sig-prob">48% prob</div><div class="sig-bar"><div class="sig-fill hold" style="width:48%"></div></div></div>
     </div>
-    <p style="font-size:.7rem;color:var(--muted);margin-top:.65rem;font-family:var(--font-m);opacity:.5">Signal cards are illustrative — see live values on the dashboard.</p>
+    <p class="section-note">Sample signals shown here — live values update on the dashboard.</p>
   </section>
 
   <!-- How it works -->
   <section id="s-how">
     <div class="section-label">how it works</div>
-    <div class="how-grid">
-      <div class="how-cell"><div class="how-icon">◈</div><h3>Theme buckets, not tickers</h3><p>Portfolio organized around investment theses — "AI infrastructure is undersupplied" — not individual stocks. NVDA, AMD, TSM, and MSFT are all expressions of the same thesis.</p></div>
-      <div class="how-cell"><div class="how-icon">λ</div><h3>NLP sentiment on 2,000+ headlines</h3><p>Every headline from Yahoo Finance RSS, CNBC, WSJ, ProMED, CDC alerts, and Breaking Defense scored daily by FinBERT — fine-tuned on financial text, not generic VADER.</p></div>
-      <div class="how-cell"><div class="how-icon">∑</div><h3>Random Forest prediction</h3><p>Trained on 3 years of daily price data. Features: 5/20/60-day momentum, realized volatility, theme-vs-SPY relative return. One model per theme, one per ticker.</p></div>
-      <div class="how-cell"><div class="how-icon">◉</div><h3>Biodefense early warning</h3><p>Monitors ProMED outbreak reports, WHO news, CDC health alerts. Thesis: mRNA platforms compress vaccine development from years to months. SIGA holds the only FDA-approved smallpox antiviral.</p></div>
+    <p class="section-intro">Four layers: thematic portfolio structure, daily news scoring, predictive models, and outbreak monitoring for the biodefense bucket.</p>
+    <div class="how-grid panel" style="padding:0">
+      <div class="how-cell"><div class="how-icon">◈</div><h3>Theme buckets, not tickers</h3><p>The portfolio is organized around theses — like "AI infrastructure is undersupplied" — not single stocks. NVDA, AMD, TSM, and MSFT all express the same idea.</p></div>
+      <div class="how-cell"><div class="how-icon">λ</div><h3>Daily NLP on headlines</h3><p>Headlines from Yahoo Finance, CNBC, WSJ, ProMED, CDC alerts, and Breaking Defense are scored with FinBERT — a model fine-tuned for financial text.</p></div>
+      <div class="how-cell"><div class="how-icon">∑</div><h3>Random Forest signals</h3><p>Models train on three years of daily prices using momentum, volatility, and relative-return features. One classifier per theme, plus per-ticker models.</p></div>
+      <div class="how-cell"><div class="how-icon">◉</div><h3>Biodefense monitoring</h3><p>ProMED outbreak reports, WHO news, and CDC alerts feed the biodefense thesis — mRNA platforms that can compress vaccine timelines, plus SIGA's FDA-approved smallpox antiviral.</p></div>
     </div>
   </section>
 
   <!-- Stack -->
   <section id="s-stack">
     <div class="section-label">stack</div>
-    <div class="stack-list">
+    <p class="section-intro">Python backend on Render, React frontend on Vercel — with scheduled jobs for price pulls and news ingestion.</p>
+    <div class="stack-list panel">
       <span class="stack-tag hi">python</span><span class="stack-tag hi">fastapi</span><span class="stack-tag hi">scikit-learn</span><span class="stack-tag hi">react</span>
       <span class="stack-tag">yfinance</span><span class="stack-tag">pandas</span><span class="stack-tag">numpy</span><span class="stack-tag">transformers</span>
       <span class="stack-tag">finbert</span><span class="stack-tag">cohere</span><span class="stack-tag">recharts</span><span class="stack-tag">render</span>
@@ -292,13 +306,14 @@ section.vis{opacity:1;transform:translateY(0)}
 
   <!-- Journal -->
   <section id="s-journal">
-    <div class="section-label">the thesis journal</div>
-    <div>
-      <div class="j-entry reveal"><div class="j-title">Jan 2023 — AI Infrastructure</div><div class="j-meta">Initiated NVDA. AI training compute will be undersupplied for 3–5 years. GPU shortage = picks-and-shovels. Added MSFT, GOOGL, META as hyperscaler beneficiaries.</div></div>
-      <div class="j-entry reveal"><div class="j-title">Apr 2023 — Defense</div><div class="j-meta">Added LMT, RTX. Ukraine conflict exposes Western stockpile depletion — multi-year re-armament cycle. Added PLTR: AI battlefield analytics is structural, not a one-time contract.</div></div>
-      <div class="j-entry reveal"><div class="j-title">Sep 2024 — Energy Transition</div><div class="j-meta">Initiated nuclear basket (CEG, VST). AI data center power demand creates sustained need for carbon-free baseload. Thesis: AI → energy scarcity → nuclear.</div></div>
-      <div class="j-entry reveal"><div class="j-title">Jan 2025 — Biodefense &amp; Pandemic</div><div class="j-meta">Initiated biodefense basket. CDC tracking elevated hantavirus cases — 38% case fatality rate, no approved antiviral. mRNA platforms compress vaccine timelines from years to months. SIGA holds the only FDA-approved smallpox antiviral (TPOXX).</div></div>
-      <div class="j-entry reveal"><div class="j-title">Mar 2025 — Healthcare Infrastructure</div><div class="j-meta">Added TMO, DHR — lab infrastructure is picks-and-shovels for pandemic response and genomics. ABT rapid testing was proven at scale during COVID.</div></div>
+    <div class="section-label">thesis journal</div>
+    <p class="section-intro">A running log of when each theme was initiated and the reasoning behind it.</p>
+    <div class="panel">
+      <div class="j-entry reveal"><div class="j-title">Jan 2023 — AI Infrastructure</div><div class="j-meta">Opened with NVDA on the thesis that AI training compute would stay undersupplied for years. Added MSFT, GOOGL, and META as hyperscaler beneficiaries.</div></div>
+      <div class="j-entry reveal"><div class="j-title">Apr 2023 — Defense</div><div class="j-meta">Added LMT and RTX after Ukraine exposed Western stockpile gaps — a multi-year re-armament cycle. PLTR followed: battlefield analytics looked structural, not one-off.</div></div>
+      <div class="j-entry reveal"><div class="j-title">Sep 2024 — Energy Transition</div><div class="j-meta">Started a nuclear basket (CEG, VST). AI data-center demand pointed to a long runway for carbon-free baseload power.</div></div>
+      <div class="j-entry reveal"><div class="j-title">Jan 2025 — Biodefense</div><div class="j-meta">Opened the biodefense bucket around mRNA platforms that can shorten vaccine timelines, plus SIGA — the only FDA-approved smallpox antiviral (TPOXX).</div></div>
+      <div class="j-entry reveal"><div class="j-title">Mar 2025 — Healthcare Infrastructure</div><div class="j-meta">Added TMO and DHR as lab-infrastructure picks-and-shovels for pandemic response and genomics.</div></div>
     </div>
   </section>
 
@@ -432,32 +447,6 @@ function addTilt(sel,s){
 addTilt('.how-cell',10);
 addTilt('.sig-card',14);
 addTilt('.stat-cell',7);
-
-// ── Paper flip sound on 3D cards ──
-(function(){
-  let actx=null;
-  function flip(){
-    try{
-      if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();
-      if(actx.state==='suspended')actx.resume();
-      const sr=actx.sampleRate,dur=1.0;
-      const buf=actx.createBuffer(1,sr*dur,sr);
-      const data=buf.getChannelData(0);
-      for(let i=0;i<data.length;i++){
-        const t=i/sr,noise=Math.random()*2-1;
-        const env=Math.exp(-t*5.5)*(1-Math.exp(-t*60));
-        data[i]=noise*env;
-      }
-      const src=actx.createBufferSource();src.buffer=buf;
-      const hp=actx.createBiquadFilter();hp.type='highpass';hp.frequency.value=800;
-      const bp=actx.createBiquadFilter();bp.type='peaking';bp.frequency.value=3200;bp.gain.value=9;bp.Q.value=1.2;
-      const g=actx.createGain();g.gain.setValueAtTime(0.16,actx.currentTime);
-      src.connect(hp);hp.connect(bp);bp.connect(g);g.connect(actx.destination);
-      src.start();src.stop(actx.currentTime+dur);
-    }catch(e){}
-  }
-  document.querySelectorAll('.how-cell,.sig-card,.stat-cell').forEach(el=>el.addEventListener('mouseenter',flip));
-})();
 
 // ── Scroll reveal ──
 const obs=new IntersectionObserver(entries=>{
