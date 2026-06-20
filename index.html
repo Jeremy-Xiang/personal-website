@@ -57,11 +57,16 @@ a:focus-visible,button:focus-visible{
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  body{perspective:none}
+  #scene-wrap{transform:none !important}
+  .section-panel,.section-panel.visible{transform:none !important}
+  .hero-tilt,.hero-eyebrow,.hero h1,.hero-sub,.scroll-cue{transform:none !important}
 }
 body{
   background:var(--bg);color:var(--text);
   font-family:var(--font-b);font-size:15px;line-height:1.72;
   overflow-x:hidden;cursor:none;transition:background .4s,color .4s;
+  perspective:1600px;perspective-origin:50% 42%;
 }
 
 /* ── Cursor ── */
@@ -199,10 +204,17 @@ nav{
 }
 .theme-btn:hover{background:var(--accent-glow);color:var(--accent);border-color:var(--accent)}
 
-/* ── Main scroll container ── */
-main{
+/* ── 3D scene ── */
+#scene-wrap{
   position:relative;z-index:2;
+  transform-style:preserve-3d;
+  transition:transform .12s ease-out;
+  will-change:transform;
+}
+main{
+  position:relative;
   padding-top:80px;/* nav height */
+  transform-style:preserve-3d;
 }
 
 /* ══════════════════════════════════════
@@ -212,15 +224,17 @@ main{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   padding:0 40px;text-align:center;position:relative;
 }
-.hero-inner{max-width:760px;width:100%}
+.hero-inner{max-width:760px;width:100%;transform-style:preserve-3d}
 .hero-eyebrow{
+  transform:translateZ(30px);
   font-family:var(--font-m);font-size:.67rem;color:var(--accent);
   letter-spacing:.19em;text-transform:uppercase;margin-bottom:28px;
   display:flex;align-items:center;justify-content:center;gap:14px;
 }
 .hero-eyebrow::before,.hero-eyebrow::after{content:'';width:26px;height:1px;background:var(--accent)}
-.hero-tilt{transform-style:preserve-3d;transition:transform .1s ease-out;will-change:transform}
+.hero-tilt{transform-style:preserve-3d;transition:transform .1s ease-out;will-change:transform;transform:translateZ(60px)}
 .hero h1{
+  transform:translateZ(20px);
   font-family:var(--font-d);font-size:clamp(2.8rem,7vw,5.8rem);
   font-weight:500;line-height:1.08;letter-spacing:-.015em;margin-bottom:28px;color:var(--text);
 }
@@ -228,6 +242,7 @@ main{
 .hero-sub{
   font-size:.95rem;color:var(--muted);max-width:520px;line-height:1.78;
   font-weight:300;margin:0 auto 40px;
+  transform:translateZ(10px);
 }
 .hero-sub a{
   color:var(--text);text-decoration:underline;text-underline-offset:3px;
@@ -239,6 +254,7 @@ main{
   letter-spacing:.15em;text-transform:uppercase;opacity:.5;
   display:flex;flex-direction:column;align-items:center;gap:8px;
   animation:scrollBounce 2s ease-in-out infinite;
+  transform:translateZ(40px);
 }
 .scroll-cue::after{
   content:'';width:1px;height:40px;
@@ -252,20 +268,41 @@ main{
 .scroll-section{
   display:flex;align-items:center;justify-content:center;
   padding:60px 40px;position:relative;
+  transform-style:preserve-3d;
+  perspective:1200px;
 }
 
 .section-panel{
   max-width:720px;width:100%;
   border-radius:12px;
   padding:36px 48px;
-  opacity:0;transform:translateY(48px) scale(.97);
+  opacity:0;
+  transform:translateY(48px) translateZ(-80px) rotateX(8deg) scale(.94);
+  transform-style:preserve-3d;
+  backface-visibility:hidden;
   transition:opacity .75s cubic-bezier(.22,1,.36,1),
-             transform .75s cubic-bezier(.22,1,.36,1),
-             box-shadow .3s;
+             box-shadow .3s,border-color .3s;
+  border:1px solid rgba(110,143,255,.08);
+  background:rgba(11,14,28,.35);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 4px 24px rgba(0,0,0,.25),0 0 0 1px rgba(110,143,255,.04) inset;
+  --rx:0deg;--ry:0deg;--tz:0px;--sc:1;
+  will-change:transform,opacity;
 }
-.section-panel.visible{opacity:1;transform:translateY(0) scale(1)}
-.section-panel:hover{box-shadow:var(--shadow)}
+[data-theme="light"] .section-panel{
+  background:rgba(255,255,255,.55);
+  border-color:rgba(42,79,255,.1);
+}
+.section-panel.visible{
+  opacity:1;
+  transform:translateY(0) translateZ(var(--tz)) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--sc));
+}
+.section-panel:hover{
+  box-shadow:0 24px 64px rgba(0,0,0,.45),0 0 40px rgba(110,143,255,.08);
+  border-color:rgba(110,143,255,.22);
+}
 
+.section-label{transform:translateZ(16px)}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
 /* ── Now entries ── */
@@ -429,7 +466,7 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;back
   </ul>
 </nav>
 
-<main>
+<main id="scene-wrap">
   <!-- HERO -->
   <section class="hero" id="hero-sec">
     <div class="hero-inner">
@@ -602,7 +639,7 @@ function projectStar(s, camZ, tiltX, tiltY) {
 
   // Camera position shifts with scroll (fly forward) and tilts plane
   const scrollTiltX = scrollRatio * 0.25; // gentle tilt as we scroll
-  const camOffsetZ = scrollRatio * 0.8;    // very slight forward drift
+  const camOffsetZ = scrollRatio * 1.8;    // forward drift through starfield
 
   // Rotate entire field to tilt the plane like HELIOS
   const ct = Math.cos(scrollTiltX), st = Math.sin(scrollTiltX);
@@ -816,11 +853,71 @@ addTilt('.tool-card', 10);
 addTilt('.trait', 10);
 
 // ══════════════════════════════════════
+// 4b. SCROLL-DRIVEN 3D DEPTH ON PANELS
+// ══════════════════════════════════════
+(function(){
+  if (REDUCED_MOTION) return;
+  const panels = document.querySelectorAll('.section-panel');
+  const scene = document.getElementById('scene-wrap');
+  let sceneMX = 0, sceneMY = 0, curSX = 0, curSY = 0;
+  let tick = false;
+
+  panels.forEach(panel => {
+    panel.addEventListener('mousemove', e => {
+      const r = panel.getBoundingClientRect();
+      panel.dataset.hx = (((e.clientX - r.left) / r.width - 0.5) * 10).toFixed(2);
+      panel.dataset.hy = (((e.clientY - r.top) / r.height - 0.5) * -8).toFixed(2);
+    });
+    panel.addEventListener('mouseleave', () => { panel.dataset.hx = '0'; panel.dataset.hy = '0'; });
+  });
+
+  window.addEventListener('mousemove', e => {
+    sceneMX = (e.clientX / window.innerWidth  - 0.5) * 2;
+    sceneMY = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  function update3D() {
+    const vh = window.innerHeight;
+
+    curSX += (sceneMY * 1.8 - curSX) * 0.04;
+    curSY += (sceneMX * 2.2 - curSY) * 0.04;
+    if (scene) scene.style.transform = `rotateX(${curSX}deg) rotateY(${curSY}deg)`;
+
+    panels.forEach(panel => {
+      if (!panel.classList.contains('visible')) return;
+      const r = panel.getBoundingClientRect();
+      const center = r.top + r.height * 0.5;
+      const norm = (center - vh * 0.5) / vh;
+      const focus = Math.max(0, 1 - Math.abs(norm) * 1.35);
+      const hx = parseFloat(panel.dataset.hx || 0);
+      const hy = parseFloat(panel.dataset.hy || 0);
+
+      panel.style.setProperty('--rx', (norm * 14 + hy).toFixed(2) + 'deg');
+      panel.style.setProperty('--ry', (sceneMX * focus * 3 + hx).toFixed(2) + 'deg');
+      panel.style.setProperty('--tz', (focus * 55 - 12).toFixed(1) + 'px');
+      panel.style.setProperty('--sc', (0.92 + focus * 0.08).toFixed(3));
+    });
+    tick = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!tick) { requestAnimationFrame(update3D); tick = true; }
+  }, { passive: true });
+
+  (function loop(){ requestAnimationFrame(loop); update3D(); })();
+})();
+
+// ══════════════════════════════════════
 // 5. SECTION PANEL SCROLL REVEAL
 // ══════════════════════════════════════
 const panelObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); panelObs.unobserve(e.target); }
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      e.target.style.setProperty('--tz', '-20px');
+      e.target.style.setProperty('--sc', '0.94');
+      panelObs.unobserve(e.target);
+    }
   });
 }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 document.querySelectorAll('.section-panel').forEach(p => panelObs.observe(p));
