@@ -43,10 +43,16 @@ let tipEl: HTMLDivElement | null = null
 onMounted(() => {
   if (reducedMotion.value) return
 
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches
+    || window.matchMedia('(hover: none)').matches
+  if (isCoarse) document.documentElement.classList.add('touch-device')
+
   const depths = [0.012, 0.007, 0.015, 0.009, 0.011, 0.006, 0.010, 0.007]
-  tipEl = document.createElement('div')
-  tipEl.style.cssText = 'position:fixed;z-index:9990;font-family:var(--font-m);font-size:.62rem;letter-spacing:.1em;text-transform:lowercase;color:var(--accent);background:rgba(7,8,15,0.94);border:1px solid rgba(110,143,255,.4);padding:6px 12px;border-radius:4px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s ease;transform:translateX(-50%);box-shadow:0 8px 24px rgba(0,0,0,.35)'
-  document.body.appendChild(tipEl)
+  if (!isCoarse) {
+    tipEl = document.createElement('div')
+    tipEl.style.cssText = 'position:fixed;z-index:9990;font-family:var(--font-m);font-size:.62rem;letter-spacing:.1em;text-transform:lowercase;color:var(--accent);background:rgba(7,8,15,0.94);border:1px solid rgba(110,143,255,.4);padding:6px 12px;border-radius:4px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s ease;transform:translateX(-50%);box-shadow:0 8px 24px rgba(0,0,0,.35)'
+    document.body.appendChild(tipEl)
+  }
 
   let mouseClientX = -999
   let mouseClientY = -999
@@ -77,9 +83,11 @@ onMounted(() => {
 
     curX += (tgtX - curX) * 0.035
     curY += (tgtY - curY) * 0.035
-    consts.forEach(({ el, depth }) => {
-      el.style.translate = `${(curX * depth * window.innerWidth * 0.45).toFixed(2)}px ${(curY * depth * window.innerHeight * 0.45).toFixed(2)}px`
-    })
+    if (!isCoarse) {
+      consts.forEach(({ el, depth }) => {
+        el.style.translate = `${(curX * depth * window.innerWidth * 0.45).toFixed(2)}px ${(curY * depth * window.innerHeight * 0.45).toFixed(2)}px`
+      })
+    }
 
     type Hit = { name: string; r: DOMRect; el: HTMLElement }
     let hit: Hit | undefined

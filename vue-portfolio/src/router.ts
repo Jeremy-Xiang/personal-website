@@ -7,6 +7,7 @@ export const router = createRouter({
   routes: [
     { path: '/', name: 'home', component: HomePage },
     { path: '/thesis', name: 'thesis', component: ThesisPage },
+    { path: '/thesis.html', redirect: '/thesis' },
   ],
   scrollBehavior(to) {
     if (to.hash) return { el: to.hash, behavior: 'smooth' }

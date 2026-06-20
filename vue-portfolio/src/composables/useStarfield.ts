@@ -1,4 +1,5 @@
 import { onMounted, onUnmounted, ref, type Ref } from 'vue'
+import { starCountForDevice } from './useDeviceProfile'
 
 interface Star3D {
   ox: number
@@ -39,9 +40,12 @@ export function useStarfield(
   let slen = 0
   let shootTimer = 0
 
-  function initStars() {
+  let starCount = 1200
+  let lowPowerDevice = false
+
+  function initStars(count: number) {
     stars.length = 0
-    for (let i = 0; i < 1200; i++) {
+    for (let i = 0; i < count; i++) {
       const theta = rand(0, Math.PI * 2)
       const phi = Math.acos(rand(-1, 1))
       stars.push({
@@ -134,6 +138,7 @@ export function useStarfield(
   }
 
   function launchShootingStar() {
+    if (lowPowerDevice) return
     if (Math.random() < 0.6) {
       sx = Math.random() * W
       sy = 0
@@ -183,7 +188,7 @@ export function useStarfield(
     }
 
     const speed = Math.abs(targetScrollRatio - scrollRatio + 0.001)
-    if (speed > 0.003) {
+    if (!lowPowerDevice && speed > 0.003) {
       const streakAlpha = Math.min(speed * 30, 0.4)
       for (let i = 0; i < 8; i++) {
         const s = stars[i * 7]
@@ -225,15 +230,24 @@ export function useStarfield(
     const canvas = canvasRef.value
     if (!canvas) return
     ctx = canvas.getContext('2d')
-    initStars()
+    const coarse = window.matchMedia('(pointer: coarse)').matches
+      || window.matchMedia('(hover: none)').matches
+    const nav = navigator as Navigator & { deviceMemory?: number }
+    const lowMem = nav.deviceMemory !== undefined && nav.deviceMemory <= 4
+    const lowCores = nav.hardwareConcurrency !== undefined && nav.hardwareConcurrency <= 4
+    lowPowerDevice = coarse || lowMem || lowCores
+    starCount = starCountForDevice(coarse, lowMem || lowCores, reducedMotion.value)
+    initStars(starCount)
     resize()
     window.addEventListener('resize', resize)
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('mousemove', onMouseMove, { passive: true })
     onScroll()
-    if (!reducedMotion.value) {
+    if (!reducedMotion.value && starCount > 0) {
       rafId = requestAnimationFrame(loop)
-      shootTimer = window.setTimeout(launchShootingStar, 8000 + Math.random() * 12000)
+      if (!lowPowerDevice) {
+        shootTimer = window.setTimeout(launchShootingStar, 8000 + Math.random() * 12000)
+      }
     }
   })
 

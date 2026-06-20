@@ -382,6 +382,7 @@ footer{
   z-index:10;box-shadow:0 6px 20px rgba(0,0,0,.3);
 }
 .constellation.is-near .const-tooltip{opacity:1}
+html.touch-device .const-tooltip{display:none}
 
 /* ── Active nav link ── */
 .nav-links a.nav-active{color:var(--text)}
