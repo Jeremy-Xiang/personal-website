@@ -116,11 +116,11 @@ body.hov .cur-ring{width:46px;height:46px;border-color:rgba(184,168,255,0.6)}
 [data-theme="light"] .const-star.faint{background:rgba(60,80,180,0.25)}
 
 /* ── Ambient blobs ── */
-.gblob{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(100px);opacity:.08}
-.gb1{width:600px;height:600px;background:#1e40cc;top:-100px;right:-80px;animation:gd1 22s ease-in-out infinite alternate}
-.gb2{width:380px;height:380px;background:#5520aa;bottom:18%;left:-60px;animation:gd2 28s ease-in-out infinite alternate}
-.gb3{width:260px;height:260px;background:#0e7acc;bottom:-30px;right:25%;animation:gd3 19s ease-in-out infinite alternate}
-[data-theme="light"] .gblob{opacity:.04}
+.gblob{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(100px);opacity:.045}
+.gb1{width:480px;height:480px;background:#1e40cc;top:-120px;right:-100px;animation:gd1 22s ease-in-out infinite alternate}
+.gb2{width:320px;height:320px;background:#5520aa;bottom:20%;left:-80px;animation:gd2 28s ease-in-out infinite alternate}
+.gb3{width:220px;height:220px;background:#0e7acc;bottom:-40px;right:18%;animation:gd3 19s ease-in-out infinite alternate}
+[data-theme="light"] .gblob{opacity:.025}
 @keyframes gd1{to{transform:translate(45px,65px)}}
 @keyframes gd2{to{transform:translate(55px,-45px)}}
 @keyframes gd3{to{transform:translate(-28px,38px)}}
