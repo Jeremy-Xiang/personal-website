@@ -1,5 +1,29 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 
+function detectFinePointer(): boolean {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(hover: hover) and (pointer: fine)').matches
+}
+
+export function useFinePointer() {
+  const finePointer = ref(detectFinePointer())
+  let mq: MediaQueryList
+
+  onMounted(() => {
+    finePointer.value = detectFinePointer()
+    mq = window.matchMedia('(hover: hover) and (pointer: fine)')
+    mq.addEventListener('change', onChange)
+  })
+
+  onUnmounted(() => mq?.removeEventListener('change', onChange))
+
+  function onChange() {
+    finePointer.value = mq.matches
+  }
+
+  return { finePointer }
+}
+
 export function useReducedMotion() {
   const reduced = ref(false)
   let mq: MediaQueryList
@@ -17,12 +41,4 @@ export function useReducedMotion() {
   }
 
   return { reducedMotion: reduced }
-}
-
-export function useFinePointer() {
-  const fine = ref(false)
-  onMounted(() => {
-    fine.value = window.matchMedia('(hover:hover) and (pointer:fine)').matches
-  })
-  return { finePointer: fine }
 }

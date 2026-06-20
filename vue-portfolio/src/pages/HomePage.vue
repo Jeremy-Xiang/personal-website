@@ -18,10 +18,12 @@ useActiveNav([...NAV_SECTIONS, 'traits'])
 useKeyboardNav({ '1': 'now', '2': 'projects', '3': 'experience', '4': 'leadership', '5': 'tools', '6': 'contact' })
 
 onMounted(() => {
-  document.querySelectorAll('a, button, .trait, .tool-card, .entry, .contact-item, .project-card').forEach((el) => {
+  const hoverSelector = 'a, button, .trait, .tool-card, .entry, .contact-item, .project-card, .effects-btn, .theme-btn'
+  document.querySelectorAll(hoverSelector).forEach((el) => {
     el.addEventListener('mouseenter', () => document.body.classList.add('hov'))
     el.addEventListener('mouseleave', () => document.body.classList.remove('hov'))
   })
+  window.addEventListener('scroll', () => document.body.classList.remove('hov'), { passive: true })
 
   const nav = document.querySelector('nav')
   if (!nav) return

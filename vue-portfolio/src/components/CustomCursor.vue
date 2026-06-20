@@ -1,59 +1,64 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onUnmounted, ref, watch } from 'vue'
 import { useFinePointer } from '../composables/useMotion'
 
 const { finePointer } = useFinePointer()
 const dot = ref<HTMLElement | null>(null)
 const ring = ref<HTMLElement | null>(null)
+
 let mx = -100
 let my = -100
 let rx = -100
 let ry = -100
 let rafId = 0
-let scrollTimer = 0
+let active = false
 
 function onMove(e: MouseEvent) {
   mx = e.clientX
   my = e.clientY
 }
 
-function onScroll() {
-  document.body.classList.add('is-scrolling')
-  clearTimeout(scrollTimer)
-  scrollTimer = window.setTimeout(() => {
-    document.body.classList.remove('is-scrolling')
-  }, 120)
+function onLeave() {
+  mx = -100
+  my = -100
 }
 
 function tick() {
-  if (!finePointer.value) return
-  rx += (mx - rx) * 0.11
-  ry += (my - ry) * 0.11
-  if (dot.value) {
-    dot.value.style.transform = `translate(calc(${mx}px - 50%), calc(${my}px - 50%))`
-  }
-  if (ring.value) {
-    ring.value.style.transform = `translate(calc(${rx}px - 50%), calc(${ry}px - 50%))`
+  if (active && dot.value && ring.value) {
+    rx += (mx - rx) * 0.11
+    ry += (my - ry) * 0.11
+    dot.value.style.left = `${mx}px`
+    dot.value.style.top = `${my}px`
+    ring.value.style.left = `${rx}px`
+    ring.value.style.top = `${ry}px`
   }
   rafId = requestAnimationFrame(tick)
 }
 
-onMounted(() => {
+function start() {
+  if (active) return
+  active = true
+  document.body.classList.add('custom-cursor')
   window.addEventListener('mousemove', onMove, { passive: true })
-  window.addEventListener('scroll', onScroll, { passive: true })
-  rafId = requestAnimationFrame(tick)
-})
+  document.documentElement.addEventListener('mouseleave', onLeave)
+  if (!rafId) rafId = requestAnimationFrame(tick)
+}
 
-onUnmounted(() => {
+function stop() {
+  active = false
+  document.body.classList.remove('custom-cursor')
   window.removeEventListener('mousemove', onMove)
-  window.removeEventListener('scroll', onScroll)
+  document.documentElement.removeEventListener('mouseleave', onLeave)
   cancelAnimationFrame(rafId)
-  clearTimeout(scrollTimer)
-  document.body.classList.remove('is-scrolling')
-})
+  rafId = 0
+}
+
+watch(finePointer, (v) => { v ? start() : stop() }, { immediate: true })
+
+onUnmounted(stop)
 </script>
 
 <template>
-  <div v-if="finePointer" ref="dot" class="cur-dot" />
-  <div v-if="finePointer" ref="ring" class="cur-ring" />
+  <div v-show="finePointer" ref="dot" class="cur-dot" aria-hidden="true" />
+  <div v-show="finePointer" ref="ring" class="cur-ring" aria-hidden="true" />
 </template>

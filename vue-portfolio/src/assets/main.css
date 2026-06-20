@@ -44,26 +44,27 @@ a:focus-visible,button:focus-visible{
 body{
   background:var(--bg);color:var(--text);
   font-family:var(--font-b);font-size:15px;line-height:1.72;
-  overflow-x:hidden;cursor:none;transition:background .4s,color .4s;
+  overflow-x:hidden;transition:background .4s,color .4s;
 }
+body.custom-cursor{cursor:none}
 
 /* ── Cursor ── */
 .cur-dot{
   position:fixed;width:7px;height:7px;background:var(--accent);
   border-radius:50%;pointer-events:none;z-index:9999;
-  left:0;top:0;
-  transition:width .2s,height .2s,background .2s,opacity .15s;will-change:transform;
+  left:0;top:0;transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,background .2s;
+  will-change:left,top;
 }
 .cur-ring{
   position:fixed;width:28px;height:28px;
   border:1px solid rgba(110,143,255,0.5);border-radius:50%;
   pointer-events:none;z-index:9998;left:0;top:0;
+  transform:translate(-50%,-50%);
   transition:width .35s cubic-bezier(.25,.46,.45,.94),
-             height .35s cubic-bezier(.25,.46,.45,.94),border-color .3s,opacity .15s;
-  will-change:transform;
+             height .35s cubic-bezier(.35,.46,.45,.94),border-color .3s;
+  will-change:left,top;
 }
-body.is-scrolling .cur-dot,
-body.is-scrolling .cur-ring{opacity:0}
 body.hov .cur-dot{width:11px;height:11px;background:var(--accent2)}
 body.hov .cur-ring{width:46px;height:46px;border-color:rgba(184,168,255,0.6)}
 
