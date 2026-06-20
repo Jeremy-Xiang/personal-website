@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="g1" cx="80%" cy="20%" r="60%">
+      <stop offset="0%" stop-color="#1e3a8a" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#07080f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="20%" cy="80%" r="50%">
+      <stop offset="0%" stop-color="#5520aa" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#07080f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#07080f"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+  <!-- stars -->
+  <circle cx="120" cy="80" r="1.5" fill="rgba(200,210,255,0.7)"/>
+  <circle cx="340" cy="160" r="1" fill="rgba(200,210,255,0.5)"/>
+  <circle cx="900" cy="60" r="2" fill="rgba(230,235,255,0.8)"/>
+  <circle cx="1050" cy="180" r="1.5" fill="rgba(200,210,255,0.6)"/>
+  <circle cx="1140" cy="420" r="1" fill="rgba(200,210,255,0.5)"/>
+  <circle cx="80" cy="500" r="1.5" fill="rgba(200,210,255,0.6)"/>
+  <circle cx="680" cy="540" r="1" fill="rgba(200,210,255,0.5)"/>
+  <circle cx="200" cy="380" r="2" fill="rgba(230,235,255,0.7)"/>
+  <!-- eyebrow line -->
+  <rect x="100" y="200" width="30" height="1" fill="#6e8fff" opacity="0.8"/>
+  <!-- eyebrow text -->
+  <text x="140" y="206" font-family="monospace" font-size="16" fill="#6e8fff" letter-spacing="3" opacity="0.8">CS + ECON · UW–MADISON · 2028</text>
+  <!-- name -->
+  <text x="98" y="320" font-family="Georgia,serif" font-size="72" font-weight="500" fill="#e4e6f5" letter-spacing="-1">jeremy xiang</text>
+  <!-- tagline -->
+  <text x="100" y="385" font-family="Georgia,serif" font-size="32" font-style="italic" fill="#b8a8ff" font-weight="400">quietly curious, relentlessly building.</text>
+  <!-- url -->
+  <text x="100" y="530" font-family="monospace" font-size="16" fill="rgba(200,205,235,0.35)" letter-spacing="1">jeremyxiang.com</text>
+  <!-- accent line -->
+  <rect x="100" y="420" width="200" height="1" fill="#6e8fff" opacity="0.3"/>
+</svg>

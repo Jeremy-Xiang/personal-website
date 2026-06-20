@@ -1,0 +1,78 @@
+/* ── Lite mode (effects toggle) ── */
+html.lite-mode .gblob,
+html.lite-mode .sky {
+  display: none !important;
+}
+html.lite-mode .starfield {
+  opacity: 0.25;
+}
+html.lite-mode .scene-wrap {
+  transform: none !important;
+}
+html.lite-mode .section-panel,
+html.lite-mode .section-panel.visible {
+  transform: translateY(0) scale(1) !important;
+  --rx: 0deg !important;
+  --ry: 0deg !important;
+  --tz: 0px !important;
+  --sc: 1 !important;
+}
+html.lite-mode body {
+  perspective: none;
+}
+html.lite-mode .hero-tilt {
+  transform: translateZ(0) !important;
+}
+
+/* ── Light mode polish ── */
+[data-theme='light'] .starfield {
+  opacity: 0.55;
+}
+[data-theme='light'] .section-panel {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(42, 79, 255, 0.12);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(42, 79, 255, 0.06) inset;
+}
+[data-theme='light'] .section-panel:hover {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08), 0 0 24px rgba(42, 79, 255, 0.06);
+}
+[data-theme='light'] .project-card {
+  background: rgba(42, 79, 255, 0.04);
+  border-color: rgba(42, 79, 255, 0.14);
+}
+[data-theme='light'] .project-card:hover {
+  background: rgba(42, 79, 255, 0.08);
+}
+[data-theme='light'] .const-star.bright {
+  background: rgba(20, 40, 120, 0.75);
+}
+[data-theme='light'] .now-meta {
+  color: rgba(20, 25, 60, 0.35);
+}
+[data-theme='light'] body::after {
+  opacity: 0.012;
+}
+[data-theme='light'] .entry-meta {
+  color: rgba(20, 25, 60, 0.45);
+}
+
+/* Effects toggle button */
+.effects-btn {
+  background: none;
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--font-m);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--muted);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.effects-btn:hover,
+.effects-btn.active {
+  background: var(--accent-glow);
+  color: var(--accent);
+  border-color: rgba(110, 143, 255, 0.35);
+}
