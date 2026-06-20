@@ -1,0 +1,15 @@
+# Deployed static site at repo root (built from vue-portfolio/) — not source code
+index.html linguist-generated=true
+404.html linguist-generated=true
+thesis.html linguist-generated=true
+assets/** linguist-generated=true
+portfolio.html linguist-vendored=true
+og-image.png linguist-vendored=true
+
+# Legacy static pages kept for reference
+/thesis.html linguist-generated=true
+
+# Real source lives here
+vue-portfolio/src/** linguist-detectable=true
+vue-portfolio/*.ts linguist-detectable=true
+vue-portfolio/*.json linguist-detectable=true

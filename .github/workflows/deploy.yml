@@ -1,0 +1,52 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'vue-portfolio/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: vue-portfolio/package-lock.json
+
+      - name: Install and build
+        working-directory: vue-portfolio
+        run: |
+          npm ci
+          npm run build
+
+      - name: Copy build to site root
+        run: |
+          rm -rf assets
+          rm -f index.html thesis.html favicon.svg icons.svg og-image.svg robots.txt sitemap.xml 404.html
+          rm -f Jeremy_Xiang_Resume.pdf Xiang_WordReadingTime_Paper.pdf
+          cp -r vue-portfolio/dist/* .
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/ thesis.html favicon.svg icons.svg og-image.svg robots.txt sitemap.xml 404.html Jeremy_Xiang_Resume.pdf Xiang_WordReadingTime_Paper.pdf
+          git diff --staged --quiet && echo "No deploy changes." && exit 0
+          git commit -m "Deploy portfolio rebuild [skip ci]"
+          git push
