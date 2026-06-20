@@ -1,15 +1,21 @@
-# Deployed static site at repo root (built from vue-portfolio/) — not source code
-index.html linguist-generated=true
-404.html linguist-generated=true
-thesis.html linguist-generated=true
-assets/** linguist-generated=true
-portfolio.html linguist-vendored=true
-og-image.png linguist-vendored=true
-
-# Legacy static pages kept for reference
+# ── Deployed site at repo root (built output — not source) ──
+/index.html linguist-generated=true
+/404.html linguist-generated=true
 /thesis.html linguist-generated=true
+/assets/** linguist-generated=true
+/favicon.svg linguist-generated=true
+/icons.svg linguist-generated=true
+/og-image.svg linguist-generated=true
+/og-image.png linguist-vendored=true
+/portfolio.html linguist-vendored=true
+*.pdf linguist-vendored=true
 
-# Real source lives here
+# ── Real source (vue-portfolio) ──
 vue-portfolio/src/** linguist-detectable=true
 vue-portfolio/*.ts linguist-detectable=true
 vue-portfolio/*.json linguist-detectable=true
+vue-portfolio/*.vue linguist-language=Vue
+vue-portfolio/** linguist-documentation=false
+
+# Vue SFCs default to "HTML" in Linguist — force Vue/TS instead
+*.vue linguist-language=Vue

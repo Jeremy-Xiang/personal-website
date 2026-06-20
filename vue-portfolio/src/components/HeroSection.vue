@@ -15,10 +15,13 @@ onMounted(() => {
   let pi = 0
   let ci = 0
   let currentNode: HTMLElement | null = null
+  let typeTimer = 0
+  let typeCancelled = false
 
   function typeNext() {
+    if (typeCancelled) return
     if (!target.value || pi >= parts.length) {
-      setTimeout(() => { showCursor.value = false }, 2000)
+      typeTimer = window.setTimeout(() => { if (!typeCancelled) showCursor.value = false }, 2000)
       return
     }
     const part = parts[pi]
@@ -29,7 +32,7 @@ onMounted(() => {
         target.value.appendChild(document.createElement('br'))
         pi++
         ci = 0
-        setTimeout(typeNext, 60)
+        typeTimer = window.setTimeout(typeNext, 60)
         return
       }
       currentNode = document.createElement(part.em ? 'em' : 'span')
@@ -43,16 +46,15 @@ onMounted(() => {
       ci = 0
       currentNode = null
     }
-    setTimeout(typeNext, 42 + Math.random() * 20)
+    typeTimer = window.setTimeout(typeNext, 42 + Math.random() * 20)
   }
 
-  setTimeout(typeNext, 1500)
+  typeTimer = window.setTimeout(typeNext, 1500)
 
   const inner = document.querySelector('.hero-inner') as HTMLElement | null
-  if (!inner) return
   let tick = false
   const onScroll = () => {
-    if (tick) return
+    if (!inner || tick) return
     tick = true
     requestAnimationFrame(() => {
       const y = window.scrollY
@@ -62,7 +64,13 @@ onMounted(() => {
     })
   }
   window.addEventListener('scroll', onScroll, { passive: true })
-  onUnmounted(() => window.removeEventListener('scroll', onScroll))
+  onScroll()
+
+  onUnmounted(() => {
+    typeCancelled = true
+    clearTimeout(typeTimer)
+    window.removeEventListener('scroll', onScroll)
+  })
 })
 </script>
 

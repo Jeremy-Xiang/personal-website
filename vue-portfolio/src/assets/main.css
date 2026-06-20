@@ -257,23 +257,30 @@ main{
   transform:translateY(32px) scale(.97);
   transition:opacity .75s cubic-bezier(.22,1,.36,1),
              transform .75s cubic-bezier(.22,1,.36,1),
-             box-shadow .3s,border-color .3s;
-  border:1px solid rgba(110,143,255,.08);
-  background:rgba(11,14,28,.35);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  box-shadow:0 4px 24px rgba(0,0,0,.25),0 0 0 1px rgba(110,143,255,.04) inset;
+             box-shadow .3s,border-color .3s,background .3s;
+  /* Frosted glass — lighter so stars show through */
+  border:1px solid rgba(110,143,255,.1);
+  background:rgba(11,14,28,.1);
+  backdrop-filter:blur(20px) saturate(1.15);
+  -webkit-backdrop-filter:blur(20px) saturate(1.15);
+  box-shadow:0 4px 24px rgba(0,0,0,.15);
 }
 [data-theme="light"] .section-panel{
-  background:rgba(255,255,255,.55);
-  border-color:rgba(42,79,255,.1);
+  background:rgba(255,255,255,.28);
+  border-color:rgba(42,79,255,.12);
+  box-shadow:0 4px 20px rgba(0,0,0,.04);
 }
 .section-panel.visible{
   opacity:1;
   transform:translateY(0) scale(1);
 }
 .section-panel:hover{
-  box-shadow:0 24px 64px rgba(0,0,0,.45),0 0 40px rgba(110,143,255,.08);
+  background:rgba(11,14,28,.16);
+  box-shadow:0 16px 40px rgba(0,0,0,.25),0 0 24px rgba(110,143,255,.05);
   border-color:rgba(110,143,255,.22);
+}
+[data-theme="light"] .section-panel:hover{
+  background:rgba(255,255,255,.38);
 }
 
 .section-label{transform:translateZ(16px)}
@@ -373,17 +380,25 @@ footer{
 .read-bar{display:inline-block;width:64px;height:3px;background:rgba(110,143,255,.18);border-radius:2px;margin-left:10px;vertical-align:middle;overflow:hidden}
 .read-fill{display:block;height:100%;background:var(--accent);border-radius:2px;opacity:.7}
 
-/* ── Constellation tooltip ── */
-.const-tooltip{
-  position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);
-  font-family:var(--font-m);font-size:.6rem;letter-spacing:.1em;text-transform:lowercase;
-  color:var(--accent);background:rgba(7,8,15,0.94);
-  border:1px solid rgba(110,143,255,.35);padding:5px 11px;border-radius:4px;
-  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s ease;
-  z-index:10;box-shadow:0 6px 20px rgba(0,0,0,.3);
+/* ── Constellation proximity label (single instance in App.vue) ── */
+.const-tip-float{
+  position:fixed;z-index:9990;pointer-events:none;
+  font-family:var(--font-m);font-size:.62rem;letter-spacing:.1em;text-transform:lowercase;
+  color:var(--accent);
+  background:rgba(7,8,15,.45);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(110,143,255,.22);padding:5px 11px;border-radius:4px;
+  white-space:nowrap;transform:translateX(-50%);
+  box-shadow:0 4px 16px rgba(0,0,0,.2);
 }
-.constellation.is-near .const-tooltip{opacity:1}
-html.touch-device .const-tooltip{display:none}
+[data-theme="light"] .const-tip-float{
+  background:rgba(240,241,248,.55);
+  border-color:rgba(42,79,255,.25);
+  color:var(--accent);
+}
+
+/* Legacy — hide if old build left these in DOM */
+.const-tooltip{display:none !important}
 
 /* ── Active nav link ── */
 .nav-links a.nav-active{color:var(--text)}

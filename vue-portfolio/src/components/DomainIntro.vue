@@ -2,11 +2,13 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 
 const visible = ref(true)
+let hideTimer = 0
 
 onMounted(() => {
-  const t = setTimeout(() => { visible.value = false }, 1300)
-  onUnmounted(() => clearTimeout(t))
+  hideTimer = window.setTimeout(() => { visible.value = false }, 1300)
 })
+
+onUnmounted(() => clearTimeout(hideTimer))
 </script>
 
 <template>
