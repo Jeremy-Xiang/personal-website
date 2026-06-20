@@ -101,12 +101,14 @@ export const EXPERIENCE: ExperienceEntry[] = [
   },
   {
     id: 'website',
+    featured: true,
     titleHtml: 'designed and built this personal website from scratch',
     metaHtml: '2026 · vue, typescript, vite',
     detail: '3D starfield with mouse parallax, constellation overlay, scroll-driven depth panels, and component-based architecture — migrated from a single HTML file.',
   },
   {
     id: 'codaworx',
+    featured: true,
     titleHtml: 'presented a <a href="https://coda-five.vercel.app/" target="_blank" rel="noopener">product strategy</a> for <a href="https://codaworx.com/" target="_blank" rel="noopener">codaworx</a> at the PMC case competition',
     metaHtml: '2026 · RICE scoring, vercel',
     detail: 'Prioritized a feature roadmap using RICE scoring and presented a go-to-market strategy at UW–Madison\'s Product Management Club case competition.',

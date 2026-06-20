@@ -75,7 +75,11 @@ body.hov .cur-ring{width:46px;height:46px;border-color:rgba(184,168,255,0.6)}
 }
 
 /* ── Constellation overlay layer ── */
-.sky{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:visible}
+.sky{
+  position:fixed;inset:0;z-index:1;pointer-events:none;overflow:visible;
+  -webkit-mask-image:radial-gradient(ellipse 44% 58% at 50% 48%,rgba(0,0,0,.4),#000 74%);
+  mask-image:radial-gradient(ellipse 44% 58% at 50% 48%,rgba(0,0,0,.4),#000 74%);
+}
 
 /* Constellation CSS unchanged from working version */
 .constellation{
@@ -250,6 +254,7 @@ main{
 }
 
 .section-panel{
+  position:relative;isolation:isolate;
   max-width:720px;width:100%;
   border-radius:12px;
   padding:36px 48px;
@@ -264,9 +269,33 @@ main{
   backdrop-filter:none;
   -webkit-backdrop-filter:none;
 }
+.section-panel::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 92% 72% at 50% 26%,rgba(7,8,15,.38) 0%,transparent 68%);
+}
+.section-panel > *{position:relative;z-index:1}
+.section-panel h2.section-label,
+.section-panel .entry-title,
+.section-panel .project-name,
+.section-panel .trait-name,
+.section-panel .tool-card h3,
+.section-panel .now-val{
+  text-shadow:0 1px 20px rgba(0,0,0,.58),0 2px 4px rgba(0,0,0,.38);
+}
 [data-theme="light"] .section-panel{
   background:transparent;
   border-color:rgba(42,79,255,.16);
+}
+[data-theme="light"] .section-panel::before{
+  background:radial-gradient(ellipse 92% 72% at 50% 26%,rgba(240,241,248,.52) 0%,transparent 68%);
+}
+[data-theme="light"] .section-panel h2.section-label,
+[data-theme="light"] .section-panel .entry-title,
+[data-theme="light"] .section-panel .project-name,
+[data-theme="light"] .section-panel .trait-name,
+[data-theme="light"] .section-panel .tool-card h3,
+[data-theme="light"] .section-panel .now-val{
+  text-shadow:0 1px 14px rgba(255,255,255,.65),0 1px 3px rgba(255,255,255,.35);
 }
 .section-panel.visible{
   opacity:1;
@@ -368,6 +397,7 @@ footer{
   .hero{padding:0 20px}
   .scroll-section{padding:60px 20px}
   .section-panel{padding:28px 24px}
+  .entry-meta{font-size:.72rem;color:rgba(200,205,235,.38)}
   .now-item{grid-template-columns:1fr;gap:3px}
   .traits-grid{grid-template-columns:repeat(2,1fr)}
   .tools-grid{grid-template-columns:1fr}
