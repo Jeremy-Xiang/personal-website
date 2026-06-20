@@ -138,7 +138,7 @@ export function useStarfield(
   }
 
   function launchShootingStar() {
-    if (lowPowerDevice) return
+    if (reducedMotion.value || liteMode?.value) return
     if (Math.random() < 0.6) {
       sx = Math.random() * W
       sy = 0
@@ -149,7 +149,7 @@ export function useStarfield(
     sang = Math.PI / 5 + Math.random() * Math.PI / 8
     slen = 180 + Math.random() * 140
     sprog = 0
-    shootTimer = window.setTimeout(launchShootingStar, 20000 + Math.random() * 25000)
+    shootTimer = window.setTimeout(launchShootingStar, 12000 + Math.random() * 18000)
   }
 
   function render() {
@@ -245,8 +245,10 @@ export function useStarfield(
     onScroll()
     if (!reducedMotion.value && starCount > 0) {
       rafId = requestAnimationFrame(loop)
-      if (!lowPowerDevice) {
-        shootTimer = window.setTimeout(launchShootingStar, 8000 + Math.random() * 12000)
+      const coarse = window.matchMedia('(pointer: coarse)').matches
+        && window.matchMedia('(hover: none)').matches
+      if (!coarse && !liteMode?.value) {
+        shootTimer = window.setTimeout(launchShootingStar, 6000 + Math.random() * 8000)
       }
     }
   })

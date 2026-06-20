@@ -9,6 +9,7 @@ import { CONSTELLATION_NAMES } from './data/content'
 
 import CustomCursor from './components/CustomCursor.vue'
 import Constellations from './components/Constellations.vue'
+import CelestialOrbit from './components/CelestialOrbit.vue'
 import DomainIntro from './components/DomainIntro.vue'
 import SiteNav from './components/SiteNav.vue'
 
@@ -43,13 +44,10 @@ function onInfinityClick() {
 let constellationLoopActive = false
 
 onMounted(() => {
-  // Remove stale tips from prior hot reloads / old builds
-  document.querySelectorAll('.const-tip-float, .const-tooltip').forEach((el) => el.remove())
-
   if (reducedMotion.value) return
 
   const isCoarse = window.matchMedia('(pointer: coarse)').matches
-    || window.matchMedia('(hover: none)').matches
+    && window.matchMedia('(hover: none)').matches
   if (isCoarse) document.documentElement.classList.add('touch-device')
 
   const depths = [0.012, 0.007, 0.015, 0.009, 0.011, 0.006, 0.010, 0.007]
@@ -76,7 +74,7 @@ onMounted(() => {
     })
   }, 700)
 
-  const PROXIMITY = 120
+  const PROXIMITY = 130
   constellationLoopActive = true
 
   function loop() {
@@ -137,13 +135,14 @@ watch(liteMode, (v) => {
   <div class="gblob gb3" />
 
   <canvas ref="canvasRef" class="starfield" />
+  <CelestialOrbit />
   <Constellations />
   <DomainIntro v-if="isHome" />
 
-  <!-- Single constellation label — Vue-managed, never duplicated -->
+  <!-- Constellation name label -->
   <div
-    v-show="constTip.visible"
     class="const-tip-float"
+    :class="{ 'is-visible': constTip.visible }"
     :style="{ left: constTip.x + 'px', top: constTip.y + 'px' }"
   >
     {{ constTip.text }}

@@ -257,30 +257,27 @@ main{
   transform:translateY(32px) scale(.97);
   transition:opacity .75s cubic-bezier(.22,1,.36,1),
              transform .75s cubic-bezier(.22,1,.36,1),
-             box-shadow .3s,border-color .3s,background .3s;
-  /* Frosted glass — lighter so stars show through */
-  border:1px solid rgba(110,143,255,.1);
-  background:rgba(11,14,28,.1);
-  backdrop-filter:blur(20px) saturate(1.15);
-  -webkit-backdrop-filter:blur(20px) saturate(1.15);
-  box-shadow:0 4px 24px rgba(0,0,0,.15);
+             border-color .3s;
+  background:transparent;
+  border:1px solid rgba(110,143,255,.14);
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
 }
 [data-theme="light"] .section-panel{
-  background:rgba(255,255,255,.28);
-  border-color:rgba(42,79,255,.12);
-  box-shadow:0 4px 20px rgba(0,0,0,.04);
+  background:transparent;
+  border-color:rgba(42,79,255,.16);
 }
 .section-panel.visible{
   opacity:1;
   transform:translateY(0) scale(1);
 }
 .section-panel:hover{
-  background:rgba(11,14,28,.16);
-  box-shadow:0 16px 40px rgba(0,0,0,.25),0 0 24px rgba(110,143,255,.05);
-  border-color:rgba(110,143,255,.22);
+  border-color:rgba(110,143,255,.32);
+  box-shadow:0 0 32px rgba(110,143,255,.06);
 }
 [data-theme="light"] .section-panel:hover{
-  background:rgba(255,255,255,.38);
+  border-color:rgba(42,79,255,.35);
 }
 
 .section-label{transform:translateZ(16px)}
@@ -380,21 +377,25 @@ footer{
 .read-bar{display:inline-block;width:64px;height:3px;background:rgba(110,143,255,.18);border-radius:2px;margin-left:10px;vertical-align:middle;overflow:hidden}
 .read-fill{display:block;height:100%;background:var(--accent);border-radius:2px;opacity:.7}
 
-/* ── Constellation proximity label (single instance in App.vue) ── */
+/* ── Constellation name label ── */
 .const-tip-float{
   position:fixed;z-index:9990;pointer-events:none;
-  font-family:var(--font-m);font-size:.62rem;letter-spacing:.1em;text-transform:lowercase;
+  font-family:var(--font-m);font-size:.64rem;letter-spacing:.1em;text-transform:lowercase;
   color:var(--accent);
-  background:rgba(7,8,15,.45);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid rgba(110,143,255,.22);padding:5px 11px;border-radius:4px;
+  background:rgba(7,8,15,.72);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(110,143,255,.35);padding:6px 12px;border-radius:4px;
   white-space:nowrap;transform:translateX(-50%);
-  box-shadow:0 4px 16px rgba(0,0,0,.2);
+  box-shadow:0 6px 20px rgba(0,0,0,.35);
+  opacity:0;visibility:hidden;
+  transition:opacity .18s ease, visibility .18s ease;
+}
+.const-tip-float.is-visible{
+  opacity:1;visibility:visible;
 }
 [data-theme="light"] .const-tip-float{
-  background:rgba(240,241,248,.55);
-  border-color:rgba(42,79,255,.25);
-  color:var(--accent);
+  background:rgba(240,241,248,.88);
+  border-color:rgba(42,79,255,.35);
 }
 
 /* Legacy — hide if old build left these in DOM */
