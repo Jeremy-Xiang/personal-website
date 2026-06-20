@@ -5,6 +5,41 @@ import { useReducedMotion } from '../composables/useMotion'
 const orbitRef = ref<HTMLElement | null>(null)
 const { reducedMotion } = useReducedMotion()
 
+/** Pinprick sunspots — tiny dark specks on the disc only */
+const sunMicroSpots = [
+  { cx: 26.4, cy: 29.2, r: 0.34 },
+  { cx: 29.8, cy: 31.5, r: 0.28 },
+  { cx: 33.6, cy: 28.4, r: 0.38 },
+  { cx: 35.2, cy: 33.1, r: 0.26 },
+  { cx: 28.1, cy: 34.8, r: 0.22 },
+  { cx: 31.4, cy: 30.6, r: 0.3 },
+  { cx: 34.8, cy: 35.6, r: 0.24 },
+  { cx: 25.6, cy: 32.4, r: 0.2 },
+  { cx: 37.1, cy: 30.2, r: 0.18 },
+  { cx: 30.5, cy: 27.3, r: 0.26 },
+  { cx: 32.8, cy: 33.9, r: 0.22 },
+  { cx: 27.2, cy: 36.2, r: 0.16 },
+]
+
+/** Micro-crater pits — tiny dark specks on the lunar disc only */
+const moonMicroSpots = [
+  { cx: 24.8, cy: 27.6, r: 0.36 },
+  { cx: 27.3, cy: 25.9, r: 0.28 },
+  { cx: 29.6, cy: 29.4, r: 0.32 },
+  { cx: 31.8, cy: 27.1, r: 0.24 },
+  { cx: 33.4, cy: 31.2, r: 0.3 },
+  { cx: 35.6, cy: 28.8, r: 0.22 },
+  { cx: 26.1, cy: 32.8, r: 0.26 },
+  { cx: 28.7, cy: 35.1, r: 0.2 },
+  { cx: 32.2, cy: 33.6, r: 0.34 },
+  { cx: 34.5, cy: 35.8, r: 0.18 },
+  { cx: 36.2, cy: 33.4, r: 0.24 },
+  { cx: 23.4, cy: 31.5, r: 0.22 },
+  { cx: 30.1, cy: 24.6, r: 0.16 },
+  { cx: 37.8, cy: 31.6, r: 0.2 },
+  { cx: 25.5, cy: 36.4, r: 0.14 },
+]
+
 onMounted(() => {
   if (reducedMotion.value) return
   const start = (Date.now() / 1000) % 200
@@ -68,6 +103,14 @@ onMounted(() => {
             <circle cx="36" cy="30" r="1.4" fill="rgba(255,230,180,0.18)" />
             <circle cx="24.5" cy="33" r="0.7" fill="rgba(255,210,140,0.2)" />
             <circle cx="33" cy="26" r="0.55" fill="rgba(255,220,160,0.16)" />
+            <circle
+              v-for="(spot, i) in sunMicroSpots"
+              :key="'ss-' + i"
+              :cx="spot.cx"
+              :cy="spot.cy"
+              :r="spot.r"
+              fill="rgba(120,55,8,0.72)"
+            />
           </g>
           <circle cx="32" cy="32" r="11.5" fill="none" stroke="rgba(255,200,100,0.22)" stroke-width="0.6" />
           <circle cx="32" cy="32" r="16" fill="none" stroke="rgba(255,220,140,0.2)" stroke-width="0.8" />
@@ -119,6 +162,14 @@ onMounted(() => {
               <circle cx="35" cy="37" r="0.6" fill="rgba(70,82,110,0.28)" />
               <circle cx="22" cy="30" r="0.55" fill="rgba(70,82,110,0.26)" />
             </g>
+            <circle
+              v-for="(spot, i) in moonMicroSpots"
+              :key="'ms-' + i"
+              :cx="spot.cx"
+              :cy="spot.cy"
+              :r="spot.r"
+              fill="rgba(28,36,58,0.78)"
+            />
             <path
               d="M 21 23 Q 28 17 37 21"
               fill="none"
