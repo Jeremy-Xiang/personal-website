@@ -30,7 +30,7 @@ const { theme, toggleTheme } = useTheme()
           :aria-pressed="liteMode"
           @click="emit('toggleLite')"
         >
-          {{ liteMode ? 'fx on' : 'lite fx' }}
+          {{ liteMode ? 'calm on' : 'calm' }}
         </button>
       </li>
       <li>

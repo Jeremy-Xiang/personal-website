@@ -11,8 +11,6 @@ onMounted(() => {
     ([e]) => {
       if (e?.isIntersecting) {
         visible.value = true
-        panel.value?.style.setProperty('--tz', '-20px')
-        panel.value?.style.setProperty('--sc', '0.94')
         obs.disconnect()
       }
     },
@@ -44,6 +42,6 @@ onMounted(() => {
 }
 .panel-rise-enter-from {
   opacity: 0;
-  transform: translateY(48px) translateZ(-80px) rotateX(8deg) scale(0.94);
+  transform: translateY(32px) scale(0.97);
 }
 </style>

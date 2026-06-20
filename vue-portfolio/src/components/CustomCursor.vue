@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useFinePointer } from '../composables/useMotion'
 
 const { finePointer } = useFinePointer()
@@ -10,10 +10,19 @@ let my = -100
 let rx = -100
 let ry = -100
 let rafId = 0
+let scrollTimer = 0
 
 function onMove(e: MouseEvent) {
   mx = e.clientX
   my = e.clientY
+}
+
+function onScroll() {
+  document.body.classList.add('is-scrolling')
+  clearTimeout(scrollTimer)
+  scrollTimer = window.setTimeout(() => {
+    document.body.classList.remove('is-scrolling')
+  }, 120)
 }
 
 function tick() {
@@ -21,24 +30,26 @@ function tick() {
   rx += (mx - rx) * 0.11
   ry += (my - ry) * 0.11
   if (dot.value) {
-    dot.value.style.left = `${mx}px`
-    dot.value.style.top = `${my}px`
+    dot.value.style.transform = `translate(calc(${mx}px - 50%), calc(${my}px - 50%))`
   }
   if (ring.value) {
-    ring.value.style.left = `${rx}px`
-    ring.value.style.top = `${ry}px`
+    ring.value.style.transform = `translate(calc(${rx}px - 50%), calc(${ry}px - 50%))`
   }
   rafId = requestAnimationFrame(tick)
 }
 
-import { onMounted, onUnmounted } from 'vue'
 onMounted(() => {
-  window.addEventListener('mousemove', onMove)
+  window.addEventListener('mousemove', onMove, { passive: true })
+  window.addEventListener('scroll', onScroll, { passive: true })
   rafId = requestAnimationFrame(tick)
 })
+
 onUnmounted(() => {
   window.removeEventListener('mousemove', onMove)
+  window.removeEventListener('scroll', onScroll)
   cancelAnimationFrame(rafId)
+  clearTimeout(scrollTimer)
+  document.body.classList.remove('is-scrolling')
 })
 </script>
 

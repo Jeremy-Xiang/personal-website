@@ -15,8 +15,6 @@ onMounted(() => {
   let pi = 0
   let ci = 0
   let currentNode: HTMLElement | null = null
-  const cursorEl = document.querySelector('.type-cursor') as HTMLElement | null
-  void cursorEl
 
   function typeNext() {
     if (!target.value || pi >= parts.length) {
@@ -49,9 +47,7 @@ onMounted(() => {
   }
 
   setTimeout(typeNext, 1500)
-})
 
-onMounted(() => {
   const inner = document.querySelector('.hero-inner') as HTMLElement | null
   if (!inner) return
   let tick = false
@@ -68,25 +64,10 @@ onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
   onUnmounted(() => window.removeEventListener('scroll', onScroll))
 })
-
-function onHeroMove(e: MouseEvent) {
-  const hero = (e.currentTarget as HTMLElement)
-  const tilt = hero.querySelector('.hero-tilt') as HTMLElement
-  if (!tilt) return
-  const r = hero.getBoundingClientRect()
-  const dx = (e.clientX - r.left - r.width / 2) / (r.width / 2)
-  const dy = (e.clientY - r.top - r.height / 2) / (r.height / 2)
-  tilt.style.transform = `perspective(900px) rotateX(${-dy * 4.5}deg) rotateY(${dx * 5.5}deg) translateZ(60px)`
-}
-
-function onHeroLeave(e: MouseEvent) {
-  const tilt = (e.currentTarget as HTMLElement).querySelector('.hero-tilt') as HTMLElement
-  if (tilt) tilt.style.transform = 'perspective(900px) rotateX(0) rotateY(0) translateZ(60px)'
-}
 </script>
 
 <template>
-  <section class="hero" id="hero-sec" @mousemove="onHeroMove" @mouseleave="onHeroLeave">
+  <section class="hero" id="hero-sec">
     <div class="hero-inner">
       <div class="hero-eyebrow">cs + econ · uw–madison · class of 2028</div>
       <div class="hero-tilt">

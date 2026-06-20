@@ -1,32 +1,21 @@
-/* ── Lite mode (effects toggle) ── */
-html.lite-mode .gblob,
-html.lite-mode .sky {
-  display: none !important;
-}
-html.lite-mode .starfield {
-  opacity: 0.25;
-}
+/* ── Lite mode (effects toggle) — keeps stars + constellations, drops panel tilt only ── */
 html.lite-mode .scene-wrap {
   transform: none !important;
 }
 html.lite-mode .section-panel,
 html.lite-mode .section-panel.visible {
   transform: translateY(0) scale(1) !important;
-  --rx: 0deg !important;
-  --ry: 0deg !important;
-  --tz: 0px !important;
-  --sc: 1 !important;
 }
 html.lite-mode body {
   perspective: none;
 }
 html.lite-mode .hero-tilt {
-  transform: translateZ(0) !important;
+  transform: none !important;
 }
 
 /* ── Light mode polish ── */
 [data-theme='light'] .starfield {
-  opacity: 0.55;
+  opacity: 0.7;
 }
 [data-theme='light'] .section-panel {
   background: rgba(255, 255, 255, 0.78);

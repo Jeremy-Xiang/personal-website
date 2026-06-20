@@ -41,7 +41,7 @@ export function useStarfield(
 
   function initStars() {
     stars.length = 0
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 1200; i++) {
       const theta = rand(0, Math.PI * 2)
       const phi = Math.acos(rand(-1, 1))
       stars.push({
@@ -52,7 +52,7 @@ export function useStarfield(
         bright: Math.random() > 0.8,
         twinkle: rand(0, Math.PI * 2),
         twinkleSpeed: rand(0.01, 0.04),
-        baseAlpha: rand(0.55, 1.0),
+        baseAlpha: rand(0.65, 1.0),
       })
     }
   }
@@ -148,7 +148,8 @@ export function useStarfield(
   }
 
   function render() {
-    if (!ctx || liteMode?.value) return
+    if (!ctx) return
+    const dimmed = liteMode?.value
     scrollRatio += (targetScrollRatio - scrollRatio) * 0.06
     const light = theme.value === 'light'
     ctx.clearRect(0, 0, W, H)
@@ -159,7 +160,7 @@ export function useStarfield(
 
       s.twinkle += s.twinkleSpeed
       const twinkFactor = 0.5 + 0.5 * Math.sin(s.twinkle)
-      const alpha = s.baseAlpha * proj.depth * twinkFactor
+      const alpha = s.baseAlpha * proj.depth * twinkFactor * (dimmed ? 0.75 : 1)
       const size = s.size * (0.4 + proj.depth * 1.2)
 
       if (light) {
@@ -205,7 +206,7 @@ export function useStarfield(
   }
 
   function loop() {
-    if (reducedMotion.value || liteMode?.value) return
+    if (reducedMotion.value) return
     render()
     rafId = requestAnimationFrame(loop)
   }

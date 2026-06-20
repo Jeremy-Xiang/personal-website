@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useReducedMotion } from '../composables/useMotion'
-import { useEffectsMode } from '../composables/useEffectsMode'
+import { onMounted } from 'vue'
 import {
-  useScroll3D,
   useActiveNav,
   useKeyboardNav,
-  useTilt,
 } from '../composables/useScroll3D'
 import { NAV_SECTIONS } from '../data/content'
 
@@ -18,16 +14,8 @@ import LeadershipSection from '../components/LeadershipSection.vue'
 import ToolsSection from '../components/ToolsSection.vue'
 import ContactSection from '../components/ContactSection.vue'
 
-const sceneRef = ref<HTMLElement | null>(null)
-const { reducedMotion } = useReducedMotion()
-const { liteMode } = useEffectsMode()
-
-useScroll3D(sceneRef, '.section-panel', reducedMotion, liteMode)
 useActiveNav([...NAV_SECTIONS, 'traits'])
 useKeyboardNav({ '1': 'now', '2': 'projects', '3': 'experience', '4': 'leadership', '5': 'tools', '6': 'contact' })
-useTilt('.tool-card', 10)
-useTilt('.trait', 10)
-useTilt('.project-card', 12)
 
 onMounted(() => {
   document.querySelectorAll('a, button, .trait, .tool-card, .entry, .contact-item, .project-card').forEach((el) => {
@@ -64,7 +52,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main ref="sceneRef" class="scene-wrap">
+  <main class="scene-wrap">
     <HeroSection />
     <NowSection />
     <ProjectsSection />

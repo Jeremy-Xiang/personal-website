@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { CONSTELLATIONS } from '../data/content'
+import { CONSTELLATIONS, CONSTELLATION_NAMES } from '../data/content'
 
 const skyRef = ref<HTMLElement | null>(null)
 
@@ -53,6 +53,7 @@ defineExpose({ skyRef })
           '--tw': s.bright ? '0.85' : s.faint ? '0.32' : '0.55',
         }"
       />
+      <div class="const-tooltip">{{ CONSTELLATION_NAMES[c.name] || c.name }}</div>
     </div>
   </div>
 </template>

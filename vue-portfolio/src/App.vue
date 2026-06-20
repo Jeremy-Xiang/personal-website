@@ -45,7 +45,7 @@ onMounted(() => {
 
   const depths = [0.012, 0.007, 0.015, 0.009, 0.011, 0.006, 0.010, 0.007]
   tipEl = document.createElement('div')
-  tipEl.style.cssText = 'position:fixed;z-index:9990;font-family:var(--font-m);font-size:.6rem;letter-spacing:.12em;text-transform:lowercase;color:var(--accent);background:rgba(7,8,15,0.92);border:1px solid rgba(110,143,255,.35);padding:4px 10px;border-radius:3px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s ease;transform:translateX(-50%)'
+  tipEl.style.cssText = 'position:fixed;z-index:9990;font-family:var(--font-m);font-size:.62rem;letter-spacing:.1em;text-transform:lowercase;color:var(--accent);background:rgba(7,8,15,0.94);border:1px solid rgba(110,143,255,.4);padding:6px 12px;border-radius:4px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s ease;transform:translateX(-50%);box-shadow:0 8px 24px rgba(0,0,0,.35)'
   document.body.appendChild(tipEl)
 
   let mouseClientX = -999
@@ -70,10 +70,10 @@ onMounted(() => {
     tgtY = (e.clientY / window.innerHeight - 0.5) * 2
   }, { passive: true })
 
-  const PROXIMITY = 80
+  const PROXIMITY = 140
   ;(function loop() {
     requestAnimationFrame(loop)
-    if (liteMode.value) return
+    if (reducedMotion.value) return
 
     curX += (tgtX - curX) * 0.035
     curY += (tgtY - curY) * 0.035
@@ -81,16 +81,17 @@ onMounted(() => {
       el.style.translate = `${(curX * depth * window.innerWidth * 0.45).toFixed(2)}px ${(curY * depth * window.innerHeight * 0.45).toFixed(2)}px`
     })
 
-    type Hit = { name: string; r: DOMRect }
+    type Hit = { name: string; r: DOMRect; el: HTMLElement }
     let hit: Hit | undefined
     let closestDist = PROXIMITY
     for (const { el, name } of consts) {
       if (!name) continue
       const r = el.getBoundingClientRect()
       const d = Math.hypot(mouseClientX - (r.left + r.width / 2), mouseClientY - (r.top + r.height / 2))
+      el.classList.toggle('is-near', d < PROXIMITY)
       if (d < closestDist) {
         closestDist = d
-        hit = { name, r }
+        hit = { name, r, el }
       }
     }
 
@@ -103,6 +104,7 @@ onMounted(() => {
     } else if (!hit && visibleFor && tipEl) {
       tipEl.style.opacity = '0'
       visibleFor = null
+      consts.forEach(({ el }) => el.classList.remove('is-near'))
     }
   })()
 })
