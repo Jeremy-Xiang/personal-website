@@ -97,7 +97,7 @@ export const FEATURED_PROJECTS: FeaturedProject[] = [
   },
 ]
 
-export const QUANT_SHOWCASE_URL = 'https://portfolio-showcase-five-chi.vercel.app/'
+export const QUANT_SHOWCASE_URL = 'https://projects.jeremyxiang.com'
 
 export const QUANT_PROJECTS: QuantProject[] = [
   {
@@ -157,7 +157,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
     id: 'quant-series',
     featured: true,
     titleHtml: 'built a <a href="https://github.com/Jeremy-Xiang/Portfolio-Showcase" target="_blank" rel="noopener">six-part quant research series</a> — factor pipeline, multi-agent analyst, filings RAG, and more',
-    metaHtml: '2026 · python, fastapi, claude api · <a href="https://portfolio-showcase-five-chi.vercel.app/" target="_blank" rel="noopener">showcase ↗</a>',
+    metaHtml: '2026 · python, fastapi, claude api · <a href="https://projects.jeremyxiang.com" target="_blank" rel="noopener">showcase ↗</a>',
     detail: 'Six FastAPI services built to mount into THESIS\'s backend: a 17-factor alpha pipeline with walk-forward boosting, a supervisor/subagent analyst with audit trails, citation-grounded filings Q&A, an event-based screener, a forecast benchmark, and behavioral ticker clustering.',
   },
   {
