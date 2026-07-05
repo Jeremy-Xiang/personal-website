@@ -1,23 +1,11 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import {
-  THESIS_HOW,
-  THESIS_JOURNAL,
-  THESIS_RETURNS,
-  THESIS_SIGNALS,
+  THESIS_DESIGN,
+  THESIS_SCORE,
   THESIS_STACK,
   THESIS_STATS,
+  THESIS_VIEWS,
 } from '../data/thesis'
-
-onMounted(() => {
-  requestAnimationFrame(() => {
-    document.querySelectorAll<HTMLElement>('.bar-fill').forEach((el) => {
-      const w = el.style.getPropertyValue('--w') || el.dataset.w || '0%'
-      el.classList.add('loaded')
-      el.style.width = w
-    })
-  })
-})
 </script>
 
 <template>
@@ -26,66 +14,60 @@ onMounted(() => {
 
     <div class="thesis-hero">
       <div class="hero-eyebrow">project · 2025–2026</div>
-      <h1>THESIS — <em>thematic<br>investment dashboard.</em></h1>
+      <h1>THESIS — <em>congressional<br>trading intelligence.</em></h1>
       <p>
-        A live portfolio dashboard built around investment themes — AI infrastructure, defense, energy, biodefense — instead of individual stock picks.
-        <span class="thesis-tagline">53 tickers · 5 themes · FinBERT sentiment · Random Forest predictions</span>
+        Members of Congress disclose their stock trades — up to 45 days late, buried in filings. THESIS decodes them into a terminal:
+        who bought what, how late they filed it, and which tickers multiple members are converging on.
+        <span class="thesis-tagline">28 members tracked · filing-lag analytics · conviction-ranked signals</span>
       </p>
       <div class="cta-row">
-        <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener" class="btn-primary">live dashboard ↗</a>
-        <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-api" target="_blank" rel="noopener" class="btn-secondary">backend ↗</a>
+        <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener" class="btn-primary">live terminal ↗</a>
         <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-frontend" target="_blank" rel="noopener" class="btn-secondary">frontend ↗</a>
+        <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-api" target="_blank" rel="noopener" class="btn-secondary">backend ↗</a>
       </div>
     </div>
 
     <section class="thesis-section">
       <div class="section-label">at a glance</div>
-      <p class="thesis-intro">The numbers behind the dashboard — capital growth, coverage, and news processed on each refresh.</p>
+      <p class="thesis-intro">Coverage and the constraint that shapes the whole product: the 45-day disclosure window.</p>
       <div class="stats-grid thesis-panel">
         <div v-for="s in THESIS_STATS" :key="s.label" class="stat-cell">
           <div class="stat-label">{{ s.label }}</div>
-          <div class="stat-value" :class="{ pos: s.positive, acc: s.accent }">{{ s.value }}</div>
+          <div class="stat-value" :class="{ acc: s.accent }">{{ s.value }}</div>
           <div class="stat-sub">{{ s.sub }}</div>
         </div>
       </div>
     </section>
 
     <section class="thesis-section">
-      <div class="section-label">theme returns</div>
-      <p class="thesis-intro">Performance since inception, grouped by theme.</p>
-      <div class="thesis-panel">
-        <div v-for="r in THESIS_RETURNS" :key="r.theme" class="bar-row">
-          <div class="bar-label">{{ r.theme }}<span>{{ r.tickers }}</span></div>
-          <div class="bar-track">
-            <div class="bar-fill" :style="{ background: r.color, width: r.width }" />
-          </div>
-          <div class="bar-pct" :class="{ pos: r.positive }" :style="!r.positive ? { color: '#ef4444' } : {}">{{ r.pct }}</div>
-        </div>
-      </div>
-      <p class="thesis-note">Biodefense was initiated in Jan 2025 — early positioning ahead of the next outbreak cycle.</p>
-    </section>
-
-    <section class="thesis-section">
-      <div class="section-label">prediction signals</div>
-      <p class="thesis-intro">Weekly Random Forest estimates of 30-day outperformance vs SPY per theme.</p>
-      <div class="signal-grid thesis-panel">
-        <div v-for="sig in THESIS_SIGNALS" :key="sig.theme" class="sig-card" :class="sig.type">
-          <div class="sig-theme">{{ sig.theme }}</div>
-          <div class="sig-label" :class="sig.type">{{ sig.signal }}</div>
-          <div class="sig-prob">{{ sig.prob }}% prob</div>
-          <div class="sig-bar"><div class="sig-fill" :class="sig.type" :style="{ width: sig.prob + '%' }" /></div>
-        </div>
-      </div>
-      <p class="thesis-note">Sample signals — live values update on the dashboard.</p>
-    </section>
-
-    <section class="thesis-section">
-      <div class="section-label">how it works</div>
+      <div class="section-label">conviction score</div>
+      <p class="thesis-intro">Every ticker gets a score, and every score explains itself. Four inputs, weighted by how hard they are to fake.</p>
       <div class="how-grid thesis-panel">
-        <div v-for="cell in THESIS_HOW" :key="cell.title" class="how-cell">
+        <div v-for="cell in THESIS_SCORE" :key="cell.title" class="how-cell">
           <div class="how-icon">{{ cell.icon }}</div>
           <h3>{{ cell.title }}</h3>
           <p>{{ cell.body }}</p>
+          <span class="score-weight">{{ cell.weight }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="thesis-section">
+      <div class="section-label">five views</div>
+      <div class="thesis-panel">
+        <div v-for="v in THESIS_VIEWS" :key="v.name" class="j-entry">
+          <div class="j-title">{{ v.name }}</div>
+          <div class="j-meta">{{ v.body }}</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="thesis-section">
+      <div class="section-label">design decisions</div>
+      <div class="thesis-panel">
+        <div v-for="d in THESIS_DESIGN" :key="d.title" class="j-entry">
+          <div class="j-title">{{ d.title }}</div>
+          <div class="j-meta">{{ d.body }}</div>
         </div>
       </div>
     </section>
@@ -93,16 +75,20 @@ onMounted(() => {
     <section class="thesis-section">
       <div class="section-label">stack</div>
       <div class="stack-list thesis-panel">
-        <span v-for="(tag, i) in THESIS_STACK" :key="tag" class="stack-tag" :class="{ hi: i < 4 }">{{ tag }}</span>
+        <span v-for="(tag, i) in THESIS_STACK" :key="tag" class="stack-tag" :class="{ hi: i < 3 }">{{ tag }}</span>
       </div>
     </section>
 
     <section class="thesis-section">
-      <div class="section-label">thesis journal</div>
+      <div class="section-label">where it came from</div>
       <div class="thesis-panel">
-        <div v-for="j in THESIS_JOURNAL" :key="j.title" class="j-entry">
-          <div class="j-title">{{ j.title }}</div>
-          <div class="j-meta">{{ j.body }}</div>
+        <div class="j-entry">
+          <div class="j-title">The predecessor</div>
+          <div class="j-meta">
+            THESIS grew out of a three-year thematic investing run — $15k to $400k+ — documented in the
+            <RouterLink to="/portfolio" class="inline-link">portfolio showcase</RouterLink>.
+            The lesson from that run: the best signals come from people with better information. Congress files theirs in public.
+          </div>
         </div>
       </div>
     </section>
@@ -144,4 +130,17 @@ onMounted(() => {
 }
 .btn-primary { background: var(--accent); color: #fff; }
 .btn-secondary { color: var(--muted); border: 1px solid var(--border); }
+.score-weight {
+  display: inline-block;
+  margin-top: 0.55rem;
+  font-family: var(--font-m);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--line-col);
+  border-radius: 3px;
+  padding: 0.1rem 0.45rem;
+}
+.inline-link { color: var(--accent); }
 </style>

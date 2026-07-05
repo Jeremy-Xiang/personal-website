@@ -1,39 +1,29 @@
 export const THESIS_STATS = [
-  { label: 'Starting capital', value: '$15k', sub: 'Jan 2023', accent: true },
-  { label: 'Peak value', value: '$400k+', sub: '3-year thesis return', positive: true },
-  { label: 'Tickers tracked', value: '53', sub: 'across 5 themes' },
-  { label: 'News scored daily', value: '300+', sub: 'scored per refresh' },
+  { label: 'Members tracked', value: '28', sub: 'across both chambers', accent: true },
+  { label: 'Signal factors', value: '4', sub: 'cluster · committee · flow · recency' },
+  { label: 'Disclosure window', value: '45d', sub: 'allowed by law' },
+  { label: 'Views', value: '5', sub: 'tape · stocks · members · signals · ideas' },
 ]
 
-export const THESIS_RETURNS = [
-  { theme: 'AI Infrastructure', tickers: 'NVDA, AMD, TSM, MSFT…', pct: '+274.6%', width: '85%', color: '#60a5fa', positive: true },
-  { theme: 'Energy Transition', tickers: 'CEG, VST, NEE, FSLR…', pct: '+362.2%', width: '100%', color: '#4ade80', positive: true },
-  { theme: 'Defense', tickers: 'LMT, RTX, PLTR, KTOS…', pct: '+202.9%', width: '64%', color: '#f97316', positive: true },
-  { theme: 'Healthcare', tickers: 'UNH, TMO, ISRG, DHR…', pct: '+0.1%', width: '12%', color: '#f472b6', positive: true },
-  { theme: 'Biodefense', tickers: 'MRNA, SIGA, ILMN, GILD…', pct: '−16.8%', width: '20%', color: '#c084fc', positive: false },
+export const THESIS_SCORE = [
+  { icon: '⚭', title: 'Cluster buys', body: 'Multiple members buying the same ticker inside the window is the strongest tell — independent conviction, same conclusion.', weight: 'highest weight' },
+  { icon: '⚖', title: 'Committee jurisdiction', body: 'A buy from a member whose committee oversees the sector counts extra. Access is the whole premise.', weight: 'high weight' },
+  { icon: '∑', title: 'Net flow', body: 'Buys minus sells per ticker over the loaded window — direction and magnitude of congressional money.', weight: 'base signal' },
+  { icon: '◷', title: 'Recency', body: 'A filing inside the last 14 days bumps the score. Old disclosures are already priced in.', weight: 'bonus' },
 ]
 
-export const THESIS_SIGNALS = [
-  { theme: 'AI', signal: 'BUY', prob: 72, type: 'buy' as const },
-  { theme: 'DEF', signal: 'HOLD', prob: 54, type: 'hold' as const },
-  { theme: 'NRG', signal: 'BUY', prob: 68, type: 'buy' as const },
-  { theme: 'BIO', signal: 'HOLD', prob: 51, type: 'hold' as const },
-  { theme: 'MED', signal: 'HOLD', prob: 48, type: 'hold' as const },
+export const THESIS_VIEWS = [
+  { name: 'the tape', body: 'Every disclosed trade in reverse-chronological order, each with its filing-lag bar — days used of the 45 allowed.' },
+  { name: 'stocks', body: 'Per-ticker congressional flow: who is buying, who is selling, and how the net line trends.' },
+  { name: 'members', body: 'Profiles with filing counts, committee seats, and one-year excess return vs the market.' },
+  { name: 'signals', body: 'Tickers ranked by conviction score, with a plain-language "why" for every rank.' },
+  { name: 'ideas', body: 'The watchlist layer — follow members, and get flagged when your follows converge on a ticker.' },
 ]
 
-export const THESIS_HOW = [
-  { icon: '◈', title: 'Theme buckets, not tickers', body: 'The portfolio is organized around theses — like "AI infrastructure is undersupplied" — not single stocks.' },
-  { icon: 'λ', title: 'Daily NLP on headlines', body: 'Headlines from Yahoo Finance, CNBC, WSJ, ProMED, CDC alerts, and Breaking Defense scored with FinBERT.' },
-  { icon: '∑', title: 'Random Forest signals', body: 'Models train on three years of daily prices using momentum, volatility, and relative-return features.' },
-  { icon: '◉', title: 'Biodefense monitoring', body: 'ProMED outbreak reports, WHO news, and CDC alerts feed the biodefense thesis.' },
-]
+export const THESIS_STACK = ['react', 'vite', 'javascript', 'fraunces', 'ibm plex mono', 'vercel']
 
-export const THESIS_STACK = ['python', 'fastapi', 'scikit-learn', 'react', 'yfinance', 'pandas', 'finbert', 'recharts', 'render', 'vercel']
-
-export const THESIS_JOURNAL = [
-  { title: 'Jan 2023 — AI Infrastructure', body: 'Opened with NVDA on the thesis that AI training compute would stay undersupplied for years.' },
-  { title: 'Apr 2023 — Defense', body: 'Added LMT and RTX after Ukraine exposed Western stockpile gaps.' },
-  { title: 'Sep 2024 — Energy Transition', body: 'Started a nuclear basket (CEG, VST). AI data-center demand pointed to baseload power.' },
-  { title: 'Jan 2025 — Biodefense', body: 'Opened around mRNA platforms and SIGA — the only FDA-approved smallpox antiviral.' },
-  { title: 'Mar 2025 — Healthcare Infrastructure', body: 'Added TMO and DHR as lab-infrastructure picks-and-shovels.' },
+export const THESIS_DESIGN = [
+  { title: 'Filing-lag bar', body: 'The signature visual. Every trade renders a bar showing how much of the legal 45-day disclosure window the member used before filing. Late filers are visible at a glance.' },
+  { title: 'Terminal aesthetic', body: 'Dark, dense, monospaced data in IBM Plex Mono under a Fraunces serif wordmark — built to read like a trading terminal, not a news site.' },
+  { title: 'Everything explains itself', body: 'No black-box scores. Each signal lists its reasons: how many members clustered, which committees are involved, how fresh the filings are.' },
 ]

@@ -38,6 +38,11 @@ async function copyEmail(e: Event) {
         <span class="c-val" :style="copied ? { color: '#22c55e' } : {}">{{ val }}</span>
         <span class="c-arr">{{ arr }}</span>
       </a>
+      <a href="https://github.com/Jeremy-Xiang" target="_blank" rel="noopener" class="contact-item">
+        <span class="c-lbl">github</span>
+        <span class="c-val">Jeremy-Xiang</span>
+        <span class="c-arr">→</span>
+      </a>
       <a href="https://www.linkedin.com/in/jeremy-xiang/" target="_blank" rel="noopener" class="contact-item">
         <span class="c-lbl">linkedin</span>
         <span class="c-val">jeremy-xiang</span>

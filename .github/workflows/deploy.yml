@@ -38,7 +38,7 @@ jobs:
       - name: Copy build to site root
         run: |
           rm -rf assets
-          rm -f index.html thesis.html favicon.svg icons.svg og-image.svg robots.txt sitemap.xml 404.html
+          rm -f index.html thesis.html portfolio.html favicon.svg icons.svg og-image.svg robots.txt sitemap.xml 404.html
           rm -f Jeremy_Xiang_Resume.pdf Xiang_WordReadingTime_Paper.pdf
           cp -r vue-portfolio/dist/* .
 
@@ -46,7 +46,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html assets/ thesis.html favicon.svg icons.svg og-image.svg robots.txt sitemap.xml 404.html Jeremy_Xiang_Resume.pdf Xiang_WordReadingTime_Paper.pdf
+          git add index.html assets/ thesis.html portfolio.html favicon.svg icons.svg og-image.svg robots.txt sitemap.xml 404.html Jeremy_Xiang_Resume.pdf Xiang_WordReadingTime_Paper.pdf
           git diff --staged --quiet && echo "No deploy changes." && exit 0
           git commit -m "Deploy portfolio rebuild [skip ci]"
           git push

@@ -43,7 +43,7 @@ function onBackdrop(e: MouseEvent) {
             >
               live ↗
             </a>
-            <RouterLink v-if="project.id === 'thesis'" to="/thesis" class="btn-secondary" @click="emit('close')">
+            <RouterLink v-if="project.pageRoute" :to="project.pageRoute" class="btn-secondary" @click="emit('close')">
               full project page
             </RouterLink>
             <a

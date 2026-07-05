@@ -1,4 +1,4 @@
-import type { Constellation, ExperienceEntry, FeaturedProject, NowItem, ToolCard, Trait } from '../types'
+import type { Constellation, ExperienceEntry, FeaturedProject, NowItem, QuantProject, ToolCard, Trait } from '../types'
 
 export const CONSTELLATIONS: Constellation[] = [
   { name: 'orion', x: 3, y: 14, w: 13, h: 16, drift: [18, -10, -12, 14, 10, -6, 35],
@@ -44,41 +44,109 @@ export const FEATURED_PROJECTS: FeaturedProject[] = [
   {
     id: 'thesis',
     name: 'THESIS',
-    desc: 'Live thematic investment dashboard — NLP sentiment, ML signals, 53 tickers across 5 themes.',
-    tags: ['python', 'fastapi', 'react', 'finbert'],
+    desc: 'Congressional trading intelligence — filings decoded into conviction-ranked signals across 28 tracked members.',
+    tags: ['react', 'vite', 'data viz'],
     href: '/thesis',
-    modalBody: 'A portfolio dashboard organized by investment theme — not ticker. FinBERT scores hundreds of headlines daily; Random Forest models flag 30-day outperformance vs SPY.',
+    accent: '#4ade80',
+    pageRoute: '/thesis',
+    modalBody: 'A terminal-style dashboard that turns congressional stock disclosures into something readable: who bought what, how late they filed it, and which tickers multiple members are converging on. Conviction scoring weighs cluster buys, committee jurisdiction, and filing recency.',
     liveUrl: 'https://thesis.jeremyxiang.com',
     highlights: [
-      '$15k → $400k+ over 3 years',
-      '53 tickers · 5 themes',
-      '300+ headlines scored per refresh',
+      '28 members tracked · 5 views (tape, stocks, members, signals, ideas)',
+      'Filing-lag bar on every trade — days used of the 45 allowed',
+      'Conviction score: cluster buys + committee jurisdiction + recency',
     ],
     extraLinks: [
-      { label: 'backend', href: 'https://github.com/Jeremy-Xiang/thesis-dashboard-api' },
       { label: 'frontend', href: 'https://github.com/Jeremy-Xiang/thesis-dashboard-frontend' },
+      { label: 'backend', href: 'https://github.com/Jeremy-Xiang/thesis-dashboard-api' },
     ],
   },
   {
     id: 'lab',
-    name: 'LAB',
-    desc: 'Interactive web experiments — generative art, canvas graphics, creative coding playground.',
-    tags: ['canvas', 'webgl', 'javascript'],
+    name: 'THE LAYERING LAB',
+    desc: 'Fragrance layering engine — 439+ fragrances scored for pairing compatibility, with community voting.',
+    tags: ['javascript', 'supabase', 'seo'],
     href: 'https://lab.jeremyxiang.com',
+    accent: '#e8b45a',
     external: true,
-    modalBody: 'A browser-based playground for interactive experiments — generative systems, physics simulations, and visual explorations. Currently home to The Layering Lab and other web graphics projects.',
+    modalBody: 'A compatibility engine for fragrance layering. Every pairing is scored through a scent-family affinity matrix with diversity-aware ranking, and the community votes combos up or down through Supabase. Ships with 29 SEO landing pages for individual fragrances.',
     liveUrl: 'https://lab.jeremyxiang.com',
     highlights: [
-      'Generative art & canvas experiments',
-      'Self-contained interactive pages',
-      'Deployed separately at lab.jeremyxiang.com',
+      '439+ fragrances in the pairing database',
+      'Scoring engine: family affinity matrix + diversity-aware ranking',
+      'Community voting via Supabase · 29 SEO pages',
     ],
+    extraLinks: [
+      { label: 'source', href: 'https://github.com/Jeremy-Xiang/Layering-Lab' },
+    ],
+  },
+  {
+    id: 'portfolio',
+    name: 'PORTFOLIO',
+    desc: 'Thematic investing showcase — $15k → $400k+ over 3 years, with FinBERT sentiment and ML signals.',
+    tags: ['python', 'finbert', 'scikit-learn'],
+    href: '/portfolio',
+    accent: '#6e8fff',
+    pageRoute: '/portfolio',
+    modalBody: 'Three years of investing organized by thesis, not ticker — AI infrastructure, defense, energy transition, biodefense. FinBERT scored 300+ headlines per refresh; Random Forest models flagged 30-day outperformance vs SPY. The full case study lives on its own page.',
+    highlights: [
+      '$15k → $400k+ over 3 years',
+      '53 tickers · 5 themes',
+      'Theme returns, prediction signals, and the full thesis journal',
+    ],
+  },
+]
+
+export const QUANT_SHOWCASE_URL = 'https://portfolio-showcase-five-chi.vercel.app/'
+
+export const QUANT_PROJECTS: QuantProject[] = [
+  {
+    id: 'alpha-factor',
+    name: 'alpha-factor-pipeline',
+    desc: '17-factor library → IC analysis → walk-forward gradient boosting → long-short backtest, reported net of costs.',
+    tags: ['scikit-learn', 'backtesting'],
+    repo: 'https://github.com/Jeremy-Xiang/Alpha-Factor-Pipeline',
+  },
+  {
+    id: 'multi-agent',
+    name: 'multi-agent-analyst',
+    desc: 'Supervisor agent coordinates three one-source subagents (technical, fundamental, sentiment) into one thesis with a full audit trail.',
+    tags: ['claude api', 'tool use'],
+    repo: 'https://github.com/Jeremy-Xiang/Multi-Agent-Analyst',
+  },
+  {
+    id: 'filings',
+    name: 'filings-assistant',
+    desc: 'Citation-grounded Q&A over filings and earnings calls. Refuses when retrieval comes back empty instead of guessing.',
+    tags: ['rag', 'tf-idf', 'claude api'],
+    repo: 'https://github.com/Jeremy-Xiang/Filings-Assistant',
+  },
+  {
+    id: 'screener',
+    name: 'screener-alerts',
+    desc: 'Event-based technical screener — fires on the crossover day, not every day after — with pluggable notifiers.',
+    tags: ['apscheduler', 'webhooks'],
+    repo: 'https://github.com/Jeremy-Xiang/Screener-Alerts',
+  },
+  {
+    id: 'forecast',
+    name: 'stock-forecast-bench',
+    desc: 'Four next-day OHLC models vs naive persistence under strict walk-forward validation. Two lose to the baseline.',
+    tags: ['scikit-learn', 'walk-forward'],
+    repo: 'https://github.com/Jeremy-Xiang/Stock-Forecast',
+  },
+  {
+    id: 'clustering',
+    name: 'ticker-clustering',
+    desc: 'Clusters tickers by behavior (return, volatility, momentum, liquidity) instead of sector label, mapped in 2D via PCA.',
+    tags: ['k-means', 'pca'],
+    repo: 'https://github.com/Jeremy-Xiang/Ticker-Clustering',
   },
 ]
 
 export const NOW_ITEMS: NowItem[] = [
   { key: 'learning', html: 'machine learning fundamentals — the math underneath the models' },
-  { key: 'building', html: '<a href="/thesis">thesis</a> — live investment dashboard · <a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">lab</a> — interactive web experiments' },
+  { key: 'building', html: 'a <a href="https://github.com/Jeremy-Xiang/Portfolio-Showcase" target="_blank" rel="noopener">six-part quant research series</a> for <a href="/thesis">thesis</a> · <a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">the layering lab</a> — fragrance pairing engine' },
   { key: 'reading', html: '<em>thinking, fast and slow</em> — daniel kahneman<span class="read-bar" title="~70% through"><span class="read-fill" style="width:70%"></span></span>' },
   { key: 'exploring', html: 'what content creation might look like over the summer' },
   { key: 'on the side', html: 'staying sharp in valorant (top 1%) — aim and economics have more in common than you\'d think' },
@@ -86,18 +154,32 @@ export const NOW_ITEMS: NowItem[] = [
 
 export const EXPERIENCE: ExperienceEntry[] = [
   {
+    id: 'quant-series',
+    featured: true,
+    titleHtml: 'built a <a href="https://github.com/Jeremy-Xiang/Portfolio-Showcase" target="_blank" rel="noopener">six-part quant research series</a> — factor pipeline, multi-agent analyst, filings RAG, and more',
+    metaHtml: '2026 · python, fastapi, claude api · <a href="https://portfolio-showcase-five-chi.vercel.app/" target="_blank" rel="noopener">showcase ↗</a>',
+    detail: 'Six FastAPI services built to mount into THESIS\'s backend: a 17-factor alpha pipeline with walk-forward boosting, a supervisor/subagent analyst with audit trails, citation-grounded filings Q&A, an event-based screener, a forecast benchmark, and behavioral ticker clustering.',
+  },
+  {
     id: 'lab',
     featured: true,
-    titleHtml: 'built <a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">LAB</a> — an interactive experiments playground exploring web graphics, generative art, and creative coding',
-    metaHtml: '2026 · html, canvas, webgl, javascript · <a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">live ↗</a>',
-    detail: 'A collection of interactive experiments: generative systems, physics simulations, and visual explorations built entirely in the browser.',
+    titleHtml: 'built <a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">THE LAYERING LAB</a> — a fragrance layering compatibility engine with community voting',
+    metaHtml: '2026 · javascript, supabase, seo · <a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">live ↗</a>',
+    detail: '439+ fragrances scored for pairing through a scent-family affinity matrix with diversity-aware ranking. Community voting runs on Supabase; 29 SEO pages drive organic search traffic.',
   },
   {
     id: 'thesis',
     featured: true,
-    titleHtml: 'built <a href="/thesis">THESIS</a> — live thematic investment dashboard with NLP sentiment analysis and ML price prediction',
-    metaHtml: '2025–2026 · python, fastapi, scikit-learn, react, finbert · <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener">live ↗</a>',
-    detail: 'Tracks 53 tickers across 5 themes. FinBERT scores 300+ headlines daily; Random Forest predicts 30-day SPY outperformance. Portfolio grew $15k → $400k+ over 3 years.',
+    titleHtml: 'built <a href="/thesis">THESIS</a> — a congressional trading intelligence dashboard with conviction-ranked signals',
+    metaHtml: '2025–2026 · react, vite · <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener">live ↗</a>',
+    detail: 'Decodes congressional stock disclosures: 28 tracked members, filing-lag analytics against the 45-day window, and a conviction score built from cluster buys, committee jurisdiction, and recency.',
+  },
+  {
+    id: 'investing',
+    featured: true,
+    titleHtml: 'grew a thematic <a href="/portfolio">investment portfolio</a> from $15k to $400k+ over 3 years',
+    metaHtml: '2023–2026 · python, finbert, scikit-learn · <a href="/portfolio">case study ↗</a>',
+    detail: 'Organized by thesis, not ticker — AI infrastructure, defense, energy transition, biodefense. FinBERT scored 300+ headlines per refresh; Random Forest models flagged 30-day SPY outperformance.',
   },
   {
     id: 'website',

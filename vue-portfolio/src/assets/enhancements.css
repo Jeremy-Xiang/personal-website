@@ -15,10 +15,12 @@
 /* Featured project cards */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
 }
 .project-card {
+  --pa: var(--accent);
+  position: relative;
   display: block;
   text-decoration: none;
   color: inherit;
@@ -29,12 +31,32 @@
   transform-style: preserve-3d;
   transition: transform 0.25s ease, box-shadow 0.25s, border-color 0.2s, background 0.2s;
   cursor: pointer;
+  overflow: hidden;
+}
+/* Constellation-line hairline: each project carries its own star color */
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 1.2rem;
+  right: 55%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--pa), transparent);
+  opacity: 0.55;
+  transition: right 0.35s ease, opacity 0.25s;
+}
+.project-card:hover::before {
+  right: 1.2rem;
+  opacity: 1;
 }
 .project-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(110, 143, 255, 0.35);
-  background: rgba(110, 143, 255, 0.08);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28), 0 0 20px rgba(110, 143, 255, 0.08);
+  border-color: color-mix(in srgb, var(--pa) 40%, transparent);
+  background: color-mix(in srgb, var(--pa) 7%, transparent);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28), 0 0 22px color-mix(in srgb, var(--pa) 12%, transparent);
+}
+.project-card:hover .project-name {
+  color: color-mix(in srgb, var(--pa) 55%, var(--text));
 }
 .project-card-top {
   display: flex;
@@ -107,6 +129,11 @@
   }
 }
 
+@media (max-width: 900px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 @media (max-width: 640px) {
   .project-grid {
     grid-template-columns: 1fr;

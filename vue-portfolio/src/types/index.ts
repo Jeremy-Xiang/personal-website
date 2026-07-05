@@ -42,12 +42,22 @@ export interface ToolCard {
   tags: string[]
 }
 
+export interface QuantProject {
+  id: string
+  name: string
+  desc: string
+  tags: string[]
+  repo: string
+}
+
 export interface FeaturedProject {
   id: string
   name: string
   desc: string
   tags: string[]
   href: string
+  accent?: string
+  pageRoute?: string
   external?: boolean
   modalBody?: string
   liveUrl?: string
