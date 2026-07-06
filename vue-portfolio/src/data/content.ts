@@ -146,7 +146,7 @@ export const QUANT_PROJECTS: QuantProject[] = [
 
 export const NOW_ITEMS: NowItem[] = [
   { key: 'learning', html: 'machine learning fundamentals — the math underneath the models' },
-  { key: 'building', html: 'a <a href="https://github.com/Jeremy-Xiang/Portfolio-Showcase" target="_blank" rel="noopener">six-part quant research series</a> for <a href="/thesis">thesis</a> · <a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">the layering lab</a> — fragrance pairing engine' },
+  { key: 'building', html: 'a <a href="https://projects.jeremyxiang.com" target="_blank" rel="noopener">six-part quant research series</a> for <a href="/thesis">thesis</a> · <a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">the layering lab</a> — fragrance pairing engine' },
   { key: 'reading', html: '<em>thinking, fast and slow</em> — daniel kahneman<span class="read-bar" title="~70% through"><span class="read-fill" style="width:70%"></span></span>' },
   { key: 'exploring', html: 'what content creation might look like over the summer' },
   { key: 'on the side', html: 'staying sharp in valorant (top 1%) — aim and economics have more in common than you\'d think' },
