@@ -12,25 +12,37 @@ let rx = -100
 let ry = -100
 let rafId = 0
 let active = false
+let lastT = 0
+
+// ring chase rate, per ms. 0.007 ≈ the old 0.11-per-frame feel at 60fps,
+// but stays identical at 240Hz and doesn't fall apart on dropped frames.
+const K = 0.007
+
+function place(el: HTMLElement, x: number, y: number) {
+  el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`
+}
 
 function onMove(e: MouseEvent) {
   mx = e.clientX
   my = e.clientY
+  // dot tracks the OS cursor directly, no RAF hop, no lag
+  if (dot.value) place(dot.value, mx, my)
 }
 
 function onLeave() {
   mx = -100
   my = -100
+  if (dot.value) place(dot.value, mx, my)
 }
 
-function tick() {
-  if (active && dot.value && ring.value) {
-    rx += (mx - rx) * 0.11
-    ry += (my - ry) * 0.11
-    dot.value.style.left = `${mx}px`
-    dot.value.style.top = `${my}px`
-    ring.value.style.left = `${rx}px`
-    ring.value.style.top = `${ry}px`
+function tick(t: number) {
+  if (active && ring.value) {
+    const dt = lastT ? Math.min(t - lastT, 100) : 16.7
+    lastT = t
+    const a = 1 - Math.exp(-dt * K)
+    rx += (mx - rx) * a
+    ry += (my - ry) * a
+    place(ring.value, rx, ry)
   }
   rafId = requestAnimationFrame(tick)
 }
@@ -38,6 +50,7 @@ function tick() {
 function start() {
   if (active) return
   active = true
+  lastT = 0
   document.body.classList.add('custom-cursor')
   window.addEventListener('mousemove', onMove, { passive: true })
   document.documentElement.addEventListener('mouseleave', onLeave)
