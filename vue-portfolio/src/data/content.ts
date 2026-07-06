@@ -81,13 +81,13 @@ export const FEATURED_PROJECTS: FeaturedProject[] = [
     ],
   },
   {
-    id: 'portfolio',
-    name: 'PORTFOLIO',
+    id: 'investing',
+    name: 'INVESTING',
     desc: 'Thematic investing showcase — $15k → $400k+ over 3 years, with FinBERT sentiment and ML signals.',
     tags: ['python', 'finbert', 'scikit-learn'],
-    href: '/portfolio',
+    href: '/investing',
     accent: '#6e8fff',
-    pageRoute: '/portfolio',
+    pageRoute: '/investing',
     modalBody: 'Three years of investing organized by thesis, not ticker — AI infrastructure, defense, energy transition, biodefense. FinBERT scored 300+ headlines per refresh; Random Forest models flagged 30-day outperformance vs SPY. The full case study lives on its own page.',
     highlights: [
       '$15k → $400k+ over 3 years',

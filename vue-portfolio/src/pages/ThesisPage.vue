@@ -86,7 +86,7 @@ import {
           <div class="j-title">The predecessor</div>
           <div class="j-meta">
             THESIS grew out of a three-year thematic investing run — $15k to $400k+ — documented in the
-            <RouterLink to="/portfolio" class="inline-link">portfolio showcase</RouterLink>.
+            <RouterLink to="/investing" class="inline-link">investing case study</RouterLink>.
             The lesson from that run: the best signals come from people with better information. Congress files theirs in public.
           </div>
         </div>

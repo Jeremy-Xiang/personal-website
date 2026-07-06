@@ -25,8 +25,8 @@ onMounted(() => {
     <RouterLink to="/" class="back-link">← back</RouterLink>
 
     <div class="thesis-hero">
-      <div class="hero-eyebrow">portfolio showcase · 2023–2026</div>
-      <h1>PORTFOLIO — <em>investing by<br>thesis, not ticker.</em></h1>
+      <div class="hero-eyebrow">investing · 2023–2026</div>
+      <h1>INVESTING — <em>by thesis,<br>not ticker.</em></h1>
       <p>
         Three years of thematic investing — AI infrastructure, defense, energy transition, biodefense — backed by FinBERT sentiment scoring and Random Forest signals.
         <span class="thesis-tagline">$15k → $400k+ · 53 tickers · 5 themes · 300+ headlines scored per refresh</span>
