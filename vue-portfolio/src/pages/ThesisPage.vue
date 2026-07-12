@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { usePanelReveal } from '../composables/useScroll3D'
 import {
   THESIS_DESIGN,
   THESIS_SCORE,
@@ -6,6 +7,8 @@ import {
   THESIS_STATS,
   THESIS_VIEWS,
 } from '../data/thesis'
+
+usePanelReveal('.thesis-section')
 </script>
 
 <template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { usePanelReveal } from '../composables/useScroll3D'
 import { onMounted } from 'vue'
 import {
   PORTFOLIO_HOW,
@@ -18,6 +19,8 @@ onMounted(() => {
     })
   })
 })
+
+usePanelReveal('.thesis-section')
 </script>
 
 <template>

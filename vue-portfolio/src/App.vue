@@ -11,7 +11,9 @@ import CustomCursor from './components/CustomCursor.vue'
 import Constellations from './components/Constellations.vue'
 import CelestialOrbit from './components/CelestialOrbit.vue'
 import DomainIntro from './components/DomainIntro.vue'
+import NebulaLayer from './components/NebulaLayer.vue'
 import SiteNav from './components/SiteNav.vue'
+import SkyReadout from './components/SkyReadout.vue'
 
 const route = useRoute()
 const canvasRef = ref<HTMLCanvasElement | null>(null)
@@ -42,6 +44,7 @@ function onInfinityClick() {
 }
 
 let constellationLoopActive = false
+let hotConst: HTMLElement | null = null
 
 onMounted(() => {
   if (reducedMotion.value) return
@@ -89,7 +92,7 @@ onMounted(() => {
       el.style.translate = `${(curX * depth * window.innerWidth * 0.45).toFixed(2)}px ${(curY * depth * window.innerHeight * 0.45).toFixed(2)}px`
     })
 
-    let hit: { name: string; r: DOMRect } | undefined
+    let hit: { name: string; r: DOMRect; el: HTMLElement } | undefined
     let closestDist = PROXIMITY
     for (const { el, name } of consts) {
       if (!name) continue
@@ -97,7 +100,7 @@ onMounted(() => {
       const d = Math.hypot(mouseClientX - (r.left + r.width / 2), mouseClientY - (r.top + r.height / 2))
       if (d < closestDist) {
         closestDist = d
-        hit = { name, r }
+        hit = { name, r, el }
       }
     }
 
@@ -108,6 +111,13 @@ onMounted(() => {
       constTip.visible = true
     } else {
       constTip.visible = false
+    }
+
+    const nextHot = hit?.el ?? null
+    if (nextHot !== hotConst) {
+      hotConst?.classList.remove('const-hot')
+      nextHot?.classList.add('const-hot')
+      hotConst = nextHot
     }
   }
 
@@ -134,9 +144,11 @@ watch(liteMode, (v) => {
   <div class="gblob gb2" />
   <div class="gblob gb3" />
 
+  <NebulaLayer />
   <canvas ref="canvasRef" class="starfield" />
   <CelestialOrbit />
   <Constellations />
+  <SkyReadout />
   <DomainIntro v-if="isHome" />
 
   <!-- Constellation name label -->
