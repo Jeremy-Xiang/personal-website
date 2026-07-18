@@ -35,14 +35,44 @@ function onLeave() {
   if (dot.value) place(dot.value, mx, my)
 }
 
+/* Morph state (FABLE 25 — 69 MORPH): over [data-mag] elements the ring
+   stops chasing the mouse and wraps the element instead. */
+let wrapEl: HTMLElement | null = null
+
+function onOver(e: Event) {
+  const t = (e.target as HTMLElement).closest?.('[data-mag]')
+  wrapEl = (t as HTMLElement) ?? null
+}
+function onOut(e: Event) {
+  const t = (e.target as HTMLElement).closest?.('[data-mag]')
+  if (t && t === wrapEl) wrapEl = null
+}
+
 function tick(t: number) {
   if (active && ring.value) {
     const dt = lastT ? Math.min(t - lastT, 100) : 16.7
     lastT = t
     const a = 1 - Math.exp(-dt * K)
-    rx += (mx - rx) * a
-    ry += (my - ry) * a
-    place(ring.value, rx, ry)
+    const el = ring.value
+    if (wrapEl && wrapEl.isConnected) {
+      const r = wrapEl.getBoundingClientRect()
+      rx += (r.left + r.width / 2 - rx) * a * 1.6
+      ry += (r.top + r.height / 2 - ry) * a * 1.6
+      el.style.width = `${r.width + 14}px`
+      el.style.height = `${r.height + 10}px`
+      el.style.borderRadius = '8px'
+      el.classList.add('cur-wrap')
+    } else {
+      rx += (mx - rx) * a
+      ry += (my - ry) * a
+      if (el.classList.contains('cur-wrap')) {
+        el.style.width = ''
+        el.style.height = ''
+        el.style.borderRadius = ''
+        el.classList.remove('cur-wrap')
+      }
+    }
+    place(el, rx, ry)
   }
   rafId = requestAnimationFrame(tick)
 }
@@ -54,6 +84,8 @@ function start() {
   document.body.classList.add('custom-cursor')
   window.addEventListener('mousemove', onMove, { passive: true })
   document.documentElement.addEventListener('mouseleave', onLeave)
+  document.addEventListener('pointerover', onOver, { passive: true })
+  document.addEventListener('pointerout', onOut, { passive: true })
   if (!rafId) rafId = requestAnimationFrame(tick)
 }
 
@@ -62,6 +94,8 @@ function stop() {
   document.body.classList.remove('custom-cursor')
   window.removeEventListener('mousemove', onMove)
   document.documentElement.removeEventListener('mouseleave', onLeave)
+  document.removeEventListener('pointerover', onOver)
+  document.removeEventListener('pointerout', onOut)
   cancelAnimationFrame(rafId)
   rafId = 0
 }

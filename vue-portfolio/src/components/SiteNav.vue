@@ -22,7 +22,7 @@ const { theme, toggleTheme } = useTheme()
       <li><RouterLink to="/thesis">thesis</RouterLink></li>
       <li><RouterLink to="/investing">investing</RouterLink></li>
       <li><a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">lab ↗</a></li>
-      <li class="res"><a href="/Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener">resume ↗</a></li>
+      <li class="res"><a v-mag href="/Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener">resume ↗</a></li>
       <li>
         <button
           type="button"

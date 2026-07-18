@@ -65,6 +65,7 @@ body.custom-cursor{cursor:none}
              height .35s cubic-bezier(.35,.46,.45,.94),border-color .3s;
   will-change:transform;
 }
+.cur-ring.cur-wrap{border-color:rgba(184,168,255,0.75);transition:border-radius .25s,border-color .25s}
 body.hov .cur-dot{width:11px;height:11px;background:var(--accent2)}
 body.hov .cur-ring{width:46px;height:46px;border-color:rgba(184,168,255,0.6)}
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
+import AsciiHero from './AsciiHero.vue'
 
 const target = ref<HTMLElement | null>(null)
 const showCursor = ref(true)
@@ -76,6 +77,7 @@ onMounted(() => {
 
 <template>
   <section class="hero" id="hero-sec">
+    <AsciiHero />
     <div class="hero-inner">
       <div class="hero-eyebrow">cs + econ · uw–madison · class of 2028</div>
       <div class="hero-tilt">

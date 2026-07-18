@@ -26,6 +26,7 @@ function closeModal() {
         v-for="p in FEATURED_PROJECTS"
         :key="p.id"
         href="#"
+        v-tilt
         class="project-card"
         :style="{ '--pa': p.accent || 'var(--accent)' }"
         @click="openModal(p, $event)"

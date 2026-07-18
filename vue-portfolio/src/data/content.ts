@@ -42,6 +42,22 @@ export const NAV_SECTIONS = ['now', 'projects', 'experience', 'leadership', 'too
 
 export const FEATURED_PROJECTS: FeaturedProject[] = [
   {
+    id: 'observatory',
+    name: 'MARKET OBSERVATORY',
+    desc: 'A market visualization suite on live data — sectors as an orbital system, a 3D realized-vol surface, and a capital-flow field.',
+    tags: ['three.js', 'webgl', 'market data'],
+    href: 'https://observatory.jeremyxiang.com',
+    accent: '#c99a4b',
+    external: true,
+    modalBody: 'Three linked, real-data views of the U.S. equity market in one self-contained page. An Orrery renders the eleven SPDR sectors as a clockwork solar system around the S&P 500 — orbital distance is 3-month return, world size is dollar liquidity, orbital speed (and retrograde motion) is 1-month momentum. A rotatable 3D surface maps annualized realized volatility across every sector and five look-back windows. A canvas flow field sends thousands of particles toward the strongest sectors — sector rotation made visible. Metrics computed from adjusted daily bars; animation techniques adapted from the FABLE 25 study collection.',
+    liveUrl: 'https://observatory.jeremyxiang.com',
+    highlights: [
+      'Orrery: 11 sectors orbiting the S&P 500, encoded on real return / liquidity / momentum',
+      '3D realized-volatility surface across sectors × 5 look-back windows',
+      'Three.js + canvas · zero framework · WebGL fallback · reduced-motion aware',
+    ],
+  },
+  {
     id: 'thesis',
     name: 'THESIS',
     desc: 'Congressional trading intelligence — filings decoded into conviction-ranked signals across 28 tracked members.',
@@ -78,6 +94,38 @@ export const FEATURED_PROJECTS: FeaturedProject[] = [
     ],
     extraLinks: [
       { label: 'source', href: 'https://github.com/Jeremy-Xiang/Layering-Lab' },
+    ],
+  },
+  {
+    id: 'basket',
+    name: 'BASKET',
+    desc: 'Personal inflation calculator — reweights official BLS CPI series into the 12-month rate you actually pay, printed as a live receipt.',
+    tags: ['javascript', 'bls api', 'data viz'],
+    href: 'https://basket.jeremyxiang.com',
+    accent: '#ff5238',
+    external: true,
+    modalBody: 'The headline CPI averages 90,000 prices for a household that isn\'t yours. Basket takes your monthly spending by category, maps each to an official BLS CPI series, and computes your personal 12-month inflation rate — rendered as a 3D receipt that prints line by line. The gap vs headline CPI-U shows how far your basket drifts from the average household\'s weights.',
+    liveUrl: 'https://basket.jeremyxiang.com',
+    highlights: [
+      '12 spending categories mapped to live BLS CPI series',
+      'Your rate vs headline CPI-U, with the gap in percentage points',
+      'Signature: a 3D receipt that prints your monthly inflation tax',
+    ],
+  },
+  {
+    id: 'mechlab',
+    name: 'MECHANISM LAB',
+    desc: 'Auction theory and matching markets, running live — equilibrium bidders, revenue equivalence, and Gale–Shapley matching step by step.',
+    tags: ['javascript', 'game theory', 'simulation'],
+    href: 'https://mechlab.jeremyxiang.com',
+    accent: '#d4aa2e',
+    external: true,
+    modalBody: 'Every bidder on the floor is an algorithm playing its equilibrium strategy. Run first- vs second-price sealed-bid auctions with strategic bidders (bids shaded to (n−1)/n × value), fire 500 rounds to watch revenue equivalence emerge, or step through Gale–Shapley deferred acceptance to see a stable matching form — then flip the proposing side to expose proposer-optimality.',
+    liveUrl: 'https://mechlab.jeremyxiang.com',
+    highlights: [
+      'First- vs second-price auctions with equilibrium bidders',
+      'Revenue equivalence shown empirically over 500 runs',
+      'Gale–Shapley matching, steppable, with proposer-optimality',
     ],
   },
   {

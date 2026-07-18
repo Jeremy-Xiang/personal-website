@@ -35,7 +35,7 @@ usePanelReveal('.thesis-section')
         <span class="thesis-tagline">$15k → $400k+ · 53 tickers · 5 themes · 300+ headlines scored per refresh</span>
       </p>
       <div class="cta-row">
-        <RouterLink to="/thesis" class="btn-primary">see thesis, the follow-up project →</RouterLink>
+        <RouterLink to="/thesis" v-mag class="btn-primary">see thesis, the follow-up project →</RouterLink>
       </div>
     </div>
 
