@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { usePanelReveal } from '../composables/useScroll3D'
 import {
   THESIS_DESIGN,
   THESIS_SCORE,
@@ -6,6 +7,8 @@ import {
   THESIS_STATS,
   THESIS_VIEWS,
 } from '../data/thesis'
+
+usePanelReveal('.thesis-section')
 </script>
 
 <template>
@@ -21,9 +24,9 @@ import {
         <span class="thesis-tagline">28 members tracked · filing-lag analytics · conviction-ranked signals</span>
       </p>
       <div class="cta-row">
-        <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener" class="btn-primary">live terminal ↗</a>
-        <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-frontend" target="_blank" rel="noopener" class="btn-secondary">frontend ↗</a>
-        <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-api" target="_blank" rel="noopener" class="btn-secondary">backend ↗</a>
+        <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener" v-mag class="btn-primary">live terminal ↗</a>
+        <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-frontend" target="_blank" rel="noopener" v-mag class="btn-secondary">frontend ↗</a>
+        <a href="https://github.com/Jeremy-Xiang/thesis-dashboard-api" target="_blank" rel="noopener" v-mag class="btn-secondary">backend ↗</a>
       </div>
     </div>
 

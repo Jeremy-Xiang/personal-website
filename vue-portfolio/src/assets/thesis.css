@@ -230,3 +230,9 @@
   .signal-grid { grid-template-columns: repeat(3, 1fr); }
   .bar-row { grid-template-columns: 100px 1fr 60px; }
 }
+
+/* section reveal — matches home-page panel rise */
+.thesis-section{opacity:0;transform:translateY(26px);
+  transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.thesis-section.visible{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.thesis-section{opacity:1;transform:none;transition:none}}

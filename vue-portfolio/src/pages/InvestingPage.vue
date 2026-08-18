@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { usePanelReveal } from '../composables/useScroll3D'
 import { onMounted } from 'vue'
 import {
   PORTFOLIO_HOW,
@@ -18,6 +19,8 @@ onMounted(() => {
     })
   })
 })
+
+usePanelReveal('.thesis-section')
 </script>
 
 <template>
@@ -32,7 +35,7 @@ onMounted(() => {
         <span class="thesis-tagline">$15k → $400k+ · 53 tickers · 5 themes · 300+ headlines scored per refresh</span>
       </p>
       <div class="cta-row">
-        <RouterLink to="/thesis" class="btn-primary">see thesis, the follow-up project →</RouterLink>
+        <RouterLink to="/thesis" v-mag class="btn-primary">see thesis, the follow-up project →</RouterLink>
       </div>
     </div>
 
