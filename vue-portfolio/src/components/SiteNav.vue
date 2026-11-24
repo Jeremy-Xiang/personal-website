@@ -19,7 +19,7 @@ const { theme, toggleTheme } = useTheme()
       <li><a href="/#traits">traits</a></li>
       <li><a href="/#tools">tools</a></li>
       <li><a href="/#contact">contact</a></li>
-      <li><RouterLink to="/thesis">thesis</RouterLink></li>
+      <li><a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener">thesis ↗</a></li>
       <li><RouterLink to="/investing">investing</RouterLink></li>
       <li><a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">lab ↗</a></li>
       <li class="res"><a v-mag href="/Jeremy_Xiang_Resume.pdf" target="_blank" rel="noopener">resume ↗</a></li>

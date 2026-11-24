@@ -7,7 +7,7 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: HomePage },
-    { path: '/thesis', name: 'thesis', component: ThesisPage },
+    { path: '/thesis', name: 'thesis', component: ThesisPage, beforeEnter: () => { window.location.href = 'https://thesis.jeremyxiang.com'; return false } },
     { path: '/thesis.html', redirect: '/thesis' },
     { path: '/investing', name: 'investing', component: InvestingPage },
     { path: '/portfolio', redirect: '/investing' },

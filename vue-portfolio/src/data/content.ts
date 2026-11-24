@@ -62,9 +62,9 @@ export const FEATURED_PROJECTS: FeaturedProject[] = [
     name: 'THESIS',
     desc: 'Congressional trading intelligence — filings decoded into conviction-ranked signals across 28 tracked members.',
     tags: ['react', 'vite', 'data viz'],
-    href: '/thesis',
+    href: 'https://thesis.jeremyxiang.com',
     accent: '#4ade80',
-    pageRoute: '/thesis',
+    external: true,
     modalBody: 'A terminal-style dashboard that turns congressional stock disclosures into something readable: who bought what, how late they filed it, and which tickers multiple members are converging on. Conviction scoring weighs cluster buys, committee jurisdiction, and filing recency.',
     liveUrl: 'https://thesis.jeremyxiang.com',
     highlights: [
@@ -194,7 +194,7 @@ export const QUANT_PROJECTS: QuantProject[] = [
 
 export const NOW_ITEMS: NowItem[] = [
   { key: 'learning', html: 'machine learning fundamentals — the math underneath the models' },
-  { key: 'building', html: 'a <a href="https://projects.jeremyxiang.com" target="_blank" rel="noopener">six-part quant research series</a> for <a href="/thesis">thesis</a> · <a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">the layering lab</a> — fragrance pairing engine' },
+  { key: 'building', html: 'a <a href="https://projects.jeremyxiang.com" target="_blank" rel="noopener">six-part quant research series</a> for <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener">thesis</a> · <a href="https://lab.jeremyxiang.com" target="_blank" rel="noopener">the layering lab</a> — fragrance pairing engine' },
   { key: 'exploring', html: 'AI-directed design — <a href="https://fable-25-exhibition.netlify.app" target="_blank" rel="noopener">fable 25</a>, a 25-site exhibition built by claude, as an inspiration bank for my own frontends' },
   { key: 'reading', html: '<em>thinking, fast and slow</em> — daniel kahneman<span class="read-bar" title="~70% through"><span class="read-fill" style="width:70%"></span></span>' },
   { key: 'shipped', html: 'a GAIA-benchmarked tool-using agent — certified through the hugging face agents course' },
@@ -219,7 +219,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     id: 'thesis',
     featured: true,
-    titleHtml: 'built <a href="/thesis">THESIS</a> — a congressional trading intelligence dashboard with conviction-ranked signals',
+    titleHtml: 'built <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener">THESIS</a> — a congressional trading intelligence dashboard with conviction-ranked signals',
     metaHtml: '2025–2026 · react, vite · <a href="https://thesis.jeremyxiang.com" target="_blank" rel="noopener">live ↗</a>',
     detail: 'Decodes congressional stock disclosures: 28 tracked members, filing-lag analytics against the 45-day window, and a conviction score built from cluster buys, committee jurisdiction, and recency.',
   },
